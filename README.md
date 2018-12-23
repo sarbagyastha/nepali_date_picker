@@ -14,7 +14,7 @@ Add this to you package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  nepali_date_picker: ^1.0.0
+  nepali_date_picker: ^1.1.0
 ```
 
 #### 2\. Install
@@ -67,7 +67,7 @@ NepaliDatePicker.showPicker(
 
 ## Example
 
-[Example sources](https://github.com/sarbagyastha/nepali-date-picker/tree/master/example)
+[Example sources](https://github.com/sarbagyastha/nepali_date_picker/tree/master/example)
 
 
 ## License

@@ -29,7 +29,7 @@
 ///                                                                         `bmP
 
 /// Website: https://sarbagyastha.com.np
-/// Github: https://github.com/sarbagyastha/
+/// Github: https://github.com/sarbagyastha/nepali_date_picker
 
 import 'dart:async';
 import 'package:flutter/material.dart';
