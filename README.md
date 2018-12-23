@@ -14,7 +14,7 @@ Add this to you package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  nepali_date_picker: ^1.1.0
+  nepali_date_picker: ^1.2.0
 ```
 
 #### 2\. Install
