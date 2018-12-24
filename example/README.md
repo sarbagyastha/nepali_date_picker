@@ -1,9 +1,33 @@
 # Nepali Date Picker Example
 
-A Flutter application example of Nepali Date Picker.
-
-## Getting Started
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```dart
+Scaffold(
+      appBar: AppBar(
+        title: Text("Nepali Date Picker"),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: RaisedButton(
+          color: Colors.pink,
+          onPressed: () {
+            NepaliDatePicker.showPicker(
+                context: context,
+                startYear: 2052,
+                endYear: 2085,
+                color: Colors.pink,
+                barrierDismissible: false,
+                onPicked: (DateTime date) {
+                  setState(() {
+                    ///Iso8601String Format: 2018-12-23T00:00:00
+                    _text = date.toIso8601String().split("T").first;
+                  });
+                });
+          },
+          child: Text(
+            _text,
+            style: TextStyle(color: Colors.white, fontSize: 40.0),
+          ),
+        ),
+      ),
+    );
+```

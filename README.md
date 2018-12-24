@@ -4,7 +4,7 @@
 
 Bikram Sambat(B.S.) Date Picker.
 
-![](screenshot/english-portrait.png)
+![](screenshot/english-portrait.png)![](screenshot/english-landscape.png)
 
 ## Usage
 
@@ -14,7 +14,7 @@ Add this to you package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  nepali_date_picker: ^1.2.0
+  nepali_date_picker: ^1.2.1
 ```
 
 #### 2\. Install
@@ -63,7 +63,7 @@ NepaliDatePicker.showPicker(
 
 ***In Nepali Language***
 
-![](screenshot/nepali-portrait.png)
+![](screenshot/nepali-portrait.png) ![](screenshot/nepali-landscape.png)
 
 ## Example
 
