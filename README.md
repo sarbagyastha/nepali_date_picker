@@ -1,6 +1,6 @@
 # Nepali Date Picker
 
-[![Pub Package](https://img.shields.io/badge/pub-v2.0.0-green.svg)](https://pub.dartlang.org/packages/nepali_date_picker)
+[![Pub Package](https://img.shields.io/badge/pub-v2.0.0-green.svg)](https://pub.dev/packages/nepali_date_picker)
 [![Licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/nepali_date_picker/blob/master/LICENSE)
 [![Download](https://img.shields.io/badge/Download-APK-blueviolet.svg)
 ](https://github.com/sarbagyastha/nepali_date_picker/raw/master/nepali_date_picker.apk)
@@ -8,6 +8,10 @@
 Bikram Sambat(B.S.) Date Picker.
 
 ![Portrait Screenshot](screenshot/portrait.jpg)
+
+Nepali Date Picker returns data in **NepaliDateTime** type, which is
+included in [*nepali_utils*](https://pub.dev/packages/nepali_utils)
+package.
 
 ## Usage
 
@@ -17,7 +21,7 @@ Add this to you package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  nepali_date_picker: ^2.0.0
+  nepali_date_picker: ^2.0.0+1
 ```
 
 #### 2\. Install
@@ -50,21 +54,6 @@ NepaliDateTime _selectedDateTime = await showNepaliDatePicker(
 );
 
 print(_selectedDateTime); // 2076-02-16T00:00:00
-
-showNepaliDatePicker(
-     context: context,
-     startYear: 2052,
-     endYear: 2085,
-     color: Colors.pink,
-     barrierDismissible: false,
-     language: Language.NEPALI,
-     onPicked: (DateTime date) {
-         setState(() {
-            ///Iso8601String Format: 2018-12-23T00:00:00
-            String _pickedDate = date.toIso8601String().split("T").first;
-         });
-     },
-);
 ```
 
 ***In Landscape mode***
