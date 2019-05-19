@@ -1,3 +1,17 @@
+## [2.0.0] - May 19, 2019
+This is a completely re-written version, so include **BREAKING
+CHANGES**.
+* **[Improved]** Works on any screen sizes without layout problems.
+* **[Feature Added]** Includes semantics i.e ease of access.
+* **[Improved]** Now backed by
+  [nepali_utils](https://pub.dev/packages/nepali_utils).
+* **[Feature Added]** Fuchsia Compatible.
+
+## [1.2.2] - April 25, 2019
+
+* Added buttons to adjust month.
+* **Breaking Change** Dart constraint is now `>=2.1.0 <3.0.0`
+
 ## [1.2.1] - December 24, 2018
 
 * Documentation adn Example Added. 

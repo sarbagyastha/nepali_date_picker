@@ -1,6 +1,7 @@
 # Nepali Date Picker
 
-[[pub packages]](https://pub.dartlang.org/packages/nepali_date_picker)
+[![Pub Package](https://img.shields.io/badge/pub-v2.0.0-green.svg)](https://pub.dartlang.org/packages/nepali_date_picker)
+[![licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/nepali_date_picker/blob/master/LICENSE)
 
 Bikram Sambat(B.S.) Date Picker.
 
@@ -15,7 +16,7 @@ Add this to you package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  nepali_date_picker: ^1.2.1
+  nepali_date_picker: ^2.0.0
 ```
 
 #### 2\. Install
@@ -37,16 +38,19 @@ import 'package:nepali_date_picker/nepali_date_picker.dart';
 #### 4\. Display Nepali DatePicker
 
 ```dart
-///
-/// context: BuildContext.
-/// startYear: Min value of year's selection range.
-/// endYear: Max value of year's selection range.
-/// color: Accent Color.
-/// barrierDismissible: Defines if Date Picker Dialog is dismissible through barriers. Default is false.
-/// language: Language.NEPALI or Language.ENGLISH.  Default is Language.ENGLISH.
-/// onPicked: Callback when "OK" action is pressed. Callback type is DateTime.
-///
-NepaliDatePicker.showPicker(
+import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
+
+NepaliDateTime _selectedDateTime = await showNepaliDatePicker(
+      context: context,
+      initialDate: NepaliDateTime.now(),
+      firstDate: NepaliDateTime(2000),
+      lastDate: NepaliDateTime(2090),
+      language: Language.ENGLISH,
+);
+
+print(_selectedDateTime); // 2076-02-16T00:00:00
+
+showNepaliDatePicker(
      context: context,
      startYear: 2052,
      endYear: 2085,
@@ -74,17 +78,23 @@ NepaliDatePicker.showPicker(
 ## License
 
 ```
-Copyright 2018 Sarbagya Dhaubanjar
+Copyright (c) 2019 Sarbagya Dhaubanjar
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-   http://www.apache.org/licenses/LICENSE-2.0
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```

@@ -7,27 +7,35 @@ Scaffold(
         centerTitle: true,
       ),
       body: Center(
-        child: RaisedButton(
-          color: Colors.pink,
-          onPressed: () {
-            NepaliDatePicker.showPicker(
-                context: context,
-                startYear: 2052,
-                endYear: 2085,
-                color: Colors.pink,
-                barrierDismissible: false,
-                onPicked: (DateTime date) {
-                  setState(() {
-                    ///Iso8601String Format: 2018-12-23T00:00:00
-                    _text = date.toIso8601String().split("T").first;
-                  });
-                });
-          },
-          child: Text(
-            _text,
-            style: TextStyle(color: Colors.white, fontSize: 40.0),
-          ),
-        ),
+        child: MaterialButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20),
+                ),
+              ),
+              color: Colors.pink,
+              onPressed: () async {
+                _selectedDateTime = await picker.showDatePicker(
+                  context: context,
+                  initialDate: NepaliDateTime.now(),
+                  firstDate: NepaliDateTime(2000),
+                  lastDate: NepaliDateTime(2090),
+                  language: _language,
+                );
+                setState(() {});
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'SELECT DATE',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ),
+            ),
       ),
     );
 ```
