@@ -15,7 +15,7 @@ Scaffold(
               ),
               color: Colors.pink,
               onPressed: () async {
-                _selectedDateTime = await picker.showDatePicker(
+                _selectedDateTime = await showNepaliDatePicker(
                   context: context,
                   initialDate: NepaliDateTime.now(),
                   firstDate: NepaliDateTime(2000),
