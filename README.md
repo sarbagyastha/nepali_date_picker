@@ -1,7 +1,9 @@
 # Nepali Date Picker
 
 [![Pub Package](https://img.shields.io/badge/pub-v2.0.0-green.svg)](https://pub.dartlang.org/packages/nepali_date_picker)
-[![licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/nepali_date_picker/blob/master/LICENSE)
+[![Licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/nepali_date_picker/blob/master/LICENSE)
+[![Download](https://img.shields.io/badge/Download-APK-blueviolet.svg)
+](https://github.com/sarbagyastha/nepali_date_picker/raw/master/nepali_date_picker.apk)
 
 Bikram Sambat(B.S.) Date Picker.
 
