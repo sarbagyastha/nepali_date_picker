@@ -7,8 +7,7 @@
 
 Bikram Sambat(B.S.) Date Picker.
 
-![](screenshot/english_portrait.png)  ![](screenshot/nepali_portrait.png)
-![](screenshot/english_landscape.png)
+![Portrait Screenshot](screenshot/portrait.jpg)
 
 ## Usage
 
@@ -68,9 +67,9 @@ showNepaliDatePicker(
 );
 ```
 
-***In Nepali Language***
+***In Landscape mode***
 
-![](screenshot/nepali_landscape.png)
+![Landscape Screenshot](screenshot/landscape.jpg)
 
 ## Example
 
