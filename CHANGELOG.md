@@ -1,3 +1,10 @@
+## [3.0.0] - June 16, 2019
+Version 3 introduces Cupertino style Date picker.
+
+* **BREAKING CHANGES** In order to maintain consistency.
+`showNepaliDatePicker` is now replace with `showMaterialDatePicker`.
+* **[Feature Added]** `showCupertinoDatePicker` and `showAdaptiveDatePicker` added.
+
 ## [2.0.0] - May 19, 2019
 This is a completely re-written version, so include **BREAKING
 CHANGES**.
