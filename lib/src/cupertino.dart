@@ -555,12 +555,18 @@ Future<NepaliDateTime> _showCupertinoDatePicker({
                   Row(
                     children: <Widget>[
                       FlatButton(
-                        child: Text('CANCEL'),
+                        child: Text(
+                          language == Language.ENGLISH
+                              ? 'CANCEL'
+                              : 'रद्द गर्नुहोस',
+                        ),
                         onPressed: () => Navigator.pop(context),
                       ),
                       Spacer(),
                       FlatButton(
-                        child: Text('DONE'),
+                        child: Text(
+                          language == Language.ENGLISH ? 'DONE' : 'ठिक छ',
+                        ),
                         onPressed: () => Navigator.pop(context, _selectedDate),
                       ),
                     ],
