@@ -1,3 +1,7 @@
+## [3.0.1] -July 30, 2019
+* **FIXED** Resolved selected date being overflowed.
+* **FIXED** Added Nepali Language support to Year Picker.
+
 ## [3.0.0] - June 16, 2019
 Version 3 introduces Cupertino style Date picker.
 
