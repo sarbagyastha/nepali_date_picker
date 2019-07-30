@@ -128,10 +128,13 @@ class _DatePickerHeader extends StatelessWidget {
             () => _handleChangeMode(DatePickerMode.day), context),
         child: Semantics(
           selected: mode == DatePickerMode.day,
-          child: Text(
-              NepaliDateFormatter("EE, MMMM dd", language: language)
-                  .format(selectedDate),
-              style: dayStyle),
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: Text(
+                NepaliDateFormatter("EE, MMMM dd", language: language)
+                    .format(selectedDate),
+                style: dayStyle),
+          ),
         ),
       ),
     );
@@ -294,21 +297,21 @@ class DayPicker extends StatelessWidget {
     language == Language.ENGLISH
         ? ['S', 'M', 'T', 'W', 'T', 'F', 'S'].forEach(
             (label) => result.add(
-                  ExcludeSemantics(
-                    child: Center(
-                      child: Text(label, style: headerStyle),
-                    ),
-                  ),
+              ExcludeSemantics(
+                child: Center(
+                  child: Text(label, style: headerStyle),
                 ),
+              ),
+            ),
           )
         : ['आ', 'सो', 'मं', 'बु', 'वि', 'शु', 'श'].forEach(
             (label) => result.add(
-                  ExcludeSemantics(
-                    child: Center(
-                      child: Text(label, style: headerStyle),
-                    ),
-                  ),
+              ExcludeSemantics(
+                child: Center(
+                  child: Text(label, style: headerStyle),
                 ),
+              ),
+            ),
           );
     return result;
   }
@@ -730,6 +733,7 @@ class YearPicker extends StatefulWidget {
   YearPicker({
     Key key,
     @required this.selectedDate,
+    @required this.language,
     @required this.onChanged,
     @required this.firstDate,
     @required this.lastDate,
@@ -743,6 +747,8 @@ class YearPicker extends StatefulWidget {
   ///
   /// This date is highlighted in the picker.
   final NepaliDateTime selectedDate;
+
+  final Language language;
 
   /// Called when the user picks a year.
   final ValueChanged<NepaliDateTime> onChanged;
@@ -800,7 +806,11 @@ class _YearPickerState extends State<YearPicker> {
           child: Center(
             child: Semantics(
               selected: isSelected,
-              child: Text(year.toString(), style: itemStyle),
+              child: Text(
+                  widget.language == Language.ENGLISH
+                      ? year.toString()
+                      : NepaliUnicode.convert(year.toString()),
+                  style: itemStyle),
             ),
           ),
         );
@@ -941,6 +951,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
       case DatePickerMode.year:
         return YearPicker(
           key: _pickerKey,
+          language: widget.language,
           selectedDate: _selectedDate,
           onChanged: _handleYearChanged,
           firstDate: widget.firstDate,
