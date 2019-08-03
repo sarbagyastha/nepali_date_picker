@@ -112,9 +112,9 @@ class _DatePickerHeader extends StatelessWidget {
         child: Semantics(
           selected: mode == DatePickerMode.year,
           child: Text(
-              NepaliDateFormatter("yyyy", language: language)
-                  .format(selectedDate),
-              style: yearStyle),
+            NepaliDateFormat.y(language).format(selectedDate),
+            style: yearStyle,
+          ),
         ),
       ),
     );
@@ -128,13 +128,20 @@ class _DatePickerHeader extends StatelessWidget {
             () => _handleChangeMode(DatePickerMode.day), context),
         child: Semantics(
           selected: mode == DatePickerMode.day,
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: Text(
-                NepaliDateFormatter("EE, MMMM dd", language: language)
-                    .format(selectedDate),
-                style: dayStyle),
-          ),
+          child: MediaQuery.of(context).orientation == Orientation.portrait
+              ? FittedBox(
+                  fit: BoxFit.contain,
+                  child: Text(
+                    NepaliDateFormat("EE, MMMM dd", language: language)
+                        .format(selectedDate),
+                    style: dayStyle,
+                  ),
+                )
+              : Text(
+                  NepaliDateFormat("EE, MMMM dd", language: language)
+                      .format(selectedDate),
+                  style: dayStyle,
+                ),
         ),
       ),
     );
@@ -373,7 +380,7 @@ class DayPicker extends StatelessWidget {
               selected: isSelectedDay,
               child: ExcludeSemantics(
                 child: Text(
-                    '${language == Language.ENGLISH ? day : NepaliNumber.from(day)}',
+                    '${language == Language.ENGLISH ? day : NepaliUnicode.convert('$day')}',
                     style: itemStyle),
               ),
             ),
@@ -404,7 +411,7 @@ class DayPicker extends StatelessWidget {
             child: Center(
               child: ExcludeSemantics(
                 child: Text(
-                  '${indexToMonth(month, language)} ${language == Language.ENGLISH ? year : NepaliNumber.from(year)}',
+                  '${indexToMonth(month, language)} ${language == Language.ENGLISH ? year : NepaliUnicode.convert('$year')}',
                   style: themeData.textTheme.subhead,
                 ),
               ),
@@ -871,7 +878,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
     if (!_announcedInitialDate) {
       _announcedInitialDate = true;
       SemanticsService.announce(
-        NepaliDateFormatter("MMMM dd, yyyy").format(_selectedDate),
+        NepaliDateFormat.yMMMMd().format(_selectedDate),
         textDirection,
       );
     }
@@ -898,11 +905,14 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
       _mode = mode;
       if (_mode == DatePickerMode.day) {
         SemanticsService.announce(
-            NepaliDateFormatter("MMMM yyyy").format(_selectedDate),
-            textDirection);
+          NepaliDateFormat.yMMMM().format(_selectedDate),
+          textDirection,
+        );
       } else {
         SemanticsService.announce(
-            NepaliDateFormatter("yyyy").format(_selectedDate), textDirection);
+          NepaliDateFormat.y().format(_selectedDate),
+          textDirection,
+        );
       }
     });
   }
@@ -932,7 +942,10 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
   }
 
   void _handleOk() {
-    Navigator.pop(context, _selectedDate);
+    Navigator.pop(
+      context,
+      _selectedDate,
+    );
   }
 
   Widget _buildPicker() {
@@ -1128,8 +1141,8 @@ Future<NepaliDateTime> showMaterialDatePicker({
   TextDirection textDirection,
   TransitionBuilder builder,
 }) async {
-  assert(firstDate.year >= 2000 && lastDate.year <= 2090,
-      'Invalid Date Range. Valid Range = [2000,2090]');
+  assert(firstDate.year >= 2000 && lastDate.year <= 2099,
+      'Invalid Date Range. Valid Range = [2000,2099]');
   assert(initialDate != null);
   assert(firstDate != null);
   assert(lastDate != null);

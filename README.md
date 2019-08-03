@@ -1,6 +1,6 @@
 # Nepali Date Picker
 
-[![Pub Package](https://img.shields.io/badge/pub-v3.0.1-green.svg)](https://pub.dev/packages/nepali_date_picker)
+[![Pub Package](https://img.shields.io/badge/pub-v3.1.0+1-green.svg)](https://pub.dev/packages/nepali_date_picker)
 [![Licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/nepali_date_picker/blob/master/LICENSE)
 [![Download](https://img.shields.io/badge/Download-APK-blueviolet.svg)
 ](https://github.com/sarbagyastha/nepali_date_picker/raw/master/ndp_eg.apk)
@@ -17,6 +17,7 @@ package.
 * Material DatePicker
 * Cupertino DatePicker
 * Adaptive DatePicker
+* Supports from 2000 B.S. to 2099 B.S.
 
 ## Usage
 

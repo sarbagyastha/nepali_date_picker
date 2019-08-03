@@ -1,3 +1,8 @@
+## [3.1.0+1] - August 3, 2019
+* Updated `nepali_utils` dependency.
+* Minor layout related fixes.
+* Example updated with time picker
+
 ## [3.0.1] -July 30, 2019
 * **FIXED** Resolved selected date being overflowed.
 * **FIXED** Added Nepali Language support to Year Picker.

@@ -1,8 +1,7 @@
 import 'package:nepali_utils/nepali_utils.dart';
 
 String indexToMonth(int index, Language language) =>
-    NepaliDateFormatter('MMMM', language: language)
-        .format(NepaliDateTime(0, index));
+    NepaliDateFormat.MMMM(language).format(NepaliDateTime(0, index));
 
 Map<int, List<int>> initializeDaysInMonths() {
   var daysInMonths = <int, List<int>>{};
@@ -97,6 +96,15 @@ Map<int, List<int>> initializeDaysInMonths() {
   daysInMonths[2088] = [0, 30, 31, 32, 32, 30, 31, 30, 30, 29, 30, 30, 30];
   daysInMonths[2089] = [0, 30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30];
   daysInMonths[2090] = [0, 30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30];
+  daysInMonths[2091] = [0, 31, 31, 32, 31, 31, 31, 30, 30, 29, 30, 30, 30];
+  daysInMonths[2092] = [0, 30, 31, 32, 32, 31, 30, 30, 30, 29, 30, 30, 30];
+  daysInMonths[2093] = [0, 30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30];
+  daysInMonths[2094] = [0, 31, 31, 32, 31, 31, 30, 30, 30, 29, 30, 30, 30];
+  daysInMonths[2095] = [0, 31, 31, 32, 31, 31, 31, 30, 29, 30, 30, 30, 30];
+  daysInMonths[2096] = [0, 30, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30];
+  daysInMonths[2097] = [0, 31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30];
+  daysInMonths[2098] = [0, 31, 31, 32, 31, 31, 31, 29, 30, 29, 30, 29, 31];
+  daysInMonths[2099] = [0, 31, 31, 32, 31, 31, 31, 30, 29, 29, 30, 30, 30];
   return daysInMonths;
 }
 
@@ -193,5 +201,14 @@ Map<int, List<int>> initializeStartDayInMonths() {
   startDayInMonths[2088] = [0, 3, 5, 1, 5, 2, 4, 7, 2, 4, 5, 7, 2];
   startDayInMonths[2089] = [0, 4, 6, 3, 6, 3, 6, 1, 3, 5, 6, 1, 3];
   startDayInMonths[2090] = [0, 5, 7, 4, 7, 4, 7, 2, 4, 6, 7, 2, 4];
+  startDayInMonths[2091] = [0, 6, 2, 5, 2, 5, 1, 4, 6, 1, 2, 4, 6];
+  startDayInMonths[2092] = [0, 1, 3, 6, 3, 7, 3, 5, 7, 2, 3, 5, 7];
+  startDayInMonths[2093] = [0, 2, 4, 1, 4, 1, 4, 6, 1, 3, 4, 6, 1];
+  startDayInMonths[2094] = [0, 3, 6, 2, 6, 2, 4, 7, 2, 4, 5, 7, 2];
+  startDayInMonths[2095] = [0, 4, 7, 3, 7, 3, 6, 2, 4, 5, 7, 2, 4];
+  startDayInMonths[2096] = [0, 6, 1, 4, 1, 5, 1, 3, 5, 6, 1, 2, 4];
+  startDayInMonths[2097] = [0, 6, 2, 6, 2, 6, 2, 4, 6, 1, 2, 4, 6];
+  startDayInMonths[2098] = [0, 1, 4, 7, 4, 7, 3, 6, 7, 2, 3, 5, 6];
+  startDayInMonths[2099] = [0, 2, 5, 1, 5, 1, 4, 7, 2, 3, 4, 6, 1];
   return startDayInMonths;
 }

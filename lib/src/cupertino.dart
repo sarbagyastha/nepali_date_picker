@@ -133,21 +133,20 @@ class _CupertinoDatePicker extends StatefulWidget {
       case _PickerColumnType.dayOfMonth:
         for (int i = 1; i <= 32; i++) {
           final String dayOfMonth =
-              language == Language.ENGLISH ? '$i' : NepaliNumber.from(i);
+              language == Language.ENGLISH ? '$i' : NepaliUnicode.convert('$i');
           if (longestText.length < dayOfMonth.length) longestText = dayOfMonth;
         }
         break;
       case _PickerColumnType.month:
         for (int i = 1; i <= 12; i++) {
-          final String month =
-              NepaliDateFormatter("MMMM", language: language).format(
+          final String month = NepaliDateFormat.MMMM(language).format(
             NepaliDateTime(0, i),
           );
           if (longestText.length < month.length) longestText = month;
         }
         break;
       case _PickerColumnType.year:
-        longestText = NepaliDateFormatter("yyyy", language: language).format(
+        longestText = NepaliDateFormat.y(language).format(
           NepaliDateTime(2076),
         );
         break;
@@ -257,7 +256,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
           Text(
             widget.language == Language.ENGLISH
                 ? '${index + 1}'
-                : NepaliNumber.from(index + 1),
+                : NepaliUnicode.convert('${index + 1}'),
             style: disableTextStyle,
           ),
         );
@@ -320,7 +319,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
           Text(
             widget.language == Language.ENGLISH
                 ? '$index'
-                : NepaliNumber.from(index),
+                : NepaliUnicode.convert('$index'),
           ),
         );
       },
@@ -465,8 +464,8 @@ void showCupertinoDatePicker({
   Language language = Language.ENGLISH,
   DateOrder dateOrder = DateOrder.mdy,
 }) {
-  assert(firstDate.year >= 2000 && lastDate.year <= 2090,
-      'Invalid Date Range. Valid Range = [2000,2090]');
+  assert(firstDate.year >= 2000 && lastDate.year <= 2099,
+      'Invalid Date Range. Valid Range = [2000, 2099]');
   assert(initialDate != null);
   assert(firstDate != null);
   assert(lastDate != null);
@@ -518,8 +517,8 @@ Future<NepaliDateTime> _showCupertinoDatePicker({
   Language language = Language.ENGLISH,
   DateOrder dateOrder = DateOrder.mdy,
 }) async {
-  assert(firstDate.year >= 2000 && lastDate.year <= 2090,
-      'Invalid Date Range. Valid Range = [2000,2090]');
+  assert(firstDate.year >= 2000 && lastDate.year <= 2099,
+      'Invalid Date Range. Valid Range = [2000, 2099]');
   assert(initialDate != null);
   assert(firstDate != null);
   assert(lastDate != null);
@@ -604,8 +603,8 @@ Future<NepaliDateTime> showAdaptiveDatePicker({
   /// Only for Android and Fuchsia
   DatePickerMode initialDatePickerMode = DatePickerMode.day,
 }) async {
-  assert(firstDate.year >= 2000 && lastDate.year <= 2090,
-      'Invalid Date Range. Valid Range = [2000,2090]');
+  assert(firstDate.year >= 2000 && lastDate.year <= 2099,
+      'Invalid Date Range. Valid Range = [2000, 2099]');
   assert(initialDate != null);
   assert(firstDate != null);
   assert(lastDate != null);

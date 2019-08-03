@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
-import 'package:nepali_utils/nepali_utils.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,14 +24,14 @@ class NepaliDatePickerExample extends StatefulWidget {
 }
 
 class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
-  NepaliDateTime _selectedDateTime;
+  NepaliDateTime _selectedDateTime = NepaliDateTime.now();
   Language _language = Language.ENGLISH;
   String _design = 'm';
-  picker.DateOrder _dateOrder = picker.DateOrder.mdy;
+  DateOrder _dateOrder = DateOrder.mdy;
+  bool _showTimerPicker = true;
 
   @override
   Widget build(BuildContext context) {
-    print(NepaliDateTime.now());
     return Scaffold(
       appBar: AppBar(
         title: Text("Nepali Date Picker"),
@@ -50,7 +49,7 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
               ),
               if (_selectedDateTime != null)
                 Text(
-                  'Selected Date: ${NepaliDateFormatter("MMMM dd, y EEE", language: _language).format(_selectedDateTime)}',
+                  'Selected Date: ${NepaliDateFormat("EEE, MMMM d, y hh:mm aa", language: _language).format(_selectedDateTime)}',
                   style: TextStyle(
                     fontWeight: FontWeight.w300,
                     fontSize: 18.0,
@@ -69,21 +68,34 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
                   color: Colors.pink,
                   onPressed: () async {
                     if (_design == 'm') {
-                      _selectedDateTime = await picker.showMaterialDatePicker(
+                      _selectedDateTime = await showMaterialDatePicker(
                         context: context,
-                        initialDate: NepaliDateTime.now(),
+                        initialDate: _selectedDateTime ?? NepaliDateTime.now(),
                         firstDate: NepaliDateTime(2000),
-                        lastDate: NepaliDateTime(2090),
+                        lastDate: NepaliDateTime(2099, 12),
                         language: _language,
                         initialDatePickerMode: DatePickerMode.day,
                       );
+                      if (_showTimerPicker) {
+                        var timeOfDay = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(
+                            _selectedDateTime?.toDateTime(),
+                          ),
+                        );
+                        _selectedDateTime = _selectedDateTime.mergeTime(
+                          timeOfDay.hour,
+                          timeOfDay.minute,
+                          0,
+                        );
+                      }
                       setState(() {});
                     } else {
-                      picker.showCupertinoDatePicker(
+                      showCupertinoDatePicker(
                         context: context,
-                        initialDate: NepaliDateTime.now(),
+                        initialDate: _selectedDateTime ?? NepaliDateTime.now(),
                         firstDate: NepaliDateTime(2000),
-                        lastDate: NepaliDateTime(2090),
+                        lastDate: NepaliDateTime(2099, 12),
                         language: _language,
                         dateOrder: _dateOrder,
                         onDateChanged: (newDate) {
@@ -95,7 +107,7 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
                     }
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(8.0),
                     child: Text(
                       'SELECT DATE',
                       style: TextStyle(
@@ -162,28 +174,39 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        _radio<picker.DateOrder>(
-                            'D M Y',
-                            picker.DateOrder.dmy,
-                            _dateOrder,
+                        _radio<DateOrder>('D M Y', DateOrder.dmy, _dateOrder,
                             (value) => setState(() => _dateOrder = value)),
-                        _radio<picker.DateOrder>(
-                            'M D Y',
-                            picker.DateOrder.mdy,
-                            _dateOrder,
+                        _radio<DateOrder>('M D Y', DateOrder.mdy, _dateOrder,
                             (value) => setState(() => _dateOrder = value)),
-                        _radio<picker.DateOrder>(
-                            'Y D M',
-                            picker.DateOrder.ydm,
-                            _dateOrder,
+                        _radio<DateOrder>('Y D M', DateOrder.ydm, _dateOrder,
                             (value) => setState(() => _dateOrder = value)),
-                        _radio<picker.DateOrder>(
-                            'Y M D',
-                            picker.DateOrder.ymd,
-                            _dateOrder,
+                        _radio<DateOrder>('Y M D', DateOrder.ymd, _dateOrder,
                             (value) => setState(() => _dateOrder = value)),
                       ],
                     ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  SizedBox(width: 10.0),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: 15.0),
+                      Text(
+                        'Show Time Picker: ',
+                        style: TextStyle(fontSize: 18.0),
+                      ),
+                      Text(
+                        '(only for Material)',
+                        style: TextStyle(fontSize: 8.0),
+                      ),
+                    ],
+                  ),
+                  Switch(
+                    value: _showTimerPicker,
+                    onChanged: (v) => setState(() => _showTimerPicker = v),
                   ),
                 ],
               ),
