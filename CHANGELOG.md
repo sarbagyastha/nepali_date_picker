@@ -1,4 +1,5 @@
 ## [3.1.0+1] - August 3, 2019
+* Update to support up to 2099 B.S.
 * Updated `nepali_utils` dependency.
 * Minor layout related fixes.
 * Example updated with time picker
