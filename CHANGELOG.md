@@ -1,3 +1,6 @@
+## [3.2.0] - November 21 2019
+* **[Improvement]** Code Refactor.
+
 ## [3.1.0+1] - August 3, 2019
 * Update to support up to 2099 B.S.
 * Updated `nepali_utils` dependency.

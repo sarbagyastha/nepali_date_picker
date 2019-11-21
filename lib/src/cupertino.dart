@@ -1,8 +1,13 @@
+// Copyright 2019 Sarbagya Dhaubanjar. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/cupertino.dart';
-import 'material.dart';
 import 'package:nepali_utils/nepali_utils.dart';
+
+import 'material.dart';
 import 'utils.dart';
 
 // Default aesthetic values obtained by comparing with iOS pickers.
@@ -40,20 +45,21 @@ class _DatePickerLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
-    double remainingWidth = size.width;
+    var remainingWidth = size.width;
 
-    for (int i = 0; i < columnWidths.length; i++)
+    for (var i = 0; i < columnWidths.length; i++) {
       remainingWidth -= columnWidths[i] + _kDatePickerPadSize * 2;
+    }
 
-    double currentHorizontalOffset = 0.0;
+    var currentHorizontalOffset = 0.0;
 
-    for (int i = 0; i < columnWidths.length; i++) {
-      final int index =
-          textDirectionFactor == 1 ? i : columnWidths.length - i - 1;
+    for (var i = 0; i < columnWidths.length; i++) {
+      final index = textDirectionFactor == 1 ? i : columnWidths.length - i - 1;
 
-      double childWidth = columnWidths[index] + _kDatePickerPadSize * 2;
-      if (index == 0 || index == columnWidths.length - 1)
+      var childWidth = columnWidths[index] + _kDatePickerPadSize * 2;
+      if (index == 0 || index == columnWidths.length - 1) {
         childWidth += remainingWidth / 2;
+      }
 
       layoutChild(index, BoxConstraints.tight(Size(childWidth, size.height)));
       positionChild(index, Offset(currentHorizontalOffset, 0.0));
@@ -75,10 +81,18 @@ enum _PickerColumnType {
   year,
 }
 
+/// Specifies date order arrangements in cupertino date picker.
 enum DateOrder {
+  /// Month Day Year
   mdy,
+
+  /// Day Month Year
   dmy,
+
+  /// Year Month Day
   ymd,
+
+  /// Year Day Month
   ydm,
 }
 
@@ -88,7 +102,7 @@ class _CupertinoDatePicker extends StatefulWidget {
     NepaliDateTime initialDate,
     this.minimumYear = 1,
     this.maximumYear,
-    this.language = Language.ENGLISH,
+    this.language = Language.english,
     this.dateOrder = DateOrder.mdy,
   })  : initialDate = initialDate ?? NepaliDateTime.now(),
         assert(minimumYear != null) {
@@ -127,19 +141,19 @@ class _CupertinoDatePicker extends StatefulWidget {
     Language language,
     BuildContext context,
   ) {
-    String longestText = '';
+    var longestText = '';
 
     switch (columnType) {
       case _PickerColumnType.dayOfMonth:
-        for (int i = 1; i <= 32; i++) {
-          final String dayOfMonth =
-              language == Language.ENGLISH ? '$i' : NepaliUnicode.convert('$i');
+        for (var i = 1; i <= 32; i++) {
+          final dayOfMonth =
+              language == Language.english ? '$i' : NepaliUnicode.convert('$i');
           if (longestText.length < dayOfMonth.length) longestText = dayOfMonth;
         }
         break;
       case _PickerColumnType.month:
-        for (int i = 1; i <= 12; i++) {
-          final String month = NepaliDateFormat.MMMM(language).format(
+        for (var i = 1; i <= 12; i++) {
+          final month = NepaliDateFormat.MMMM(language).format(
             NepaliDateTime(0, i),
           );
           if (longestText.length < month.length) longestText = month;
@@ -154,7 +168,7 @@ class _CupertinoDatePicker extends StatefulWidget {
 
     assert(longestText != '', 'column type is not appropriate');
 
-    final TextPainter painter = TextPainter(
+    final painter = TextPainter(
       text: TextSpan(
         style: DefaultTextStyle.of(context).style,
         text: longestText,
@@ -192,12 +206,9 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
   // Estimated width of columns.
   Map<int, double> estimatedColumnWidths = <int, double>{};
 
-  var _daysInMonths;
-
   @override
   void initState() {
     super.initState();
-    _daysInMonths = initializeDaysInMonths();
     selectedDay = widget.initialDate.day;
     selectedMonth = widget.initialDate.month;
     selectedYear = widget.initialDate.year;
@@ -230,8 +241,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
 
   Widget _buildDayPicker(
       double offAxisFraction, TransitionBuilder itemPositioningBuilder) {
-    final int daysInCurrentMonth =
-        _daysInMonths[selectedYear][selectedMonth % 12];
+    final daysInCurrentMonth = daysInMonths[selectedYear][selectedMonth % 12];
     return CupertinoPicker(
       scrollController: dayController,
       offAxisFraction: offAxisFraction,
@@ -241,9 +251,10 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
       backgroundColor: _kBackgroundColor,
       onSelectedItemChanged: (int index) {
         selectedDay = index + 1;
-        if (selectedDay <= _daysInMonths[selectedYear][selectedMonth])
+        if (selectedDay <= daysInMonths[selectedYear][selectedMonth]) {
           widget.onDateChanged(
               NepaliDateTime(selectedYear, selectedMonth, selectedDay));
+        }
       },
       children: List<Widget>.generate(32, (int index) {
         TextStyle disableTextStyle; // Null if not out of range.
@@ -254,7 +265,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
         return itemPositioningBuilder(
           context,
           Text(
-            widget.language == Language.ENGLISH
+            widget.language == Language.english
                 ? '${index + 1}'
                 : NepaliUnicode.convert('${index + 1}'),
             style: disableTextStyle,
@@ -277,9 +288,10 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
       backgroundColor: _kBackgroundColor,
       onSelectedItemChanged: (int index) {
         selectedMonth = index + 1;
-        if (selectedDay <= _daysInMonths[selectedYear][selectedMonth])
+        if (selectedDay <= daysInMonths[selectedYear][selectedMonth]) {
           widget.onDateChanged(
               NepaliDateTime(selectedYear, selectedMonth, selectedDay));
+        }
       },
       children: List<Widget>.generate(12, (int index) {
         return itemPositioningBuilder(
@@ -304,20 +316,22 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
       backgroundColor: _kBackgroundColor,
       onSelectedItemChanged: (int index) {
         selectedYear = index;
-        if (selectedDay <= _daysInMonths[selectedYear][selectedMonth])
+        if (selectedDay <= daysInMonths[selectedYear][selectedMonth]) {
           widget.onDateChanged(
               NepaliDateTime(selectedYear, selectedMonth, selectedDay));
+        }
       },
       itemBuilder: (BuildContext context, int index) {
         if (index < widget.minimumYear) return null;
 
-        if (widget.maximumYear != null && index > widget.maximumYear)
+        if (widget.maximumYear != null && index > widget.maximumYear) {
           return null;
+        }
 
         return itemPositioningBuilder(
           context,
           Text(
-            widget.language == Language.ENGLISH
+            widget.language == Language.english
                 ? '$index'
                 : NepaliUnicode.convert('$index'),
           ),
@@ -329,8 +343,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
   bool _keepInValidRange(ScrollEndNotification notification) {
     // Whenever scrolling lands on an invalid entry, the picker
     // automatically scrolls to a valid one.
-    final int desiredDay =
-        selectedDay % _daysInMonths[selectedYear][selectedMonth];
+    final desiredDay = selectedDay % daysInMonths[selectedYear][selectedMonth];
     if (desiredDay != selectedDay) {
       SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
         dayController.animateToItem(
@@ -350,8 +363,8 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
 
   @override
   Widget build(BuildContext context) {
-    List<_ColumnBuilder> pickerBuilders = <_ColumnBuilder>[];
-    List<double> columnWidths = <double>[];
+    var pickerBuilders = <_ColumnBuilder>[];
+    var columnWidths = <double>[];
 
     switch (widget.dateOrder) {
       case DateOrder.mdy:
@@ -406,14 +419,15 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
         assert(false, 'date order is not specified');
     }
 
-    final List<Widget> pickers = <Widget>[];
+    final pickers = <Widget>[];
 
-    for (int i = 0; i < columnWidths.length; i++) {
-      final double offAxisFraction = (i - 1) * 0.3 * textDirectionFactor;
+    for (var i = 0; i < columnWidths.length; i++) {
+      final offAxisFraction = (i - 1) * 0.3 * textDirectionFactor;
 
-      EdgeInsets padding = const EdgeInsets.only(right: _kDatePickerPadSize);
-      if (textDirectionFactor == -1)
+      var padding = const EdgeInsets.only(right: _kDatePickerPadSize);
+      if (textDirectionFactor == -1) {
         padding = const EdgeInsets.only(left: _kDatePickerPadSize);
+      }
 
       pickers.add(LayoutId(
         id: i,
@@ -455,13 +469,14 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
   }
 }
 
+/// Shows Cupertino-styled nepali date picker.
 void showCupertinoDatePicker({
   @required BuildContext context,
   @required NepaliDateTime initialDate,
   @required NepaliDateTime firstDate,
   @required NepaliDateTime lastDate,
   @required ValueChanged<NepaliDateTime> onDateChanged,
-  Language language = Language.ENGLISH,
+  Language language = Language.english,
   DateOrder dateOrder = DateOrder.mdy,
 }) {
   assert(firstDate.year >= 2000 && lastDate.year <= 2099,
@@ -514,7 +529,7 @@ Future<NepaliDateTime> _showCupertinoDatePicker({
   @required NepaliDateTime initialDate,
   @required NepaliDateTime firstDate,
   @required NepaliDateTime lastDate,
-  Language language = Language.ENGLISH,
+  Language language = Language.english,
   DateOrder dateOrder = DateOrder.mdy,
 }) async {
   assert(firstDate.year >= 2000 && lastDate.year <= 2099,
@@ -555,7 +570,7 @@ Future<NepaliDateTime> _showCupertinoDatePicker({
                     children: <Widget>[
                       FlatButton(
                         child: Text(
-                          language == Language.ENGLISH
+                          language == Language.english
                               ? 'CANCEL'
                               : 'रद्द गर्नुहोस',
                         ),
@@ -564,7 +579,7 @@ Future<NepaliDateTime> _showCupertinoDatePicker({
                       Spacer(),
                       FlatButton(
                         child: Text(
-                          language == Language.ENGLISH ? 'DONE' : 'ठिक छ',
+                          language == Language.english ? 'DONE' : 'ठिक छ',
                         ),
                         onPressed: () => Navigator.pop(context, _selectedDate),
                       ),
@@ -590,12 +605,13 @@ Future<NepaliDateTime> _showCupertinoDatePicker({
   );
 }
 
+/// Shows nepali date picker of style that adapts as per the platform.
 Future<NepaliDateTime> showAdaptiveDatePicker({
   @required BuildContext context,
   @required NepaliDateTime initialDate,
   @required NepaliDateTime firstDate,
   @required NepaliDateTime lastDate,
-  Language language = Language.ENGLISH,
+  Language language = Language.english,
 
   /// Only for iOS
   DateOrder dateOrder = DateOrder.mdy,
@@ -616,7 +632,7 @@ Future<NepaliDateTime> showAdaptiveDatePicker({
       !firstDate.isAfter(lastDate), 'lastDate must be on or after firstDate');
   assert(context != null);
 
-  final ThemeData theme = Theme.of(context);
+  final theme = Theme.of(context);
   assert(theme.platform != null);
   switch (theme.platform) {
     case TargetPlatform.android:

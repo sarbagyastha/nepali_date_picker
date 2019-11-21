@@ -1,8 +1,13 @@
+// Copyright 2019 Sarbagya Dhaubanjar. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 void main() => runApp(MyApp());
 
+/// MyApp
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -17,6 +22,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Example
 class NepaliDatePickerExample extends StatefulWidget {
   @override
   _NepaliDatePickerExampleState createState() =>
@@ -25,7 +31,7 @@ class NepaliDatePickerExample extends StatefulWidget {
 
 class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
   NepaliDateTime _selectedDateTime = NepaliDateTime.now();
-  Language _language = Language.ENGLISH;
+  Language _language = Language.english;
   String _design = 'm';
   DateOrder _dateOrder = DateOrder.mdy;
   bool _showTimerPicker = true;
@@ -128,9 +134,9 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
                     'Language: ',
                     style: TextStyle(fontSize: 18.0),
                   ),
-                  _radio<Language>('English', Language.ENGLISH, _language,
+                  _radio<Language>('English', Language.english, _language,
                       (value) => setState(() => _language = value)),
-                  _radio<Language>('Nepali', Language.NEPALI, _language,
+                  _radio<Language>('Nepali', Language.nepali, _language,
                       (value) => setState(() => _language = value)),
                 ],
               ),
