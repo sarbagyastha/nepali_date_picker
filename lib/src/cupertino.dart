@@ -1,4 +1,4 @@
-// Copyright 2019 Sarbagya Dhaubanjar. All rights reserved.
+// Copyright 2020 Sarbagya Dhaubanjar. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -200,6 +200,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
   int selectedDay;
   int selectedMonth;
   int selectedYear;
+  int daysInCurrentMonth;
 
   FixedExtentScrollController dayController;
 
@@ -237,11 +238,12 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
     estimatedColumnWidths[_PickerColumnType.year.index] =
         _CupertinoDatePicker._getColumnWidth(
             _PickerColumnType.year, widget.language, context);
+    daysInCurrentMonth =
+        NepaliDateTime(selectedYear, selectedMonth % 12).totalDays;
   }
 
   Widget _buildDayPicker(
       double offAxisFraction, TransitionBuilder itemPositioningBuilder) {
-    final daysInCurrentMonth = daysInMonths[selectedYear][selectedMonth % 12];
     return CupertinoPicker(
       scrollController: dayController,
       offAxisFraction: offAxisFraction,
@@ -251,7 +253,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
       backgroundColor: _kBackgroundColor,
       onSelectedItemChanged: (int index) {
         selectedDay = index + 1;
-        if (selectedDay <= daysInMonths[selectedYear][selectedMonth]) {
+        if (selectedDay <= daysInCurrentMonth) {
           widget.onDateChanged(
               NepaliDateTime(selectedYear, selectedMonth, selectedDay));
         }
@@ -288,7 +290,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
       backgroundColor: _kBackgroundColor,
       onSelectedItemChanged: (int index) {
         selectedMonth = index + 1;
-        if (selectedDay <= daysInMonths[selectedYear][selectedMonth]) {
+        if (selectedDay <= daysInCurrentMonth) {
           widget.onDateChanged(
               NepaliDateTime(selectedYear, selectedMonth, selectedDay));
         }
@@ -297,7 +299,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
         return itemPositioningBuilder(
           context,
           Text(
-            indexToMonth(index + 1, widget.language),
+            formattedMonth(index + 1, widget.language),
           ),
         );
       }),
@@ -316,7 +318,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
       backgroundColor: _kBackgroundColor,
       onSelectedItemChanged: (int index) {
         selectedYear = index;
-        if (selectedDay <= daysInMonths[selectedYear][selectedMonth]) {
+        if (selectedDay <= daysInCurrentMonth) {
           widget.onDateChanged(
               NepaliDateTime(selectedYear, selectedMonth, selectedDay));
         }
@@ -343,7 +345,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
   bool _keepInValidRange(ScrollEndNotification notification) {
     // Whenever scrolling lands on an invalid entry, the picker
     // automatically scrolls to a valid one.
-    final desiredDay = selectedDay % daysInMonths[selectedYear][selectedMonth];
+    final desiredDay = selectedDay % daysInCurrentMonth;
     if (desiredDay != selectedDay) {
       SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
         dayController.animateToItem(
@@ -509,7 +511,7 @@ void showCupertinoDatePicker({
             child: SafeArea(
               top: false,
               child: _CupertinoDatePicker(
-                initialDate: NepaliDateTime.now(),
+                initialDate: initialDate,
                 minimumYear: firstDate.year,
                 maximumYear: lastDate.year,
                 onDateChanged: onDateChanged,

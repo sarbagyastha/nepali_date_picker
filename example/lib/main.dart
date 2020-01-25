@@ -82,7 +82,7 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
                         language: _language,
                         initialDatePickerMode: DatePickerMode.day,
                       );
-                      if (_showTimerPicker) {
+                      if (_selectedDateTime != null && _showTimerPicker) {
                         var timeOfDay = await showTimePicker(
                           context: context,
                           initialTime: TimeOfDay.fromDateTime(

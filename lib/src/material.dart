@@ -321,8 +321,8 @@ class DayPicker extends StatelessWidget {
     final themeData = Theme.of(context);
     final year = displayedMonth.year;
     final month = displayedMonth.month;
-    final daysInMonth = daysInMonths[year][month];
-    final firstDayOffset = startDayInMonths[year][month] - 1;
+    final daysInMonth = displayedMonth.totalDays;
+    final firstDayOffset = displayedMonth.weekDay - 1;
     final labels = <Widget>[];
     labels.addAll(
       _getDayHeaders(language, themeData.textTheme.caption),
@@ -369,7 +369,7 @@ class DayPicker extends StatelessWidget {
           decoration: decoration,
           child: Center(
             child: Semantics(
-              label: '${indexToMonth(month, Language.english)} $day, $year',
+              label: '${formattedMonth(month, Language.english)} $day, $year',
               selected: isSelectedDay,
               child: ExcludeSemantics(
                 child: Text(
@@ -404,7 +404,7 @@ class DayPicker extends StatelessWidget {
             child: Center(
               child: ExcludeSemantics(
                 child: Text(
-                  '${indexToMonth(month, language)} ${language == Language.english ? year : NepaliUnicode.convert('$year')}',
+                  '${formattedMonth(month, language)} ${language == Language.english ? year : NepaliUnicode.convert('$year')}',
                   style: themeData.textTheme.subhead,
                 ),
               ),
@@ -535,8 +535,11 @@ class _MonthPickerState extends State<MonthPicker>
 
   void _updateCurrentDate() {
     _todayDate = NepaliDateTime.now();
-    final tomorrow =
-        NepaliDateTime(_todayDate.year, _todayDate.month, _todayDate.day + 1);
+    final tomorrow = NepaliDateTime(
+      _todayDate.year,
+      _todayDate.month,
+      _todayDate.day + 1,
+    );
     var timeUntilTomorrow = tomorrow.difference(_todayDate);
     timeUntilTomorrow +=
         const Duration(seconds: 1); // so we don't miss it by rounding
@@ -554,9 +557,13 @@ class _MonthPickerState extends State<MonthPicker>
 
   /// Add months to a month truncated date.
   NepaliDateTime _addMonthsToMonthDate(
-      NepaliDateTime monthDate, int monthsToAdd) {
+    NepaliDateTime monthDate,
+    int monthsToAdd,
+  ) {
     return NepaliDateTime(
-        monthDate.year + monthsToAdd ~/ 12, monthDate.month + monthsToAdd % 12);
+      monthDate.year + monthsToAdd ~/ 12,
+      monthDate.month + monthsToAdd % 12,
+    );
   }
 
   Widget _buildItems(BuildContext context, int index) {
@@ -578,7 +585,7 @@ class _MonthPickerState extends State<MonthPicker>
   void _handleNextMonth() {
     if (!_isDisplayingLastMonth) {
       SemanticsService.announce(
-          "${indexToMonth(_nextMonthDate.month, Language.english)} ${_nextMonthDate.year}",
+          "${formattedMonth(_nextMonthDate.month, Language.english)} ${_nextMonthDate.year}",
           textDirection);
       _dayPickerController.nextPage(
           duration: _kMonthScrollDuration, curve: Curves.ease);
@@ -588,7 +595,7 @@ class _MonthPickerState extends State<MonthPicker>
   void _handlePreviousMonth() {
     if (!_isDisplayingFirstMonth) {
       SemanticsService.announce(
-          "${indexToMonth(_previousMonthDate.month, Language.english)} ${_previousMonthDate.year}",
+          "${formattedMonth(_previousMonthDate.month, Language.english)} ${_previousMonthDate.year}",
           textDirection);
       _dayPickerController.previousPage(
           duration: _kMonthScrollDuration, curve: Curves.ease);
@@ -662,7 +669,7 @@ class _MonthPickerState extends State<MonthPicker>
                   icon: const Icon(Icons.chevron_left),
                   tooltip: _isDisplayingFirstMonth
                       ? null
-                      : 'Previous month ${indexToMonth(_previousMonthDate.month, Language.english)} ${_previousMonthDate.year}',
+                      : 'Previous month ${formattedMonth(_previousMonthDate.month, Language.english)} ${_previousMonthDate.year}',
                   onPressed:
                       _isDisplayingFirstMonth ? null : _handlePreviousMonth,
                 ),
@@ -680,7 +687,7 @@ class _MonthPickerState extends State<MonthPicker>
                   icon: const Icon(Icons.chevron_right),
                   tooltip: _isDisplayingLastMonth
                       ? null
-                      : 'Next month ${indexToMonth(_nextMonthDate.month, Language.english)} ${_nextMonthDate.year}',
+                      : 'Next month ${formattedMonth(_nextMonthDate.month, Language.english)} ${_nextMonthDate.year}',
                   onPressed: _isDisplayingLastMonth ? null : _handleNextMonth,
                 ),
               ),
