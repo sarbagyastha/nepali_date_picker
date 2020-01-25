@@ -975,21 +975,18 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
         child: _buildPicker(),
       ),
     );
-    final Widget actions = ButtonTheme.bar(
-      child: ButtonBar(
-        children: <Widget>[
-          FlatButton(
-            child: Text(widget.language == Language.english
-                ? 'CANCEL'
-                : 'रद्द गर्नुहोस'),
-            onPressed: _handleCancel,
-          ),
-          FlatButton(
-            child: Text(widget.language == Language.english ? 'OK' : 'ठिक छ'),
-            onPressed: _handleOk,
-          ),
-        ],
-      ),
+    final Widget actions = ButtonBar(
+      children: <Widget>[
+        FlatButton(
+          child: Text(
+              widget.language == Language.english ? 'CANCEL' : 'रद्द गर्नुहोस'),
+          onPressed: _handleCancel,
+        ),
+        FlatButton(
+          child: Text(widget.language == Language.english ? 'OK' : 'ठिक छ'),
+          onPressed: _handleOk,
+        ),
+      ],
     );
     final dialog = Dialog(
       child: OrientationBuilder(

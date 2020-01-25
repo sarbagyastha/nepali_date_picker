@@ -1,5 +1,6 @@
 ## [3.2.0+1] - January 25, 2020
-* Updated `nepali_utils` to latest version. 
+* Updated `nepali_utils` to latest version.
+* Memory Optimizations
 
 ## [3.2.0] - November 21, 2019
 * **[Improvement]** Code Refactor.
