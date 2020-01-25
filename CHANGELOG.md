@@ -1,4 +1,7 @@
-## [3.2.0] - November 21 2019
+## [3.2.0+1] - January 25, 2020
+* Updated `nepali_utils` to latest version. 
+
+## [3.2.0] - November 21, 2019
 * **[Improvement]** Code Refactor.
 
 ## [3.1.0+1] - August 3, 2019

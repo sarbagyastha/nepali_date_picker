@@ -134,13 +134,13 @@ class _DatePickerHeader extends StatelessWidget {
               ? FittedBox(
                   fit: BoxFit.contain,
                   child: Text(
-                    NepaliDateFormat("EE, MMMM dd", language: language)
+                    NepaliDateFormat("EE, MMMM dd", language)
                         .format(selectedDate),
                     style: dayStyle,
                   ),
                 )
               : Text(
-                  NepaliDateFormat("EE, MMMM dd", language: language)
+                  NepaliDateFormat("EE, MMMM dd", language)
                       .format(selectedDate),
                   style: dayStyle,
                 ),

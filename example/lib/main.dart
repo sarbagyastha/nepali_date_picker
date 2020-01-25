@@ -55,7 +55,7 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
               ),
               if (_selectedDateTime != null)
                 Text(
-                  'Selected Date: ${NepaliDateFormat("EEE, MMMM d, y hh:mm aa", language: _language).format(_selectedDateTime)}',
+                  'Selected Date: ${NepaliDateFormat("EEE, MMMM d, y hh:mm aa", _language).format(_selectedDateTime)}',
                   style: TextStyle(
                     fontWeight: FontWeight.w300,
                     fontSize: 18.0,
