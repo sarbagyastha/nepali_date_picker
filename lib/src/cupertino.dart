@@ -238,8 +238,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
     estimatedColumnWidths[_PickerColumnType.year.index] =
         _CupertinoDatePicker._getColumnWidth(
             _PickerColumnType.year, widget.language, context);
-    daysInCurrentMonth =
-        NepaliDateTime(selectedYear, selectedMonth % 12).totalDays;
+    daysInCurrentMonth = NepaliDateTime(selectedYear, selectedMonth).totalDays;
   }
 
   Widget _buildDayPicker(
@@ -648,6 +647,7 @@ Future<NepaliDateTime> showAdaptiveDatePicker({
         initialDatePickerMode: initialDatePickerMode,
       );
     case TargetPlatform.iOS:
+    case TargetPlatform.macOS:
       return await _showCupertinoDatePicker(
         context: context,
         initialDate: initialDate,

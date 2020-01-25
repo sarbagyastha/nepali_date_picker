@@ -78,7 +78,7 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
                         context: context,
                         initialDate: _selectedDateTime ?? NepaliDateTime.now(),
                         firstDate: NepaliDateTime(2000),
-                        lastDate: NepaliDateTime(2099, 12),
+                        lastDate: NepaliDateTime(2099, 11, 6),
                         language: _language,
                         initialDatePickerMode: DatePickerMode.day,
                       );
@@ -90,8 +90,8 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
                           ),
                         );
                         _selectedDateTime = _selectedDateTime.mergeTime(
-                          timeOfDay.hour,
-                          timeOfDay.minute,
+                          timeOfDay?.hour ?? 0,
+                          timeOfDay?.minute ?? 0,
                           0,
                         );
                       }
@@ -212,7 +212,9 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
                   ),
                   Switch(
                     value: _showTimerPicker,
-                    onChanged: (v) => setState(() => _showTimerPicker = v),
+                    onChanged: _design == 'm'
+                        ? (v) => setState(() => _showTimerPicker = v)
+                        : null,
                   ),
                 ],
               ),
@@ -233,7 +235,8 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
       child: RadioListTile<T>(
         value: value,
         groupValue: groupValue,
-        onChanged: onChanged,
+        onChanged:
+            _design == 'm' && groupValue == _dateOrder ? null : onChanged,
         title: Text(title),
       ),
     );
