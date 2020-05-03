@@ -8,7 +8,7 @@
 
 Material and Cupertino Style Date Picker with Bikram Sambat(Nepali) Calendar Support. Supports Android, iOS and Fuchsia. Available in Nepali and English Languages.
 
-![Loading Demo](nepali_datePicker_demo.gif)
+![Loading Demo](demo.gif)
 
 Nepali Date Picker returns data in **NepaliDateTime** type, which is
 included in [*nepali_utils*](https://pub.dev/packages/nepali_utils)
@@ -32,7 +32,6 @@ NepaliDateTime _selectedDateTime = await picker.showMaterialDatePicker(
     initialDate: NepaliDateTime.now(),
     firstDate: NepaliDateTime(2000),
     lastDate: NepaliDateTime(2090),
-    language: _language,
     initialDatePickerMode: DatePickerMode.day,
 );
 
@@ -73,11 +72,11 @@ NepaliDateTime _selectedDateTime = await picker.showAdaptiveDatePicker(
 
 ***Material Design*** (Portrait)
 
-![Portrait Screenshot](screenshot/portrait.jpg)
+![Portrait Screenshot](screenshot/portrait.png)
 
 ***Material Design*** (Landscape)
 
-![Landscape Screenshot](screenshot/landscape.jpg)
+![Landscape Screenshot](screenshot/landscape.png)
 
 ***Cupertino Design***
 
@@ -93,7 +92,7 @@ NepaliDateTime _selectedDateTime = await picker.showAdaptiveDatePicker(
 ## License
 
 ```
-Copyright 2019 Sarbagya Dhaubanjar. All rights reserved.
+Copyright 2020 Sarbagya Dhaubanjar. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
