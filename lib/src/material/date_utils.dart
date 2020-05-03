@@ -12,7 +12,9 @@ NepaliDateTime dateOnly(NepaliDateTime date) {
 /// Returns true if the two [NepaliDateTime] objects have the same day, month, and
 /// year.
 bool isSameDay(NepaliDateTime dateA, NepaliDateTime dateB) {
-  return dateA.year == dateB.year && dateA.month == dateB.month && dateA.day == dateB.day;
+  return dateA.year == dateB.year &&
+      dateA.month == dateB.month &&
+      dateA.day == dateB.day;
 }
 
 /// Determines the number of months between two [NepaliDateTime] objects.

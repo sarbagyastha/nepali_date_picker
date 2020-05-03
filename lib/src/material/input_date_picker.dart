@@ -66,12 +66,16 @@ class InputDatePickerFormField extends StatefulWidget {
         firstDate = utils.dateOnly(firstDate),
         lastDate = utils.dateOnly(lastDate),
         super(key: key) {
-    assert(!this.lastDate.isBefore(this.firstDate), 'lastDate ${this.lastDate} must be on or after firstDate ${this.firstDate}.');
+    assert(!this.lastDate.isBefore(this.firstDate),
+        'lastDate ${this.lastDate} must be on or after firstDate ${this.firstDate}.');
     assert(initialDate == null || !this.initialDate.isBefore(this.firstDate),
         'initialDate ${this.initialDate} must be on or after firstDate ${this.firstDate}.');
     assert(initialDate == null || !this.initialDate.isAfter(this.lastDate),
         'initialDate ${this.initialDate} must be on or before lastDate ${this.lastDate}.');
-    assert(selectableDayPredicate == null || initialDate == null || selectableDayPredicate(this.initialDate),
+    assert(
+        selectableDayPredicate == null ||
+            initialDate == null ||
+            selectableDayPredicate(this.initialDate),
         'Provided initialDate ${this.initialDate} must satisfy provided selectableDayPredicate.');
   }
 
@@ -122,7 +126,8 @@ class InputDatePickerFormField extends StatefulWidget {
   final bool autofocus;
 
   @override
-  _InputDatePickerFormFieldState createState() => _InputDatePickerFormFieldState();
+  _InputDatePickerFormFieldState createState() =>
+      _InputDatePickerFormFieldState();
 }
 
 class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
@@ -164,7 +169,8 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
   }
 
   NepaliDateTime _parseDate(String text) {
-    if (RegExp(r'^2[01]\d{2}/(0[1-9]|1[0-2])/(0[1-9]|1[1-9]|2[1-9]|3[0-2])').hasMatch(text)) {
+    if (RegExp(r'^2[01]\d{2}/(0[1-9]|1[0-2])/(0[1-9]|1[1-9]|2[1-9]|3[0-2])')
+        .hasMatch(text)) {
       return NepaliDateTime.parse(text.replaceAll('/', '-'));
     }
     return null;
@@ -174,7 +180,8 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
     return date != null &&
         !date.isBefore(widget.firstDate) &&
         !date.isAfter(widget.lastDate) &&
-        (widget.selectableDayPredicate == null || widget.selectableDayPredicate(date));
+        (widget.selectableDayPredicate == null ||
+            widget.selectableDayPredicate(date));
   }
 
   String _validateDate(String text) {
@@ -211,12 +218,15 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(builder: (BuildContext context, Orientation orientation) {
+    return OrientationBuilder(
+        builder: (BuildContext context, Orientation orientation) {
       assert(orientation != null);
 
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 24),
-        height: orientation == Orientation.portrait ? _inputPortraitHeight : _inputLandscapeHeight,
+        height: orientation == Orientation.portrait
+            ? _inputPortraitHeight
+            : _inputLandscapeHeight,
         child: Column(
           children: <Widget>[
             const Spacer(),
@@ -255,7 +265,8 @@ class _DateTextInputFormatter extends TextInputFormatter {
       WhitelistingTextInputFormatter(RegExp(r'[\d\/\.,-\s]+'));
 
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     final filteredValue = _filterFormatter.formatEditUpdate(oldValue, newValue);
     return filteredValue.copyWith(
       // Replace any separator character with the given separator

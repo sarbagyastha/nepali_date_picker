@@ -18,7 +18,8 @@ const Duration _monthScrollDuration = Duration(milliseconds: 200);
 const double _dayPickerRowHeight = 42.0;
 const int _maxDayPickerRowCount = 6; // A 31 day month that starts on Saturday.
 // One extra row for the day-of-week header.
-const double _maxDayPickerHeight = _dayPickerRowHeight * (_maxDayPickerRowCount + 1);
+const double _maxDayPickerHeight =
+    _dayPickerRowHeight * (_maxDayPickerRowCount + 1);
 const double _monthPickerHorizontalPadding = 8.0;
 
 const int _yearPickerColumnCount = 3;
@@ -86,10 +87,15 @@ class CalendarDatePicker extends StatefulWidget {
         assert(onDateChanged != null),
         assert(initialCalendarMode != null),
         super(key: key) {
-    assert(!this.lastDate.isBefore(this.firstDate), 'lastDate ${this.lastDate} must be on or after firstDate ${this.firstDate}.');
-    assert(!this.initialDate.isBefore(this.firstDate), 'initialDate ${this.initialDate} must be on or after firstDate ${this.firstDate}.');
-    assert(!this.initialDate.isAfter(this.lastDate), 'initialDate ${this.initialDate} must be on or before lastDate ${this.lastDate}.');
-    assert(selectableDayPredicate == null || selectableDayPredicate(this.initialDate),
+    assert(!this.lastDate.isBefore(this.firstDate),
+        'lastDate ${this.lastDate} must be on or after firstDate ${this.firstDate}.');
+    assert(!this.initialDate.isBefore(this.firstDate),
+        'initialDate ${this.initialDate} must be on or after firstDate ${this.firstDate}.');
+    assert(!this.initialDate.isAfter(this.lastDate),
+        'initialDate ${this.initialDate} must be on or before lastDate ${this.lastDate}.');
+    assert(
+        selectableDayPredicate == null ||
+            selectableDayPredicate(this.initialDate),
         'Provided initialDate ${this.initialDate} must satisfy provided selectableDayPredicate.');
   }
 
@@ -134,7 +140,8 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
   void initState() {
     super.initState();
     _mode = widget.initialCalendarMode;
-    _currentDisplayedMonthDate = NepaliDateTime(widget.initialDate.year, widget.initialDate.month);
+    _currentDisplayedMonthDate =
+        NepaliDateTime(widget.initialDate.year, widget.initialDate.month);
     _selectedDate = widget.initialDate;
   }
 
@@ -185,7 +192,8 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
 
   void _handleMonthChanged(NepaliDateTime date) {
     setState(() {
-      if (_currentDisplayedMonthDate.year != date.year || _currentDisplayedMonthDate.month != date.month) {
+      if (_currentDisplayedMonthDate.year != date.year ||
+          _currentDisplayedMonthDate.month != date.month) {
         _currentDisplayedMonthDate = NepaliDateTime(date.year, date.month);
         widget.onDisplayedMonthChanged?.call(_currentDisplayedMonthDate);
       }
@@ -263,7 +271,9 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
           title: NepaliDateFormat.yMMMM().format(_currentDisplayedMonthDate),
           onTitlePressed: () {
             // Toggle the day/year mode.
-            _handleModeChanged(_mode == DatePickerMode.day ? DatePickerMode.year : DatePickerMode.day);
+            _handleModeChanged(_mode == DatePickerMode.day
+                ? DatePickerMode.year
+                : DatePickerMode.day);
           },
         ),
       ],
@@ -292,10 +302,13 @@ class _DatePickerModeToggleButton extends StatefulWidget {
   final VoidCallback onTitlePressed;
 
   @override
-  _DatePickerModeToggleButtonState createState() => _DatePickerModeToggleButtonState();
+  _DatePickerModeToggleButtonState createState() =>
+      _DatePickerModeToggleButtonState();
 }
 
-class _DatePickerModeToggleButtonState extends State<_DatePickerModeToggleButton> with SingleTickerProviderStateMixin {
+class _DatePickerModeToggleButtonState
+    extends State<_DatePickerModeToggleButton>
+    with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
   @override
@@ -456,7 +469,8 @@ class _MonthPickerState extends State<_MonthPicker> {
     _currentMonth = widget.initialMonth;
     _previousMonthDate = utils.addMonthsToMonthDate(_currentMonth, -1);
     _nextMonthDate = utils.addMonthsToMonthDate(_currentMonth, 1);
-    _pageController = PageController(initialPage: utils.monthDelta(widget.firstDate, _currentMonth));
+    _pageController = PageController(
+        initialPage: utils.monthDelta(widget.firstDate, _currentMonth));
   }
 
   @override
@@ -473,7 +487,8 @@ class _MonthPickerState extends State<_MonthPicker> {
 
   void _handleMonthPageChanged(int monthPage) {
     final monthDate = utils.addMonthsToMonthDate(widget.firstDate, monthPage);
-    if (_currentMonth.year != monthDate.year || _currentMonth.month != monthDate.month) {
+    if (_currentMonth.year != monthDate.year ||
+        _currentMonth.month != monthDate.month) {
       _currentMonth = NepaliDateTime(monthDate.year, monthDate.month);
       _previousMonthDate = utils.addMonthsToMonthDate(_currentMonth, -1);
       _nextMonthDate = utils.addMonthsToMonthDate(_currentMonth, 1);
@@ -541,7 +556,8 @@ class _MonthPickerState extends State<_MonthPicker> {
         '${NepaliUtils().language == Language.english ? 'Previous Month' : 'अघिल्लो महिना'} ${NepaliDateFormat.yMMMM().format(_previousMonthDate)}';
     final nextTooltipText =
         '${NepaliUtils().language == Language.english ? 'Next Month' : 'अर्को महिना'} ${NepaliDateFormat.yMMMM().format(_nextMonthDate)}';
-    final controlColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.60);
+    final controlColor =
+        Theme.of(context).colorScheme.onSurface.withOpacity(0.60);
 
     return Semantics(
       child: Column(
@@ -556,7 +572,8 @@ class _MonthPickerState extends State<_MonthPicker> {
                   icon: const Icon(Icons.chevron_left),
                   color: controlColor,
                   tooltip: _isDisplayingFirstMonth ? null : previousTooltipText,
-                  onPressed: _isDisplayingFirstMonth ? null : _handlePreviousMonth,
+                  onPressed:
+                      _isDisplayingFirstMonth ? null : _handlePreviousMonth,
                 ),
                 IconButton(
                   icon: const Icon(Icons.chevron_right),
@@ -572,7 +589,8 @@ class _MonthPickerState extends State<_MonthPicker> {
             child: PageView.builder(
               controller: _pageController,
               itemBuilder: _buildItems,
-              itemCount: utils.monthDelta(widget.firstDate, widget.lastDate) + 1,
+              itemCount:
+                  utils.monthDelta(widget.firstDate, widget.lastDate) + 1,
               scrollDirection: Axis.horizontal,
               onPageChanged: _handleMonthPageChanged,
             ),
@@ -663,7 +681,8 @@ class _DayPicker extends StatelessWidget {
         final dayToBuild = NepaliDateTime(year, month, day);
         final isDisabled = dayToBuild.isAfter(lastDate) ||
             dayToBuild.isBefore(firstDate) ||
-            (selectableDayPredicate != null && !selectableDayPredicate(dayToBuild));
+            (selectableDayPredicate != null &&
+                !selectableDayPredicate(dayToBuild));
 
         BoxDecoration decoration;
         var dayColor = enabledDayColor;
@@ -691,7 +710,8 @@ class _DayPicker extends StatelessWidget {
         Widget dayWidget = Container(
           decoration: decoration,
           child: Center(
-            child: Text(NepaliNumberFormat().format(day), style: dayStyle.apply(color: dayColor)),
+            child: Text(NepaliNumberFormat().format(day),
+                style: dayStyle.apply(color: dayColor)),
           ),
         );
 
@@ -710,7 +730,8 @@ class _DayPicker extends StatelessWidget {
               // day of month before the rest of the date, as they are looking
               // for the day of month. To do that we prepend day of month to the
               // formatted full date.
-              label: '${NepaliNumberFormat().format(day)}, ${NepaliDateFormat.yMMMMEEEEd().format(dayToBuild)}',
+              label:
+                  '${NepaliNumberFormat().format(day)}, ${NepaliDateFormat.yMMMMEEEEd().format(dayToBuild)}',
               selected: isSelectedDay,
               excludeSemantics: true,
               child: dayWidget,
@@ -745,7 +766,8 @@ class _DayPickerGridDelegate extends SliverGridDelegate {
   SliverGridLayout getLayout(SliverConstraints constraints) {
     const columnCount = DateTime.daysPerWeek;
     final tileWidth = constraints.crossAxisExtent / columnCount;
-    final tileHeight = math.min(_dayPickerRowHeight, constraints.viewportMainAxisExtent / _maxDayPickerRowCount);
+    final tileHeight = math.min(_dayPickerRowHeight,
+        constraints.viewportMainAxisExtent / _maxDayPickerRowCount);
     return SliverGridRegularTileLayout(
       childCrossAxisExtent: tileWidth,
       childMainAxisExtent: tileHeight,
@@ -766,7 +788,9 @@ class _DayHeaders extends StatelessWidget {
   /// Builds widgets showing abbreviated days of week. The first widget in the
   /// returned list corresponds to the first day of week for the current locale.
   List<Widget> _getDayHeaders(TextStyle headerStyle) {
-    return (NepaliUtils().language == Language.english ? ['S', 'M', 'T', 'W', 'T', 'F', 'S'] : ['आ', 'सो', 'मं', 'बु', 'वि', 'शु', 'श'])
+    return (NepaliUtils().language == Language.english
+            ? ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+            : ['आ', 'सो', 'मं', 'बु', 'वि', 'शु', 'श'])
         .map(
           (label) => ExcludeSemantics(
             child: Center(
@@ -866,7 +890,8 @@ class _YearPickerState extends State<_YearPicker> {
     final initialYearRow = initialYearIndex ~/ _yearPickerColumnCount;
     // Move the offset down by 2 rows to approximately center it.
     final centeredYearRow = initialYearRow - 2;
-    final scrollOffset = _itemCount < minYears ? 0.0 : centeredYearRow * _yearPickerRowHeight;
+    final scrollOffset =
+        _itemCount < minYears ? 0.0 : centeredYearRow * _yearPickerRowHeight;
     scrollController = ScrollController(initialScrollOffset: scrollOffset);
   }
 
@@ -879,7 +904,8 @@ class _YearPickerState extends State<_YearPicker> {
     final year = widget.firstDate.year + index - offset;
     final isSelected = year == widget.selectedDate.year;
     final isCurrentYear = year == widget.currentDate.year;
-    final isDisabled = year < widget.firstDate.year || year > widget.lastDate.year;
+    final isDisabled =
+        year < widget.firstDate.year || year > widget.lastDate.year;
     const decorationHeight = 36.0;
     const decorationWidth = 72.0;
 
@@ -922,7 +948,9 @@ class _YearPickerState extends State<_YearPicker> {
           child: Semantics(
             selected: isSelected,
             child: Text(
-              NepaliUtils().language == Language.english ? year.toString() : NepaliUnicode.convert(year.toString()),
+              NepaliUtils().language == Language.english
+                  ? year.toString()
+                  : NepaliUnicode.convert(year.toString()),
               style: itemStyle,
             ),
           ),
@@ -982,7 +1010,9 @@ class _YearPickerGridDelegate extends SliverGridDelegate {
 
   @override
   SliverGridLayout getLayout(SliverConstraints constraints) {
-    final tileWidth = (constraints.crossAxisExtent - (_yearPickerColumnCount - 1) * _yearPickerRowSpacing) / _yearPickerColumnCount;
+    final tileWidth = (constraints.crossAxisExtent -
+            (_yearPickerColumnCount - 1) * _yearPickerRowSpacing) /
+        _yearPickerColumnCount;
     return SliverGridRegularTileLayout(
       childCrossAxisExtent: tileWidth,
       childMainAxisExtent: _yearPickerRowHeight,
@@ -997,4 +1027,5 @@ class _YearPickerGridDelegate extends SliverGridDelegate {
   bool shouldRelayout(_YearPickerGridDelegate oldDelegate) => false;
 }
 
-const _YearPickerGridDelegate _yearPickerGridDelegate = _YearPickerGridDelegate();
+const _YearPickerGridDelegate _yearPickerGridDelegate =
+    _YearPickerGridDelegate();

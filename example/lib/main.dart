@@ -26,7 +26,8 @@ class MyApp extends StatelessWidget {
 /// Example
 class NepaliDatePickerExample extends StatefulWidget {
   @override
-  _NepaliDatePickerExampleState createState() => _NepaliDatePickerExampleState();
+  _NepaliDatePickerExampleState createState() =>
+      _NepaliDatePickerExampleState();
 }
 
 class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
@@ -133,9 +134,17 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
                     style: TextStyle(fontSize: 18.0),
                   ),
                   _radio<Language>(
-                      'English', Language.english, NepaliUtils().language, (value) => setState(() => NepaliUtils().language = value)),
+                      'English',
+                      Language.english,
+                      NepaliUtils().language,
+                      (value) =>
+                          setState(() => NepaliUtils().language = value)),
                   _radio<Language>(
-                      'Nepali', Language.nepali, NepaliUtils().language, (value) => setState(() => NepaliUtils().language = value)),
+                      'Nepali',
+                      Language.nepali,
+                      NepaliUtils().language,
+                      (value) =>
+                          setState(() => NepaliUtils().language = value)),
                 ],
               ),
               SizedBox(height: 20),
@@ -147,8 +156,10 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
                     'Design: ',
                     style: TextStyle(fontSize: 18.0),
                   ),
-                  _radio<String>('Material', 'm', _design, (value) => setState(() => _design = value)),
-                  _radio<String>('Cupertino', 'c', _design, (value) => setState(() => _design = value)),
+                  _radio<String>('Material', 'm', _design,
+                      (value) => setState(() => _design = value)),
+                  _radio<String>('Cupertino', 'c', _design,
+                      (value) => setState(() => _design = value)),
                 ],
               ),
               SizedBox(height: 20),
@@ -176,10 +187,14 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        _radio<DateOrder>('D M Y', DateOrder.dmy, _dateOrder, (value) => setState(() => _dateOrder = value)),
-                        _radio<DateOrder>('M D Y', DateOrder.mdy, _dateOrder, (value) => setState(() => _dateOrder = value)),
-                        _radio<DateOrder>('Y D M', DateOrder.ydm, _dateOrder, (value) => setState(() => _dateOrder = value)),
-                        _radio<DateOrder>('Y M D', DateOrder.ymd, _dateOrder, (value) => setState(() => _dateOrder = value)),
+                        _radio<DateOrder>('D M Y', DateOrder.dmy, _dateOrder,
+                            (value) => setState(() => _dateOrder = value)),
+                        _radio<DateOrder>('M D Y', DateOrder.mdy, _dateOrder,
+                            (value) => setState(() => _dateOrder = value)),
+                        _radio<DateOrder>('Y D M', DateOrder.ydm, _dateOrder,
+                            (value) => setState(() => _dateOrder = value)),
+                        _radio<DateOrder>('Y M D', DateOrder.ymd, _dateOrder,
+                            (value) => setState(() => _dateOrder = value)),
                       ],
                     ),
                   ),
@@ -204,7 +219,9 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
                   ),
                   Switch(
                     value: _showTimerPicker,
-                    onChanged: _design == 'm' ? (v) => setState(() => _showTimerPicker = v) : null,
+                    onChanged: _design == 'm'
+                        ? (v) => setState(() => _showTimerPicker = v)
+                        : null,
                   ),
                 ],
               ),
@@ -225,7 +242,8 @@ class _NepaliDatePickerExampleState extends State<NepaliDatePickerExample> {
       child: RadioListTile<T>(
         value: value,
         groupValue: groupValue,
-        onChanged: _design == 'm' && groupValue == _dateOrder ? null : onChanged,
+        onChanged:
+            _design == 'm' && groupValue == _dateOrder ? null : onChanged,
         title: Text(title),
       ),
     );

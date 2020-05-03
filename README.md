@@ -13,6 +13,8 @@ Nepali Date Picker returns data in **NepaliDateTime** type, which is
 included in [*nepali_utils*](https://pub.dev/packages/nepali_utils)
 package.
 
+**NOTE:** Use version **3.2.0+2** to support versions prior to **Flutter 1.14.x**
+
 ### Salient Features
 * Material DatePicker
 * Cupertino DatePicker
