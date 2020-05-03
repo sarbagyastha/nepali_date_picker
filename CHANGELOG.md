@@ -1,3 +1,11 @@
+## [4.0.0] - May 3, 2020
+* Updated material picker's design to match [Material Spec](https://material.io/components/pickers).
+* Added web demo.
+
+## [3.3.0-beta.1] - January 25, 2020
+* Fixed shutter while changing months
+* Compatible with `flutter >= 1.14.5-pre.24`
+
 ## [3.2.0+1] - January 25, 2020
 * Updated `nepali_utils` to latest version.
 * Memory Optimizations

@@ -2,13 +2,12 @@
 
 [![Pub Package](https://img.shields.io/pub/v/nepali_date_picker)](https://pub.dev/packages/nepali_date_picker)
 [![Licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/nepali_date_picker/blob/master/LICENSE)
-[![Download](https://img.shields.io/badge/Download-APK-blueviolet.svg)
-](https://github.com/sarbagyastha/nepali_date_picker/raw/master/ndp_eg.apk)
+[![Demo](https://img.shields.io/badge/Demo-APK-blueviolet.svg)](https://sarbagya.me/nepali_date_picker)
 [![effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://dart.dev/guides/language/effective-dart)
 
 Material and Cupertino Style Date Picker with Bikram Sambat(Nepali) Calendar Support. Supports Android, iOS and Fuchsia. Available in Nepali and English Languages.
 
-![Loading Demo](nepali_datePicker_demo.gif)
+![Loading Demo](demo.gif)
 
 Nepali Date Picker returns data in **NepaliDateTime** type, which is
 included in [*nepali_utils*](https://pub.dev/packages/nepali_utils)
@@ -32,7 +31,6 @@ NepaliDateTime _selectedDateTime = await picker.showMaterialDatePicker(
     initialDate: NepaliDateTime.now(),
     firstDate: NepaliDateTime(2000),
     lastDate: NepaliDateTime(2090),
-    language: _language,
     initialDatePickerMode: DatePickerMode.day,
 );
 
@@ -73,11 +71,11 @@ NepaliDateTime _selectedDateTime = await picker.showAdaptiveDatePicker(
 
 ***Material Design*** (Portrait)
 
-![Portrait Screenshot](screenshot/portrait.jpg)
+![Portrait Screenshot](screenshot/portrait.png)
 
 ***Material Design*** (Landscape)
 
-![Landscape Screenshot](screenshot/landscape.jpg)
+![Landscape Screenshot](screenshot/landscape.png)
 
 ***Cupertino Design***
 
@@ -93,7 +91,7 @@ NepaliDateTime _selectedDateTime = await picker.showAdaptiveDatePicker(
 ## License
 
 ```
-Copyright 2019 Sarbagya Dhaubanjar. All rights reserved.
+Copyright 2020 Sarbagya Dhaubanjar. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
