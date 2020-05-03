@@ -1,4 +1,4 @@
-## [4.0.0] - May 3, 2020
+## [4.0.0-beta.1] - May 3, 2020
 * Updated material picker's design to match [Material Spec](https://material.io/components/pickers).
 * Added web demo.
 
