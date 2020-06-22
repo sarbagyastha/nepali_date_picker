@@ -1,4 +1,4 @@
-## [4.1.0] - Jun 22, 2020
+## [4.1.0+1] - Jun 22, 2020
 * Added `CalendarDatePicker` widget with `dayBuilder`, `selectedDayDecoration` and `todayDecoration`.
 * Added Calender picker demo to example app.
 
