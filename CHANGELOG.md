@@ -1,3 +1,7 @@
+## [4.1.0] - Jun 22, 2020
+* Added `CalendarDatePicker` widget with `dayBuilder`, `selectedDayDecoration` and `todayDecoration`.
+* Added Calender picker demo to example app.
+
 ## [4.0.0+3] - May 3, 2020
 * Updated material picker's design to match [Material Spec](https://material.io/components/pickers).
 * Added web demo.

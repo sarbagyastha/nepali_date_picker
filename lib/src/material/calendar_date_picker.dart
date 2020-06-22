@@ -77,6 +77,9 @@ class CalendarDatePicker extends StatefulWidget {
     this.onDisplayedMonthChanged,
     this.initialCalendarMode = DatePickerMode.day,
     this.selectableDayPredicate,
+    this.selectedDayDecoration,
+    this.todayDecoration,
+    this.dayBuilder,
   })  : assert(initialDate != null),
         assert(firstDate != null),
         assert(lastDate != null),
@@ -119,6 +122,15 @@ class CalendarDatePicker extends StatefulWidget {
 
   /// The initial display of the calendar picker.
   final DatePickerMode initialCalendarMode;
+
+  /// Builds the widget for particular day.
+  final Widget Function(NepaliDateTime) dayBuilder;
+
+  /// Decoration for today's cell.
+  final BoxDecoration todayDecoration;
+
+  /// Decoration for selected day's cell.
+  final BoxDecoration selectedDayDecoration;
 
   /// Function to provide full control over which dates in the calendar can be selected.
   final common.SelectableDayPredicate selectableDayPredicate;
@@ -237,6 +249,9 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
           onChanged: _handleDayChanged,
           onDisplayedMonthChanged: _handleMonthChanged,
           selectableDayPredicate: widget.selectableDayPredicate,
+          todayDecoration: widget.todayDecoration,
+          selectedDayDecoration: widget.selectedDayDecoration,
+          dayBuilder: widget.dayBuilder,
         );
       case DatePickerMode.year:
         return Padding(
@@ -409,6 +424,9 @@ class _MonthPicker extends StatefulWidget {
     @required this.selectedDate,
     @required this.onChanged,
     @required this.onDisplayedMonthChanged,
+    this.selectedDayDecoration,
+    this.todayDecoration,
+    this.dayBuilder,
     this.selectableDayPredicate,
   })  : assert(selectedDate != null),
         assert(currentDate != null),
@@ -448,6 +466,15 @@ class _MonthPicker extends StatefulWidget {
 
   /// Called when the user navigates to a new month
   final ValueChanged<NepaliDateTime> onDisplayedMonthChanged;
+
+  /// Builds the widget for particular day.
+  final Widget Function(NepaliDateTime) dayBuilder;
+
+  /// Decoration for today's cell.
+  final BoxDecoration todayDecoration;
+
+  /// Decoration for selected day's cell.
+  final BoxDecoration selectedDayDecoration;
 
   /// Optional user supplied predicate function to customize selectable days.
   final common.SelectableDayPredicate selectableDayPredicate;
@@ -547,6 +574,9 @@ class _MonthPickerState extends State<_MonthPicker> {
       lastDate: widget.lastDate,
       displayedMonth: month,
       selectableDayPredicate: widget.selectableDayPredicate,
+      dayBuilder: widget.dayBuilder,
+      selectedDayDecoration: widget.selectedDayDecoration,
+      todayDecoration: widget.todayDecoration,
     );
   }
 
@@ -615,6 +645,9 @@ class _DayPicker extends StatelessWidget {
     @required this.lastDate,
     @required this.selectedDate,
     @required this.onChanged,
+    this.todayDecoration,
+    this.selectedDayDecoration,
+    this.dayBuilder,
     this.selectableDayPredicate,
   })  : assert(currentDate != null),
         assert(displayedMonth != null),
@@ -650,6 +683,15 @@ class _DayPicker extends StatelessWidget {
 
   /// The month whose days are displayed by this picker.
   final NepaliDateTime displayedMonth;
+
+  /// Builds the widget for particular day.
+  final Widget Function(NepaliDateTime) dayBuilder;
+
+  /// Decoration for today's cell.
+  final BoxDecoration todayDecoration;
+
+  /// Decoration for selected day's cell.
+  final BoxDecoration selectedDayDecoration;
 
   /// Optional user supplied predicate function to customize selectable days.
   final common.SelectableDayPredicate selectableDayPredicate;
@@ -691,28 +733,32 @@ class _DayPicker extends StatelessWidget {
           // The selected day gets a circle background highlight, and a
           // contrasting text color.
           dayColor = selectedDayColor;
-          decoration = BoxDecoration(
-            color: selectedDayBackground,
-            shape: BoxShape.circle,
-          );
+          decoration = selectedDayDecoration ??
+              BoxDecoration(
+                color: selectedDayBackground,
+                shape: BoxShape.circle,
+              );
         } else if (isDisabled) {
           dayColor = disabledDayColor;
         } else if (utils.isSameDay(currentDate, dayToBuild)) {
           // The current day gets a different text color and a circle stroke
           // border.
           dayColor = todayColor;
-          decoration = BoxDecoration(
-            border: Border.all(color: todayColor, width: 1),
-            shape: BoxShape.circle,
-          );
+          decoration = todayDecoration ??
+              BoxDecoration(
+                border: Border.all(color: todayColor, width: 1),
+                shape: BoxShape.circle,
+              );
         }
 
         Widget dayWidget = Container(
           decoration: decoration,
-          child: Center(
-            child: Text(NepaliNumberFormat().format(day),
-                style: dayStyle.apply(color: dayColor)),
-          ),
+          child: dayBuilder == null
+              ? Center(
+                  child: Text(NepaliNumberFormat().format(day),
+                      style: dayStyle.apply(color: dayColor)),
+                )
+              : dayBuilder(dayToBuild),
         );
 
         if (isDisabled) {

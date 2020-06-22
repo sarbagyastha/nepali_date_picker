@@ -1,4 +1,4 @@
-# Nepali Date Picker
+# Nepali Date Picker + Calendar
 
 [![Pub Package](https://img.shields.io/pub/v/nepali_date_picker)](https://pub.dev/packages/nepali_date_picker)
 [![Licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/nepali_date_picker/blob/master/LICENSE)
@@ -13,14 +13,15 @@ Nepali Date Picker returns data in **NepaliDateTime** type, which is
 included in [*nepali_utils*](https://pub.dev/packages/nepali_utils)
 package.
 
-**NOTE:** Use version **3.2.0+2** to support versions prior to **Flutter 1.14.x**
-
 [**Click here to launch WEB DEMO**](https://sarbagya.me/nepali_date_picker)
+
+![Loading Demo](screenshot/picker.png) ![Loading Demo](screenshot/calendar.png)
 
 ### Salient Features
 * Material DatePicker
 * Cupertino DatePicker
 * Adaptive DatePicker
+* Calendar Picker
 * Supports from 2000 B.S. to 2099 B.S.
 
 ## Usage
@@ -69,6 +70,33 @@ NepaliDateTime _selectedDateTime = await picker.showAdaptiveDatePicker(
     dateOrder: _dateOrder, // for iOS only
     initialDatePickerMode: DatePickerMode.day, // for platform except iOS
 );
+```
+
+#### Calender Picker
+Shows Calendar, can be used for showing events.
+```dart
+CalendarDatePicker(
+    initialDate: NepaliDateTime.now(),
+    firstDate: NepaliDateTime(2070),
+    lastDate: NepaliDateTime(2090),
+    onDateChanged: (date) => _selectedDate.value = date,
+    dayBuilder: (dayToBuild) { // Optional
+      return Center(
+                child: Text(
+                    '${dayToBuild.day}',
+                    style: Theme.of(context).textTheme.caption,
+               ),
+          ),
+      },
+     selectedDayDecoration: BoxDecoration ( // Optional
+            color: Colors.deepOrange,
+            shape: BoxShape.circle,
+     ),
+     todayDecoration: BoxDecoration ( // Optional
+            gradient: LinearGradient(colors: [Colors.yellow, Colors.orange]),
+            shape: BoxShape.circle,
+     ),
+};
 ```
 
 ## Screenshots
