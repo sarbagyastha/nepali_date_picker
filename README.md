@@ -13,7 +13,7 @@ Nepali Date Picker returns data in **NepaliDateTime** type, which is
 included in [*nepali_utils*](https://pub.dev/packages/nepali_utils)
 package.
 
-[**Click here to launch WEB DEMO**](https://sarbagya.me/nepali_date_picker)
+[**Click here to launch WEB DEMO**](https://sarbagyastha.github.com/nepali_date_picker)
 
 ![Loading Demo](screenshot/picker.png) ![Loading Demo](screenshot/calendar.png)
 
