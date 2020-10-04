@@ -22,7 +22,8 @@ package.
 * Cupertino DatePicker
 * Adaptive DatePicker
 * Calendar Picker
-* Calendar Date Range Picker
+* Material Date Range Picker
+* Calendar Range Picker
 * Supports from 2000 B.S. to 2099 B.S.
 
 ## Usage
@@ -45,7 +46,7 @@ print(_selectedDateTime); // 2076-02-16T00:00:00
 
 #### Cupertino Style Date Picker
 ```dart
-picker.showCupertinoDatePicker(
+NepaliDateTime _selectedDateTime = await picker.showCupertinoDatePicker(
     context: context,
     initialDate: NepaliDateTime.now(),
     firstDate: NepaliDateTime(2000),
@@ -70,6 +71,15 @@ NepaliDateTime _selectedDateTime = await picker.showAdaptiveDatePicker(
     language: _language,
     dateOrder: _dateOrder, // for iOS only
     initialDatePickerMode: DatePickerMode.day, // for platform except iOS
+);
+```
+
+#### Material Date Range Picker
+```dart
+NepaliDateTimeRange _selectedDateTimeRange = await showMaterialDateRangePicker(
+    context: context,
+    firstDate: NepaliDateTime(2020),
+    lastDate: NepaliDateTime(2099),
 );
 ```
 

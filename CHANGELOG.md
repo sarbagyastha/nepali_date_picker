@@ -1,3 +1,9 @@
+## [4.2.0] - Oct 4, 2020
+* Added `CalendarDateRangePicker` widget.
+* Added `showMaterialDateRangePicker` method.
+* Added keyboard navigation support.
+* Synced with latest material specs.
+
 ## [4.1.0+1] - Jun 22, 2020
 * Added `CalendarDatePicker` widget with `dayBuilder`, `selectedDayDecoration` and `todayDecoration`.
 * Added Calender picker demo to example app.

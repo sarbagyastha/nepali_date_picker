@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:nepali_date_picker_example/modes/calendar_date_picker_widget.dart';
 import 'package:nepali_date_picker_example/modes/calendar_date_range_picker_widget.dart';
 import 'package:nepali_date_picker_example/modes/date_picker_widget.dart';
+import 'package:nepali_date_picker_example/modes/date_range_picker_widget.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
 void main() => runApp(MyApp());
@@ -26,15 +27,17 @@ class _MyAppState extends State<MyApp> {
       ),
       title: 'Nepali Date Picker Demo',
       home: DefaultTabController(
-        length: 3,
+        length: 4,
         child: Scaffold(
           appBar: AppBar(
             title: Text("Nepali Date Picker"),
             centerTitle: true,
             bottom: TabBar(
+              isScrollable: true,
               tabs: [
                 Tab(text: 'Date Picker'),
                 Tab(text: 'Calendar'),
+                Tab(text: 'Date Range Picker'),
                 Tab(text: 'Calendar Range'),
               ],
             ),
@@ -55,6 +58,7 @@ class _MyAppState extends State<MyApp> {
             children: [
               DatePickerWidget(),
               CalendarDatePickerWidget(),
+              DateRangePickerWidget(),
               CalendarDateRangePickerWidget(),
             ],
           ),
