@@ -37,9 +37,7 @@ class NepaliDateTimeRange {
   @override
   bool operator ==(Object other) {
     if (other.runtimeType != runtimeType) return false;
-    return other is NepaliDateTimeRange &&
-        other.start == start &&
-        other.end == end;
+    return other is NepaliDateTimeRange && other.start == start && other.end == end;
   }
 
   @override
