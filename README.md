@@ -46,7 +46,7 @@ print(_selectedDateTime); // 2076-02-16T00:00:00
 
 #### Cupertino Style Date Picker
 ```dart
-NepaliDateTime _selectedDateTime = await picker.showCupertinoDatePicker(
+picker.showCupertinoDatePicker(
     context: context,
     initialDate: NepaliDateTime.now(),
     firstDate: NepaliDateTime(2000),
@@ -74,15 +74,6 @@ NepaliDateTime _selectedDateTime = await picker.showAdaptiveDatePicker(
 );
 ```
 
-#### Material Date Range Picker
-```dart
-NepaliDateTimeRange _selectedDateTimeRange = await showMaterialDateRangePicker(
-    context: context,
-    firstDate: NepaliDateTime(2020),
-    lastDate: NepaliDateTime(2099),
-);
-```
-
 #### Calender Picker
 Shows Calendar, can be used for showing events.
 ```dart
@@ -107,22 +98,6 @@ CalendarDatePicker(
             gradient: LinearGradient(colors: [Colors.yellow, Colors.orange]),
             shape: BoxShape.circle,
      ),
-};
-```
-
-#### Calender Range Picker
-```dart
-CalendarDateRangePicker(
-    initialStartDate: NepaliDateTime.now(),
-    initialEndDate: NepaliDateTime.now().add(Duration(days: 5)),
-    firstDate: NepaliDateTime(2070),
-    lastDate: NepaliDateTime(2090),
-    onStartDateChanged: (date) {
-       print('Start Date: $date');
-    },
-    onEndDateChanged: (date) {
-       print('End Date: $date');
-    },
 };
 ```
 
