@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide CalendarDatePicker;
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 
@@ -10,7 +9,10 @@ class CalendarDateRangePickerWidget extends StatefulWidget {
 
 class _CalendarDateRangePickerWidgetState extends State<CalendarDateRangePickerWidget> {
   ///
-  final List<NepaliDateTime> dateRange = List.filled(2, NepaliDateTime.now());
+  final List<NepaliDateTime> dateRange = [
+    NepaliDateTime.now(),
+    NepaliDateTime.now().add(Duration(days: 5)),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +21,8 @@ class _CalendarDateRangePickerWidgetState extends State<CalendarDateRangePickerW
         children: [
           Expanded(
             child: CalendarDateRangePicker(
+              initialStartDate: NepaliDateTime.now(),
+              initialEndDate: NepaliDateTime.now().add(Duration(days: 5)),
               firstDate: NepaliDateTime(2070),
               lastDate: NepaliDateTime(2090),
               onStartDateChanged: (date) {

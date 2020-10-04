@@ -2,10 +2,10 @@
 
 [![Pub Package](https://img.shields.io/pub/v/nepali_date_picker)](https://pub.dev/packages/nepali_date_picker)
 [![Licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/nepali_date_picker/blob/master/LICENSE)
-[![Demo](https://img.shields.io/badge/Demo-WEB-blueviolet.svg)](http://sarbagya.me/nepali_date_picker)
+[![Demo](https://img.shields.io/badge/Demo-WEB-blueviolet.svg)](https://sarbagyastha.com.np/nepali_date_picker)
 [![effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://dart.dev/guides/language/effective-dart)
 
-Material and Cupertino Style Date Picker with Bikram Sambat(Nepali) Calendar Support. Supports Android, iOS and Fuchsia. Available in Nepali and English Languages.
+Material and Cupertino Styled Date Picker, Date Range Picker and Calendar with Bikram Sambat(Nepali) Support.
 
 ![Loading Demo](demo.gif)
 
@@ -13,7 +13,7 @@ Nepali Date Picker returns data in **NepaliDateTime** type, which is
 included in [*nepali_utils*](https://pub.dev/packages/nepali_utils)
 package.
 
-[**Click here to launch WEB DEMO**](https://sarbagya.me/nepali_date_picker)
+[**Click here to launch WEB DEMO**](https://sarbagyastha.com.np/nepali_date_picker)
 
 ![Loading Demo](screenshot/picker.png) ![Loading Demo](screenshot/calendar.png)
 
@@ -22,6 +22,7 @@ package.
 * Cupertino DatePicker
 * Adaptive DatePicker
 * Calendar Picker
+* Calendar Date Range Picker
 * Supports from 2000 B.S. to 2099 B.S.
 
 ## Usage
@@ -96,6 +97,22 @@ CalendarDatePicker(
             gradient: LinearGradient(colors: [Colors.yellow, Colors.orange]),
             shape: BoxShape.circle,
      ),
+};
+```
+
+#### Calender Range Picker
+```dart
+CalendarDateRangePicker(
+    initialStartDate: NepaliDateTime.now(),
+    initialEndDate: NepaliDateTime.now().add(Duration(days: 5)),
+    firstDate: NepaliDateTime(2070),
+    lastDate: NepaliDateTime(2090),
+    onStartDateChanged: (date) {
+       print('Start Date: $date');
+    },
+    onEndDateChanged: (date) {
+       print('End Date: $date');
+    },
 };
 ```
 
