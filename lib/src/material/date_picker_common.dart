@@ -4,7 +4,7 @@
 
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
 /// Signature for predicating dates for enabled date selections.
