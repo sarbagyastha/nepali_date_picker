@@ -4,12 +4,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker_example/modes/calendar_date_picker_widget.dart';
+import 'package:nepali_date_picker_example/modes/calendar_date_range_picker_widget.dart';
 import 'package:nepali_date_picker_example/modes/date_picker_widget.dart';
+import 'package:nepali_utils/nepali_utils.dart';
 
 void main() => runApp(MyApp());
 
 /// MyApp
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,7 +26,7 @@ class MyApp extends StatelessWidget {
       ),
       title: 'Nepali Date Picker Demo',
       home: DefaultTabController(
-        length: 2,
+        length: 3,
         child: Scaffold(
           appBar: AppBar(
             title: Text("Nepali Date Picker"),
@@ -28,13 +35,27 @@ class MyApp extends StatelessWidget {
               tabs: [
                 Tab(text: 'Date Picker'),
                 Tab(text: 'Calendar'),
+                Tab(text: 'Calendar Range'),
               ],
             ),
+            actions: [
+              IconButton(
+                icon: Text(
+                  NepaliUtils().language == Language.english ? 'ने' : 'En',
+                  style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.white),
+                ),
+                onPressed: () {
+                  NepaliUtils().language = NepaliUtils().language == Language.english ? Language.nepali : Language.english;
+                  setState(() {});
+                },
+              ),
+            ],
           ),
           body: TabBarView(
             children: [
               DatePickerWidget(),
               CalendarDatePickerWidget(),
+              CalendarDateRangePickerWidget(),
             ],
           ),
         ),

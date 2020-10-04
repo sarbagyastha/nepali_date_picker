@@ -78,8 +78,9 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                       language: NepaliUtils().language,
                       dateOrder: _dateOrder,
                       onDateChanged: (newDate) {
+                        final timeOfDay = TimeOfDay.now();
                         setState(() {
-                          _selectedDateTime = newDate;
+                          _selectedDateTime = newDate.mergeTime(timeOfDay.hour, timeOfDay.minute, 0);
                         });
                       },
                     );
@@ -104,34 +105,11 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
               children: <Widget>[
                 SizedBox(width: 10.0),
                 Text(
-                  'Language: ',
-                  style: TextStyle(fontSize: 18.0),
-                ),
-                _radio<Language>(
-                    'English',
-                    Language.english,
-                    NepaliUtils().language,
-                    (value) => setState(() => NepaliUtils().language = value)),
-                _radio<Language>(
-                    'Nepali',
-                    Language.nepali,
-                    NepaliUtils().language,
-                    (value) => setState(() => NepaliUtils().language = value)),
-              ],
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                SizedBox(width: 10.0),
-                Text(
                   'Design: ',
                   style: TextStyle(fontSize: 18.0),
                 ),
-                _radio<String>('Material', 'm', _design,
-                    (value) => setState(() => _design = value)),
-                _radio<String>('Cupertino', 'c', _design,
-                    (value) => setState(() => _design = value)),
+                _radio<String>('Material', 'm', _design, (value) => setState(() => _design = value)),
+                _radio<String>('Cupertino', 'c', _design, (value) => setState(() => _design = value)),
               ],
             ),
             SizedBox(height: 20),
@@ -159,14 +137,10 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      _radio<DateOrder>('D M Y', DateOrder.dmy, _dateOrder,
-                          (value) => setState(() => _dateOrder = value)),
-                      _radio<DateOrder>('M D Y', DateOrder.mdy, _dateOrder,
-                          (value) => setState(() => _dateOrder = value)),
-                      _radio<DateOrder>('Y D M', DateOrder.ydm, _dateOrder,
-                          (value) => setState(() => _dateOrder = value)),
-                      _radio<DateOrder>('Y M D', DateOrder.ymd, _dateOrder,
-                          (value) => setState(() => _dateOrder = value)),
+                      _radio<DateOrder>('D M Y', DateOrder.dmy, _dateOrder, (value) => setState(() => _dateOrder = value)),
+                      _radio<DateOrder>('M D Y', DateOrder.mdy, _dateOrder, (value) => setState(() => _dateOrder = value)),
+                      _radio<DateOrder>('Y D M', DateOrder.ydm, _dateOrder, (value) => setState(() => _dateOrder = value)),
+                      _radio<DateOrder>('Y M D', DateOrder.ymd, _dateOrder, (value) => setState(() => _dateOrder = value)),
                     ],
                   ),
                 ),
@@ -191,9 +165,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                 ),
                 Switch(
                   value: _showTimerPicker,
-                  onChanged: _design == 'm'
-                      ? (v) => setState(() => _showTimerPicker = v)
-                      : null,
+                  onChanged: _design == 'm' ? (v) => setState(() => _showTimerPicker = v) : null,
                 ),
               ],
             ),
@@ -213,8 +185,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       child: RadioListTile<T>(
         value: value,
         groupValue: groupValue,
-        onChanged:
-            _design == 'm' && groupValue == _dateOrder ? null : onChanged,
+        onChanged: _design == 'm' && groupValue == _dateOrder ? null : onChanged,
         title: Text(title),
       ),
     );
