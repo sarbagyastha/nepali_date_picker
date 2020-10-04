@@ -90,8 +90,10 @@ class DatePickerHeader extends StatelessWidget {
 
     // The header should use the primary color in light themes and surface color in dark
     final isDark = colorScheme.brightness == Brightness.dark;
-    final primarySurfaceColor = isDark ? colorScheme.surface : colorScheme.primary;
-    final onPrimarySurfaceColor = isDark ? colorScheme.onSurface : colorScheme.onPrimary;
+    final primarySurfaceColor =
+        isDark ? colorScheme.surface : colorScheme.primary;
+    final onPrimarySurfaceColor =
+        isDark ? colorScheme.onSurface : colorScheme.onPrimary;
 
     final helpStyle = textTheme.overline?.copyWith(
       color: onPrimarySurfaceColor,

@@ -8,7 +8,8 @@ class DateRangePickerWidget extends StatefulWidget {
 }
 
 class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
-  NepaliDateTimeRange _selectedDateTimeRange = NepaliDateTimeRange(start: NepaliDateTime.now(), end: NepaliDateTime.now());
+  NepaliDateTimeRange _selectedDateTimeRange = NepaliDateTimeRange(
+      start: NepaliDateTime.now(), end: NepaliDateTime.now());
 
   @override
   Widget build(BuildContext context) {

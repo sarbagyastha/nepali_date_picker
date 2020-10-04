@@ -5,14 +5,21 @@ import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 /// Calendar Picker Example
 class CalendarDatePickerWidget extends StatelessWidget {
-  final ValueNotifier<NepaliDateTime> _selectedDate = ValueNotifier(NepaliDateTime.now());
+  final ValueNotifier<NepaliDateTime> _selectedDate =
+      ValueNotifier(NepaliDateTime.now());
 
   /// Events
   final List<Event> events = [
     Event(date: NepaliDateTime.now(), eventTitles: ['Today 1', 'Today 2']),
-    Event(date: NepaliDateTime.now().add(Duration(days: 30)), eventTitles: ['Holiday 1', 'Holiday 2']),
-    Event(date: NepaliDateTime.now().subtract(Duration(days: 5)), eventTitles: ['Event 1', 'Event 2']),
-    Event(date: NepaliDateTime.now().add(Duration(days: 8)), eventTitles: ['Seminar 1', 'Seminar 2']),
+    Event(
+        date: NepaliDateTime.now().add(Duration(days: 30)),
+        eventTitles: ['Holiday 1', 'Holiday 2']),
+    Event(
+        date: NepaliDateTime.now().subtract(Duration(days: 5)),
+        eventTitles: ['Event 1', 'Event 2']),
+    Event(
+        date: NepaliDateTime.now().add(Duration(days: 8)),
+        eventTitles: ['Seminar 1', 'Seminar 2']),
   ];
 
   @override
@@ -29,7 +36,9 @@ class CalendarDatePickerWidget extends StatelessWidget {
               children: <Widget>[
                 Center(
                   child: Text(
-                    NepaliUtils().language == Language.english ? '${dayToBuild.day}' : NepaliUnicode.convert('${dayToBuild.day}'),
+                    NepaliUtils().language == Language.english
+                        ? '${dayToBuild.day}'
+                        : NepaliUnicode.convert('${dayToBuild.day}'),
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),
@@ -39,7 +48,8 @@ class CalendarDatePickerWidget extends StatelessWidget {
                     child: Container(
                       width: 6,
                       height: 6,
-                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.purple),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: Colors.purple),
                     ),
                   )
               ],
@@ -58,7 +68,8 @@ class CalendarDatePickerWidget extends StatelessWidget {
           child: ValueListenableBuilder(
             valueListenable: _selectedDate,
             builder: (context, date, _) {
-              final event = events.firstWhere((e) => _dayEquals(e.date, date), orElse: () => null);
+              final event = events.firstWhere((e) => _dayEquals(e.date, date),
+                  orElse: () => null);
 
               if (event == null) {
                 return Center(
@@ -84,7 +95,9 @@ class CalendarDatePickerWidget extends StatelessWidget {
     );
   }
 
-  bool _dayEquals(NepaliDateTime a, NepaliDateTime b) => a.toIso8601String().substring(0, 10) == b.toIso8601String().substring(0, 10);
+  bool _dayEquals(NepaliDateTime a, NepaliDateTime b) =>
+      a.toIso8601String().substring(0, 10) ==
+      b.toIso8601String().substring(0, 10);
 }
 
 ///
@@ -122,8 +135,14 @@ class TodayWidget extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 2),
                 child: Text(
-                  NepaliDateFormat.EEEE().format(today).substring(0, 3).toUpperCase(),
-                  style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.white),
+                  NepaliDateFormat.EEEE()
+                      .format(today)
+                      .substring(0, 3)
+                      .toUpperCase(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      .copyWith(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
               ),

@@ -4,10 +4,12 @@ import 'package:nepali_date_picker/nepali_date_picker.dart';
 ///
 class CalendarDateRangePickerWidget extends StatefulWidget {
   @override
-  _CalendarDateRangePickerWidgetState createState() => _CalendarDateRangePickerWidgetState();
+  _CalendarDateRangePickerWidgetState createState() =>
+      _CalendarDateRangePickerWidgetState();
 }
 
-class _CalendarDateRangePickerWidgetState extends State<CalendarDateRangePickerWidget> {
+class _CalendarDateRangePickerWidgetState
+    extends State<CalendarDateRangePickerWidget> {
   ///
   final List<NepaliDateTime> dateRange = [
     NepaliDateTime.now(),

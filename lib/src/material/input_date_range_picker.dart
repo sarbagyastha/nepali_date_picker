@@ -35,8 +35,10 @@ class InputDateRangePicker extends StatefulWidget {
     this.fieldEndLabelText,
     this.autofocus = false,
     this.autovalidate = false,
-  })  : initialStartDate = initialStartDate == null ? null : utils.dateOnly(initialStartDate),
-        initialEndDate = initialEndDate == null ? null : utils.dateOnly(initialEndDate),
+  })  : initialStartDate =
+            initialStartDate == null ? null : utils.dateOnly(initialStartDate),
+        initialEndDate =
+            initialEndDate == null ? null : utils.dateOnly(initialEndDate),
         assert(firstDate != null),
         firstDate = utils.dateOnly(firstDate),
         assert(lastDate != null),
@@ -138,7 +140,8 @@ class InputDateRangePickerState extends State<InputDateRangePicker> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_startDate != null) {
-      _startInputText = NepaliDateFormat.yMd(Language.english).format(_startDate);
+      _startInputText =
+          NepaliDateFormat.yMd(Language.english).format(_startDate);
       final selectText = widget.autofocus && !_autoSelected;
       _updateController(_startController, _startInputText, selectText);
       _autoSelected = selectText;
@@ -161,7 +164,8 @@ class InputDateRangePickerState extends State<InputDateRangePicker> {
     final endError = _validateDate(_endDate);
     if (startError == null && endError == null) {
       if (_startDate.isAfter(_endDate)) {
-        startError = widget.errorInvalidRangeText ?? MaterialLocalizations.of(context).invalidDateRangeLabel;
+        startError = widget.errorInvalidRangeText ??
+            MaterialLocalizations.of(context).invalidDateRangeLabel;
       }
     }
     setState(() {
@@ -172,7 +176,8 @@ class InputDateRangePickerState extends State<InputDateRangePicker> {
   }
 
   NepaliDateTime _parseDate(String text) {
-    if (RegExp(r'^2[01]\d{2}/(0[1-9]|1[0-2])/(0[1-9]|1[1-9]|2[1-9]|3[0-2])').hasMatch(text)) {
+    if (RegExp(r'^2[01]\d{2}/(0[1-9]|1[0-2])/(0[1-9]|1[1-9]|2[1-9]|3[0-2])')
+        .hasMatch(text)) {
       return NepaliDateTime.parse(text.replaceAll('/', '-'));
     }
     return null;
@@ -180,14 +185,18 @@ class InputDateRangePickerState extends State<InputDateRangePicker> {
 
   String _validateDate(NepaliDateTime date) {
     if (date == null) {
-      return widget.errorFormatText ?? MaterialLocalizations.of(context).invalidDateFormatLabel;
-    } else if (date.isBefore(widget.firstDate) || date.isAfter(widget.lastDate)) {
-      return widget.errorInvalidText ?? MaterialLocalizations.of(context).dateOutOfRangeLabel;
+      return widget.errorFormatText ??
+          MaterialLocalizations.of(context).invalidDateFormatLabel;
+    } else if (date.isBefore(widget.firstDate) ||
+        date.isAfter(widget.lastDate)) {
+      return widget.errorInvalidText ??
+          MaterialLocalizations.of(context).dateOutOfRangeLabel;
     }
     return null;
   }
 
-  void _updateController(TextEditingController controller, String text, bool selectText) {
+  void _updateController(
+      TextEditingController controller, String text, bool selectText) {
     var textEditingValue = controller.value.copyWith(text: text);
     if (selectText) {
       textEditingValue = textEditingValue.copyWith(
@@ -235,7 +244,8 @@ class InputDateRangePickerState extends State<InputDateRangePicker> {
               border: inputTheme.border ?? const UnderlineInputBorder(),
               filled: inputTheme.filled ?? true,
               hintText: widget.fieldStartHintText ?? localizations.dateHelpText,
-              labelText: widget.fieldStartLabelText ?? localizations.dateRangeStartLabel,
+              labelText: widget.fieldStartLabelText ??
+                  localizations.dateRangeStartLabel,
               errorText: _startErrorText,
             ),
             keyboardType: TextInputType.datetime,
@@ -251,7 +261,8 @@ class InputDateRangePickerState extends State<InputDateRangePicker> {
               border: inputTheme.border ?? const UnderlineInputBorder(),
               filled: inputTheme.filled ?? true,
               hintText: widget.fieldEndHintText ?? localizations.dateHelpText,
-              labelText: widget.fieldEndLabelText ?? localizations.dateRangeEndLabel,
+              labelText:
+                  widget.fieldEndLabelText ?? localizations.dateRangeEndLabel,
               errorText: _endErrorText,
             ),
             keyboardType: TextInputType.datetime,
