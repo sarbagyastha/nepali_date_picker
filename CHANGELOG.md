@@ -1,4 +1,4 @@
-## [4.2.0] - Oct 4, 2020
+## [4.2.0+1] - Oct 4, 2020
 * Added `CalendarDateRangePicker` widget.
 * Added `showMaterialDateRangePicker` method.
 * Added keyboard navigation support.

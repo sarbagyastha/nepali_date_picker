@@ -3,11 +3,12 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:nepali_date_picker_example/modes/calendar_date_picker_widget.dart';
-import 'package:nepali_date_picker_example/modes/calendar_date_range_picker_widget.dart';
-import 'package:nepali_date_picker_example/modes/date_picker_widget.dart';
-import 'package:nepali_date_picker_example/modes/date_range_picker_widget.dart';
 import 'package:nepali_utils/nepali_utils.dart';
+
+import 'modes/calendar_date_picker_widget.dart';
+import 'modes/calendar_date_range_picker_widget.dart';
+import 'modes/date_picker_widget.dart';
+import 'modes/date_range_picker_widget.dart';
 
 void main() => runApp(MyApp());
 
@@ -45,16 +46,10 @@ class _MyAppState extends State<MyApp> {
               IconButton(
                 icon: Text(
                   NepaliUtils().language == Language.english ? 'ने' : 'En',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6
-                      .copyWith(color: Colors.white),
+                  style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.white),
                 ),
                 onPressed: () {
-                  NepaliUtils().language =
-                      NepaliUtils().language == Language.english
-                          ? Language.nepali
-                          : Language.english;
+                  NepaliUtils().language = NepaliUtils().language == Language.english ? Language.nepali : Language.english;
                   setState(() {});
                 },
               ),
