@@ -30,13 +30,14 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
           SizedBox(height: 20),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 50.0),
-            child: MaterialButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
                 ),
               ),
-              color: Theme.of(context).primaryColor,
               onPressed: () async {
                 _selectedDateTimeRange = await showMaterialDateRangePicker(
                   context: context,

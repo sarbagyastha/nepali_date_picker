@@ -39,13 +39,14 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             SizedBox(height: 20),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 50.0),
-              child: MaterialButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
                   ),
                 ),
-                color: Theme.of(context).primaryColor,
                 onPressed: () async {
                   if (_design == 'm') {
                     _selectedDateTime = await showMaterialDatePicker(
