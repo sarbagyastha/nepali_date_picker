@@ -10,11 +10,15 @@ NepaliDateTime dateOnly(NepaliDateTime date) {
 }
 
 /// Returns true if the two [NepaliDateTime] objects have the same day, month, and
-/// year.
+/// year, or are both null.
 bool isSameDay(NepaliDateTime dateA, NepaliDateTime dateB) {
-  return dateA.year == dateB.year &&
-      dateA.month == dateB.month &&
-      dateA.day == dateB.day;
+  return dateA?.year == dateB?.year && dateA?.month == dateB?.month && dateA?.day == dateB?.day;
+}
+
+/// Returns true if the two [NepaliDateTime] objects have the same month, and
+/// year, or are both null.
+bool isSameMonth(NepaliDateTime dateA, NepaliDateTime dateB) {
+  return dateA?.year == dateB?.year && dateA?.month == dateB?.month;
 }
 
 /// Determines the number of months between two [NepaliDateTime] objects.
@@ -32,10 +36,6 @@ NepaliDateTime addMonthsToMonthDate(NepaliDateTime monthDate, int monthsToAdd) {
   _month = _month % 12;
   if (_month == 0) _month = 12;
   return NepaliDateTime(_year, _month);
-//  return NepaliDateTime(
-//    monthDate.year + monthsToAdd ~/ 12,
-//    monthDate.month + monthsToAdd % 12,
-//  );
 }
 
 /// Computes the offset from the first day of the week that the first day of
@@ -46,11 +46,5 @@ int firstDayOffset(int year, int month) {
 
 /// Returns the number of days in a month.
 int getDaysInMonth(int year, int month) {
-//  var _year = year;
-//  var _month = month;
-//  if (month > 12) {
-//    _year += month ~/ 12;
-//    _month = month % 12;
-//  }
   return NepaliDateTime(year, month).totalDays;
 }

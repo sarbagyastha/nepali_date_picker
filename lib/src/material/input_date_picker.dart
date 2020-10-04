@@ -10,9 +10,6 @@ import 'package:nepali_utils/nepali_utils.dart';
 import 'date_picker_common.dart' as common;
 import 'date_utils.dart' as utils;
 
-const double _inputPortraitHeight = 98.0;
-const double _inputLandscapeHeight = 108.0;
-
 /// A [TextFormField] configured to accept and validate a date entered by the user.
 ///
 /// The text entered into this field will be constrained to only allow digits
@@ -66,16 +63,12 @@ class InputDatePickerFormField extends StatefulWidget {
         firstDate = utils.dateOnly(firstDate),
         lastDate = utils.dateOnly(lastDate),
         super(key: key) {
-    assert(!this.lastDate.isBefore(this.firstDate),
-        'lastDate ${this.lastDate} must be on or after firstDate ${this.firstDate}.');
+    assert(!this.lastDate.isBefore(this.firstDate), 'lastDate ${this.lastDate} must be on or after firstDate ${this.firstDate}.');
     assert(initialDate == null || !this.initialDate.isBefore(this.firstDate),
         'initialDate ${this.initialDate} must be on or after firstDate ${this.firstDate}.');
     assert(initialDate == null || !this.initialDate.isAfter(this.lastDate),
         'initialDate ${this.initialDate} must be on or before lastDate ${this.lastDate}.');
-    assert(
-        selectableDayPredicate == null ||
-            initialDate == null ||
-            selectableDayPredicate(this.initialDate),
+    assert(selectableDayPredicate == null || initialDate == null || selectableDayPredicate(this.initialDate),
         'Provided initialDate ${this.initialDate} must satisfy provided selectableDayPredicate.');
   }
 
@@ -126,8 +119,7 @@ class InputDatePickerFormField extends StatefulWidget {
   final bool autofocus;
 
   @override
-  _InputDatePickerFormFieldState createState() =>
-      _InputDatePickerFormFieldState();
+  _InputDatePickerFormFieldState createState() => _InputDatePickerFormFieldState();
 }
 
 class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
@@ -169,8 +161,7 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
   }
 
   NepaliDateTime _parseDate(String text) {
-    if (RegExp(r'^2[01]\d{2}/(0[1-9]|1[0-2])/(0[1-9]|1[1-9]|2[1-9]|3[0-2])')
-        .hasMatch(text)) {
+    if (RegExp(r'^2[01]\d{2}/(0[1-9]|1[0-2])/(0[1-9]|1[1-9]|2[1-9]|3[0-2])').hasMatch(text)) {
       return NepaliDateTime.parse(text.replaceAll('/', '-'));
     }
     return null;
@@ -180,8 +171,7 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
     return date != null &&
         !date.isBefore(widget.firstDate) &&
         !date.isAfter(widget.lastDate) &&
-        (widget.selectableDayPredicate == null ||
-            widget.selectableDayPredicate(date));
+        (widget.selectableDayPredicate == null || widget.selectableDayPredicate(date));
   }
 
   String _validateDate(String text) {
@@ -218,40 +208,24 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(
-        builder: (BuildContext context, Orientation orientation) {
-      assert(orientation != null);
-
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        height: orientation == Orientation.portrait
-            ? _inputPortraitHeight
-            : _inputLandscapeHeight,
-        child: Column(
-          children: <Widget>[
-            const Spacer(),
-            TextFormField(
-              decoration: InputDecoration(
-                border: const UnderlineInputBorder(),
-                filled: true,
-                hintText: widget.fieldHintText ?? 'mm/dd/yyyy',
-                labelText: widget.fieldLabelText ?? 'Enter Date',
-              ),
-              validator: _validateDate,
-              inputFormatters: <TextInputFormatter>[
-                _DateTextInputFormatter('/'),
-              ],
-              keyboardType: TextInputType.datetime,
-              onSaved: _handleSaved,
-              onFieldSubmitted: _handleSubmitted,
-              autofocus: widget.autofocus,
-              controller: _controller,
-            ),
-            const Spacer(),
-          ],
-        ),
-      );
-    });
+    final inputTheme = Theme.of(context).inputDecorationTheme;
+    return TextFormField(
+      decoration: InputDecoration(
+        border: inputTheme.border ?? const UnderlineInputBorder(),
+        filled: inputTheme.filled ?? true,
+        hintText: widget.fieldHintText ?? 'yyyy/mm/dd',
+        labelText: widget.fieldLabelText ?? 'Enter Date',
+      ),
+      validator: _validateDate,
+      inputFormatters: <TextInputFormatter>[
+        _DateTextInputFormatter('/'),
+      ],
+      keyboardType: TextInputType.datetime,
+      onSaved: _handleSaved,
+      onFieldSubmitted: _handleSubmitted,
+      autofocus: widget.autofocus,
+      controller: _controller,
+    );
   }
 }
 
@@ -260,13 +234,12 @@ class _DateTextInputFormatter extends TextInputFormatter {
 
   final String separator;
 
-  final WhitelistingTextInputFormatter _filterFormatter =
+  final FilteringTextInputFormatter _filterFormatter =
       // Only allow digits and separators (slash, dot, comma, hyphen, space).
-      WhitelistingTextInputFormatter(RegExp(r'[\d\/\.,-\s]+'));
+      FilteringTextInputFormatter.allow(RegExp(r'[\d\/\.,-\s]+'));
 
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     final filteredValue = _filterFormatter.formatEditUpdate(oldValue, newValue);
     return filteredValue.copyWith(
       // Replace any separator character with the given separator

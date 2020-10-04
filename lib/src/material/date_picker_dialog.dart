@@ -6,6 +6,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
 import 'calendar_date_picker.dart' as cdp;
@@ -19,6 +20,8 @@ const Size _calendarLandscapeDialogSize = Size(496.0, 346.0);
 const Size _inputPortraitDialogSize = Size(330.0, 270.0);
 const Size _inputLandscapeDialogSize = Size(496, 160.0);
 const Duration _dialogSizeAnimationDuration = Duration(milliseconds: 200);
+const double _inputFormPortraitHeight = 98.0;
+const double _inputFormLandscapeHeight = 108.0;
 
 /// Shows a dialog containing a Material Design date picker.
 ///
@@ -110,12 +113,9 @@ Future<NepaliDateTime> showMaterialDatePicker({
   initialDate = utils.dateOnly(initialDate);
   firstDate = utils.dateOnly(firstDate);
   lastDate = utils.dateOnly(lastDate);
-  assert(!lastDate.isBefore(firstDate),
-      'lastDate $lastDate must be on or after firstDate $firstDate.');
-  assert(!initialDate.isBefore(firstDate),
-      'initialDate $initialDate must be on or after firstDate $firstDate.');
-  assert(!initialDate.isAfter(lastDate),
-      'initialDate $initialDate must be on or before lastDate $lastDate.');
+  assert(!lastDate.isBefore(firstDate), 'lastDate $lastDate must be on or after firstDate $firstDate.');
+  assert(!initialDate.isBefore(firstDate), 'initialDate $initialDate must be on or after firstDate $firstDate.');
+  assert(!initialDate.isAfter(lastDate), 'initialDate $initialDate must be on or before lastDate $lastDate.');
   assert(selectableDayPredicate == null || selectableDayPredicate(initialDate),
       'Provided initialDate $initialDate must satisfy provided selectableDayPredicate.');
   assert(initialEntryMode != null);
@@ -192,15 +192,10 @@ class _DatePickerDialog extends StatefulWidget {
         assert(initialEntryMode != null),
         assert(initialCalendarMode != null),
         super(key: key) {
-    assert(!this.lastDate.isBefore(this.firstDate),
-        'lastDate ${this.lastDate} must be on or after firstDate ${this.firstDate}.');
-    assert(!this.initialDate.isBefore(this.firstDate),
-        'initialDate ${this.initialDate} must be on or after firstDate ${this.firstDate}.');
-    assert(!this.initialDate.isAfter(this.lastDate),
-        'initialDate ${this.initialDate} must be on or before lastDate ${this.lastDate}.');
-    assert(
-        selectableDayPredicate == null ||
-            selectableDayPredicate(this.initialDate),
+    assert(!this.lastDate.isBefore(this.firstDate), 'lastDate ${this.lastDate} must be on or after firstDate ${this.firstDate}.');
+    assert(!this.initialDate.isBefore(this.firstDate), 'initialDate ${this.initialDate} must be on or after firstDate ${this.firstDate}.');
+    assert(!this.initialDate.isAfter(this.lastDate), 'initialDate ${this.initialDate} must be on or before lastDate ${this.lastDate}.');
+    assert(selectableDayPredicate == null || selectableDayPredicate(this.initialDate),
         'Provided initialDate ${this.initialDate} must satisfy provided selectableDayPredicate');
   }
 
@@ -250,7 +245,7 @@ class _DatePickerDialog extends StatefulWidget {
 class _DatePickerDialogState extends State<_DatePickerDialog> {
   DatePickerEntryMode _entryMode;
   NepaliDateTime _selectedDate;
-  bool _autoValidate;
+  AutovalidateMode _autoValidateMode;
   final GlobalKey _calendarPickerKey = GlobalKey();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -259,14 +254,14 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
     super.initState();
     _entryMode = widget.initialEntryMode;
     _selectedDate = widget.initialDate;
-    _autoValidate = false;
+    _autoValidateMode = AutovalidateMode.disabled;
   }
 
   void _handleOk() {
     if (_entryMode == DatePickerEntryMode.input) {
       final form = _formKey.currentState;
       if (!form.validate()) {
-        setState(() => _autoValidate = true);
+        setState(() => _autoValidateMode = AutovalidateMode.onUserInteraction);
         return;
       }
       form.save();
@@ -282,7 +277,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
     setState(() {
       switch (_entryMode) {
         case DatePickerEntryMode.calendar:
-          _autoValidate = false;
+          _autoValidateMode = AutovalidateMode.disabled;
           _entryMode = DatePickerEntryMode.input;
           break;
         case DatePickerEntryMode.input:
@@ -320,6 +315,11 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
     return null;
   }
 
+  static final Map<LogicalKeySet, Intent> _formShortcutMap = <LogicalKeySet, Intent>{
+    // Pressing enter on the field will move focus to the next field or control.
+    LogicalKeySet(LogicalKeyboardKey.enter): const NextFocusIntent(),
+  };
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -328,18 +328,12 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
     final textTheme = theme.textTheme;
     // Constrain the textScaleFactor to the largest supported value to prevent
     // layout issues.
-    final textScaleFactor =
-        math.min(MediaQuery.of(context).textScaleFactor, 1.3);
+    final textScaleFactor = math.min(MediaQuery.of(context).textScaleFactor, 1.3);
 
     final dateText = _selectedDate != null
-        ? NepaliDateFormat(NepaliUtils().language == Language.english
-                ? 'EE, MMM d'
-                : 'EE, MMMM d')
-            .format(_selectedDate)
+        ? NepaliDateFormat(NepaliUtils().language == Language.english ? 'EE, MMM d' : 'EE, MMMM d').format(_selectedDate)
         : 'Date';
-    final dateColor = colorScheme.brightness == Brightness.light
-        ? colorScheme.onPrimary
-        : colorScheme.onSurface;
+    final dateColor = colorScheme.brightness == Brightness.light ? colorScheme.onPrimary : colorScheme.onSurface;
     final dateStyle = orientation == Orientation.landscape
         ? textTheme.headline5?.copyWith(color: dateColor)
         : textTheme.headline4?.copyWith(color: dateColor);
@@ -349,17 +343,11 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
       layoutBehavior: ButtonBarLayoutBehavior.constrained,
       children: <Widget>[
         FlatButton(
-          child: Text(
-              widget.cancelText ?? NepaliUtils().language == Language.english
-                  ? 'CANCEL'
-                  : 'रद्द गर्नुहोस'),
+          child: Text(widget.cancelText ?? NepaliUtils().language == Language.english ? 'CANCEL' : 'रद्द गर्नुहोस'),
           onPressed: _handleCancel,
         ),
         FlatButton(
-          child: Text(
-              widget.confirmText ?? NepaliUtils().language == Language.english
-                  ? 'OK'
-                  : 'ठिक छ'),
+          child: Text(widget.confirmText ?? NepaliUtils().language == Language.english ? 'OK' : 'ठिक छ'),
           onPressed: _handleOk,
         ),
       ],
@@ -387,19 +375,32 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
       case DatePickerEntryMode.input:
         picker = Form(
           key: _formKey,
-          autovalidate: _autoValidate,
-          child: idp.InputDatePickerFormField(
-            initialDate: _selectedDate,
-            firstDate: widget.firstDate,
-            lastDate: widget.lastDate,
-            onDateSubmitted: _handleDateChanged,
-            onDateSaved: _handleDateChanged,
-            selectableDayPredicate: widget.selectableDayPredicate,
-            errorFormatText: widget.errorFormatText,
-            errorInvalidText: widget.errorInvalidText,
-            fieldHintText: widget.fieldHintText,
-            fieldLabelText: widget.fieldLabelText,
-            autofocus: true,
+          autovalidateMode: _autoValidateMode,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            height: orientation == Orientation.portrait ? _inputFormPortraitHeight : _inputFormLandscapeHeight,
+            child: Shortcuts(
+              shortcuts: _formShortcutMap,
+              child: Column(
+                children: [
+                  const Spacer(),
+                  idp.InputDatePickerFormField(
+                    initialDate: _selectedDate,
+                    firstDate: widget.firstDate,
+                    lastDate: widget.lastDate,
+                    onDateSubmitted: _handleDateChanged,
+                    onDateSaved: _handleDateChanged,
+                    selectableDayPredicate: widget.selectableDayPredicate,
+                    errorFormatText: widget.errorFormatText,
+                    errorInvalidText: widget.errorInvalidText,
+                    fieldHintText: widget.fieldHintText,
+                    fieldLabelText: widget.fieldLabelText,
+                    autofocus: true,
+                  ),
+                  const Spacer(),
+                ],
+              ),
+            ),
           ),
         );
         entryModeIcon = Icons.calendar_today;
@@ -408,9 +409,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
     }
 
     final Widget header = DatePickerHeader(
-      helpText: widget.helpText ?? NepaliUtils().language == Language.english
-          ? 'SELECT DATE'
-          : 'मिति चयन गर्नुहोस',
+      helpText: widget.helpText ?? NepaliUtils().language == Language.english ? 'SELECT DATE' : 'मिति चयन गर्नुहोस',
       titleText: dateText,
       titleStyle: dateStyle,
       orientation: orientation,
@@ -421,7 +420,6 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
     );
 
     final dialogSize = _dialogSize(context) * textScaleFactor;
-    final dialogTheme = Theme.of(context).dialogTheme;
     return Dialog(
       child: AnimatedContainer(
         width: dialogSize.width,
@@ -467,14 +465,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
           }),
         ),
       ),
-      insetPadding:
-          const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-      // The default dialog shape is radius 2 rounded rect, but the spec has
-      // been updated to 4, so we will use that here for the Date Picker, but
-      // only if there isn't one provided in the theme.
-      shape: dialogTheme.shape ??
-          const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(4.0))),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
       clipBehavior: Clip.antiAlias,
     );
   }

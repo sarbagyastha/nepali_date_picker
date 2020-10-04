@@ -90,10 +90,8 @@ class DatePickerHeader extends StatelessWidget {
 
     // The header should use the primary color in light themes and surface color in dark
     final isDark = colorScheme.brightness == Brightness.dark;
-    final primarySurfaceColor =
-        isDark ? colorScheme.surface : colorScheme.primary;
-    final onPrimarySurfaceColor =
-        isDark ? colorScheme.onSurface : colorScheme.onPrimary;
+    final primarySurfaceColor = isDark ? colorScheme.surface : colorScheme.primary;
+    final onPrimarySurfaceColor = isDark ? colorScheme.onSurface : colorScheme.onPrimary;
 
     final helpStyle = textTheme.overline?.copyWith(
       color: onPrimarySurfaceColor,
@@ -121,12 +119,11 @@ class DatePickerHeader extends StatelessWidget {
 
     switch (orientation) {
       case Orientation.portrait:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              height: _datePickerHeaderPortraitHeight,
-              color: primarySurfaceColor,
+        return SizedBox(
+          height: _datePickerHeaderPortraitHeight,
+          child: Material(
+            color: primarySurfaceColor,
+            child: Padding(
               padding: const EdgeInsetsDirectional.only(
                 start: 24,
                 end: 12,
@@ -146,45 +143,42 @@ class DatePickerHeader extends StatelessWidget {
                 ],
               ),
             ),
-          ],
+          ),
         );
       case Orientation.landscape:
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              width: _datePickerHeaderLandscapeWidth,
-              color: primarySurfaceColor,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const SizedBox(height: 16),
-                  Padding(
+        return SizedBox(
+          width: _datePickerHeaderLandscapeWidth,
+          child: Material(
+            color: primarySurfaceColor,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: _headerPaddingLandscape,
+                  ),
+                  child: help,
+                ),
+                SizedBox(height: isShort ? 16 : 56),
+                FittedBox(
+                  child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: _headerPaddingLandscape,
                     ),
-                    child: help,
+                    child: title,
                   ),
-                  SizedBox(height: isShort ? 16 : 56),
-                  FittedBox(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: _headerPaddingLandscape,
-                      ),
-                      child: title,
-                    ),
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4,
                   ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 4,
-                    ),
-                    child: icon,
-                  ),
-                ],
-              ),
+                  child: icon,
+                ),
+              ],
             ),
-          ],
+          ),
         );
     }
     return null;
