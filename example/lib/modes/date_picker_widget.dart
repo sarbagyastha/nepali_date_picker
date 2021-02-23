@@ -10,7 +10,7 @@ class DatePickerWidget extends StatefulWidget {
 }
 
 class _DatePickerWidgetState extends State<DatePickerWidget> {
-  NepaliDateTime _selectedDateTime = NepaliDateTime.now();
+  NepaliDateTime? _selectedDateTime = NepaliDateTime.now();
   String _design = 'm';
   DateOrder _dateOrder = DateOrder.mdy;
   bool _showTimerPicker = false;
@@ -29,7 +29,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             ),
             if (_selectedDateTime != null)
               Text(
-                'Selected Date: ${NepaliDateFormat("EEE, MMMM d, y hh:mm aa").format(_selectedDateTime)}',
+                'Selected Date: ${NepaliDateFormat("EEE, MMMM d, y hh:mm aa").format(_selectedDateTime!)}',
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
                   fontSize: 18.0,
@@ -60,10 +60,10 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                       var timeOfDay = await showTimePicker(
                         context: context,
                         initialTime: TimeOfDay.fromDateTime(
-                          _selectedDateTime?.toDateTime(),
+                          _selectedDateTime!.toDateTime(),
                         ),
                       );
-                      _selectedDateTime = _selectedDateTime.mergeTime(
+                      _selectedDateTime = _selectedDateTime!.mergeTime(
                         timeOfDay?.hour ?? 0,
                         timeOfDay?.minute ?? 0,
                         0,
@@ -195,8 +195,9 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       child: RadioListTile<T>(
         value: value,
         groupValue: groupValue,
-        onChanged:
-            _design == 'm' && groupValue == _dateOrder ? null : onChanged,
+        onChanged: _design == 'm' && groupValue == _dateOrder
+            ? null
+            : (v) => onChanged(v!),
         title: Text(title),
       ),
     );

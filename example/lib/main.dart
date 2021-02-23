@@ -46,10 +46,16 @@ class _MyAppState extends State<MyApp> {
               IconButton(
                 icon: Text(
                   NepaliUtils().language == Language.english ? 'ने' : 'En',
-                  style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.white),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      ?.copyWith(color: Colors.white),
                 ),
                 onPressed: () {
-                  NepaliUtils().language = NepaliUtils().language == Language.english ? Language.nepali : Language.english;
+                  NepaliUtils().language =
+                      NepaliUtils().language == Language.english
+                          ? Language.nepali
+                          : Language.english;
                   setState(() {});
                 },
               ),

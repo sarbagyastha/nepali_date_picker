@@ -65,11 +65,15 @@ class CalendarDatePickerWidget extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: ValueListenableBuilder(
+          child: ValueListenableBuilder<NepaliDateTime>(
             valueListenable: _selectedDate,
             builder: (context, date, _) {
-              final event = events.firstWhere((e) => _dayEquals(e.date, date),
-                  orElse: () => null);
+              Event? event;
+              try {
+                event = events.firstWhere((e) => _dayEquals(e.date, date));
+              } on StateError {
+                event = null;
+              }
 
               if (event == null) {
                 return Center(
@@ -83,7 +87,7 @@ class CalendarDatePickerWidget extends StatelessWidget {
                   leading: TodayWidget(
                     today: date,
                   ),
-                  title: Text(event.eventTitles[index]),
+                  title: Text(event!.eventTitles[index]),
                   onTap: () {},
                 ),
                 separatorBuilder: (context, _) => Divider(),
@@ -95,9 +99,11 @@ class CalendarDatePickerWidget extends StatelessWidget {
     );
   }
 
-  bool _dayEquals(NepaliDateTime a, NepaliDateTime b) =>
+  bool _dayEquals(NepaliDateTime? a, NepaliDateTime? b) =>
+      a != null &&
+      b != null &&
       a.toIso8601String().substring(0, 10) ==
-      b.toIso8601String().substring(0, 10);
+          b.toIso8601String().substring(0, 10);
 }
 
 ///
@@ -107,8 +113,8 @@ class TodayWidget extends StatelessWidget {
 
   ///
   const TodayWidget({
-    Key key,
-    @required this.today,
+    Key? key,
+    required this.today,
   }) : super(key: key);
 
   @override
@@ -142,7 +148,7 @@ class TodayWidget extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1
-                      .copyWith(color: Colors.white),
+                      ?.copyWith(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -170,5 +176,5 @@ class Event {
   final List<String> eventTitles;
 
   ///
-  Event({this.date, this.eventTitles});
+  Event({required this.date, required this.eventTitles});
 }

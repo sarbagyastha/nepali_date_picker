@@ -8,8 +8,10 @@ class DateRangePickerWidget extends StatefulWidget {
 }
 
 class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
-  NepaliDateTimeRange _selectedDateTimeRange = NepaliDateTimeRange(
-      start: NepaliDateTime.now(), end: NepaliDateTime.now());
+  NepaliDateTimeRange? _selectedDateTimeRange = NepaliDateTimeRange(
+    start: NepaliDateTime.now(),
+    end: NepaliDateTime.now(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +22,8 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
         children: [
           if (_selectedDateTimeRange != null)
             Text(
-              'From Date: ${NepaliDateFormat("EEE, MMMM d, y").format(_selectedDateTimeRange.start)}\n\n'
-              'To Date: ${NepaliDateFormat("EEE, MMMM d, y").format(_selectedDateTimeRange.end)}',
+              'From Date: ${NepaliDateFormat("EEE, MMMM d, y").format(_selectedDateTimeRange!.start)}\n\n'
+              'To Date: ${NepaliDateFormat("EEE, MMMM d, y").format(_selectedDateTimeRange!.end)}',
               style: TextStyle(
                 fontWeight: FontWeight.w300,
                 fontSize: 18.0,
