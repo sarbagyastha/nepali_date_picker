@@ -13,7 +13,7 @@ NepaliDateTime dateOnly(NepaliDateTime date) {
 
 /// Returns true if the two [NepaliDateTime] objects have the same day, month, and
 /// year, or are both null.
-bool isSameDay(NepaliDateTime dateA, NepaliDateTime dateB) {
+bool isSameDay(NepaliDateTime? dateA, NepaliDateTime? dateB) {
   return dateA?.year == dateB?.year &&
       dateA?.month == dateB?.month &&
       dateA?.day == dateB?.day;
@@ -60,7 +60,7 @@ int getDaysInMonth(int year, int month) {
 /// day format (i.e. 'Asr 21'). Otherwise it will return the short date format
 /// (i.e. 'Asr 21, 2077').
 String formatRangeStartDate(MaterialLocalizations localizations,
-    NepaliDateTime startDate, NepaliDateTime endDate) {
+    NepaliDateTime? startDate, NepaliDateTime? endDate) {
   return startDate == null
       ? localizations.dateRangeStartLabel
       : (endDate == null || startDate.year == endDate.year)
@@ -76,8 +76,8 @@ String formatRangeStartDate(MaterialLocalizations localizations,
 /// include the year (i.e. 'Asr 21, 2077').
 String formatRangeEndDate(
     MaterialLocalizations localizations,
-    NepaliDateTime startDate,
-    NepaliDateTime endDate,
+    NepaliDateTime? startDate,
+    NepaliDateTime? endDate,
     NepaliDateTime currentDate) {
   return endDate == null
       ? localizations.dateRangeEndLabel

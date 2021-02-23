@@ -33,9 +33,7 @@ class DatePickerHeader extends StatelessWidget {
     required this.titleStyle,
     required this.orientation,
     this.isShort = false,
-    required this.icon,
-    required this.iconTooltip,
-    required this.onIconPressed,
+    this.entryModeButton,
   }) : super(key: key);
 
   /// The text that is displayed at the top of the header.
@@ -50,7 +48,7 @@ class DatePickerHeader extends StatelessWidget {
   final String? titleSemanticsLabel;
 
   /// The [TextStyle] that the title text is displayed with.
-  final TextStyle titleStyle;
+  final TextStyle? titleStyle;
 
   /// The orientation is used to decide how to layout its children.
   final Orientation orientation;
@@ -65,19 +63,8 @@ class DatePickerHeader extends StatelessWidget {
   /// landscape orientation, in order to account for the keyboard height.
   final bool isShort;
 
-  /// The mode-switching icon that will be displayed in the lower right
-  /// in portrait, and lower left in landscape.
   ///
-  /// The available icons are described in [Icons].
-  final IconData icon;
-
-  /// The text that is displayed for the tooltip of the icon.
-  final String iconTooltip;
-
-  /// Callback when the user taps the icon in the header.
-  ///
-  /// The picker will use this to toggle between entry modes.
-  final VoidCallback onIconPressed;
+  final Widget? entryModeButton;
 
   @override
   Widget build(BuildContext context) {
@@ -109,12 +96,6 @@ class DatePickerHeader extends StatelessWidget {
       maxLines: (isShort || orientation == Orientation.portrait) ? 1 : 2,
       overflow: TextOverflow.ellipsis,
     );
-    final icon = IconButton(
-      icon: Icon(this.icon),
-      color: onPrimarySurfaceColor,
-      tooltip: iconTooltip,
-      onPressed: onIconPressed,
-    );
 
     switch (orientation) {
       case Orientation.portrait:
@@ -136,7 +117,7 @@ class DatePickerHeader extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Expanded(child: title),
-                      icon,
+                      if (entryModeButton != null) entryModeButton!,
                     ],
                   ),
                 ],
@@ -160,7 +141,7 @@ class DatePickerHeader extends StatelessWidget {
                   child: help,
                 ),
                 SizedBox(height: isShort ? 16 : 56),
-                FittedBox(
+                Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: _headerPaddingLandscape,
@@ -168,13 +149,11 @@ class DatePickerHeader extends StatelessWidget {
                     child: title,
                   ),
                 ),
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 4,
+                if (entryModeButton != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: entryModeButton,
                   ),
-                  child: icon,
-                ),
               ],
             ),
           ),
