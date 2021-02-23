@@ -32,10 +32,9 @@ const TextStyle _kDefaultPickerTextStyle = TextStyle(
 // column will be extended equally to the remaining width.
 class _DatePickerLayoutDelegate extends MultiChildLayoutDelegate {
   _DatePickerLayoutDelegate({
-    @required this.columnWidths,
-    @required this.textDirectionFactor,
-  })  : assert(columnWidths != null),
-        assert(textDirectionFactor != null);
+    required this.columnWidths,
+    required this.textDirectionFactor,
+  });
 
   // The list containing widths of all columns.
   final List<double> columnWidths;
@@ -98,16 +97,13 @@ enum DateOrder {
 
 class _CupertinoDatePicker extends StatefulWidget {
   _CupertinoDatePicker({
-    @required this.onDateChanged,
-    NepaliDateTime initialDate,
+    required this.onDateChanged,
+    NepaliDateTime? initialDate,
     this.minimumYear = 1,
     this.maximumYear,
     this.language = Language.english,
     this.dateOrder = DateOrder.mdy,
-  })  : initialDate = initialDate ?? NepaliDateTime.now(),
-        assert(minimumYear != null) {
-    assert(this.initialDate != null);
-  }
+  }) : initialDate = initialDate ?? NepaliDateTime.now();
 
   /// The initial date of the picker.
   ///
@@ -120,7 +116,7 @@ class _CupertinoDatePicker extends StatefulWidget {
   final int minimumYear;
 
   /// Maximum year that the picker can be scrolled to. Null if there's no limit.
-  final int maximumYear;
+  final int? maximumYear;
 
   /// Callback called when the selected date changes. Must not be
   /// null.
@@ -189,20 +185,20 @@ typedef _ColumnBuilder = Widget Function(
     double offAxisFraction, TransitionBuilder itemPositioningBuilder);
 
 class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
-  int textDirectionFactor;
+  late int textDirectionFactor;
 
   // Alignment based on text direction. The variable name is self descriptive,
   // however, when text direction is rtl, alignment is reversed.
-  Alignment alignCenterLeft;
-  Alignment alignCenterRight;
+  late Alignment alignCenterLeft;
+  late Alignment alignCenterRight;
 
   // The currently selected values of the picker.
-  int selectedDay;
-  int selectedMonth;
-  int selectedYear;
-  int daysInCurrentMonth;
+  late int selectedDay;
+  late int selectedMonth;
+  late int selectedYear;
+  late int daysInCurrentMonth;
 
-  FixedExtentScrollController dayController;
+  late final FixedExtentScrollController dayController;
 
   // Estimated width of columns.
   Map<int, double> estimatedColumnWidths = <int, double>{};
@@ -258,7 +254,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
         }
       },
       children: List<Widget>.generate(32, (int index) {
-        TextStyle disableTextStyle; // Null if not out of range.
+        TextStyle? disableTextStyle; // Null if not out of range.
         if (index >= daysInCurrentMonth) {
           disableTextStyle =
               const TextStyle(color: CupertinoColors.inactiveGray);
@@ -325,7 +321,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
       itemBuilder: (BuildContext context, int index) {
         if (index < widget.minimumYear) return null;
 
-        if (widget.maximumYear != null && index > widget.maximumYear) {
+        if (widget.maximumYear != null && index > widget.maximumYear!) {
           return null;
         }
 
@@ -346,7 +342,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
     // automatically scrolls to a valid one.
     final desiredDay = selectedDay % daysInCurrentMonth;
     if (desiredDay != selectedDay) {
-      SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
+      SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
         dayController.animateToItem(
           // The next valid date is also the amount of days overflown.
           dayController.selectedItem - desiredDay,
@@ -375,9 +371,9 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
           _buildYearPicker
         ];
         columnWidths = <double>[
-          estimatedColumnWidths[_PickerColumnType.month.index],
-          estimatedColumnWidths[_PickerColumnType.dayOfMonth.index],
-          estimatedColumnWidths[_PickerColumnType.year.index]
+          _getEstimatedColumnWidth(_PickerColumnType.month),
+          _getEstimatedColumnWidth(_PickerColumnType.dayOfMonth),
+          _getEstimatedColumnWidth(_PickerColumnType.year),
         ];
         break;
       case DateOrder.dmy:
@@ -387,9 +383,9 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
           _buildYearPicker
         ];
         columnWidths = <double>[
-          estimatedColumnWidths[_PickerColumnType.dayOfMonth.index],
-          estimatedColumnWidths[_PickerColumnType.month.index],
-          estimatedColumnWidths[_PickerColumnType.year.index]
+          _getEstimatedColumnWidth(_PickerColumnType.dayOfMonth),
+          _getEstimatedColumnWidth(_PickerColumnType.month),
+          _getEstimatedColumnWidth(_PickerColumnType.year),
         ];
         break;
       case DateOrder.ymd:
@@ -399,9 +395,9 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
           _buildDayPicker
         ];
         columnWidths = <double>[
-          estimatedColumnWidths[_PickerColumnType.year.index],
-          estimatedColumnWidths[_PickerColumnType.month.index],
-          estimatedColumnWidths[_PickerColumnType.dayOfMonth.index]
+          _getEstimatedColumnWidth(_PickerColumnType.year),
+          _getEstimatedColumnWidth(_PickerColumnType.month),
+          _getEstimatedColumnWidth(_PickerColumnType.dayOfMonth),
         ];
         break;
       case DateOrder.ydm:
@@ -411,9 +407,9 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
           _buildMonthPicker
         ];
         columnWidths = <double>[
-          estimatedColumnWidths[_PickerColumnType.year.index],
-          estimatedColumnWidths[_PickerColumnType.dayOfMonth.index],
-          estimatedColumnWidths[_PickerColumnType.month.index]
+          _getEstimatedColumnWidth(_PickerColumnType.year),
+          _getEstimatedColumnWidth(_PickerColumnType.dayOfMonth),
+          _getEstimatedColumnWidth(_PickerColumnType.month),
         ];
         break;
       default:
@@ -434,7 +430,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
         id: i,
         child: pickerBuilders[i](
           offAxisFraction,
-          (BuildContext context, Widget child) {
+          (BuildContext context, Widget? child) {
             return Container(
               alignment: i == columnWidths.length - 1
                   ? alignCenterLeft
@@ -468,30 +464,40 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
       ),
     );
   }
+
+  // Lazily calculate the column width of the column being displayed only.
+  double _getEstimatedColumnWidth(_PickerColumnType columnType) {
+    if (estimatedColumnWidths[columnType.index] == null) {
+      estimatedColumnWidths[columnType.index] =
+          _CupertinoDatePicker._getColumnWidth(
+        columnType,
+        widget.language,
+        context,
+      );
+    }
+
+    return estimatedColumnWidths[columnType.index]!;
+  }
 }
 
 /// Shows Cupertino-styled nepali date picker.
 void showCupertinoDatePicker({
-  @required BuildContext context,
-  @required NepaliDateTime initialDate,
-  @required NepaliDateTime firstDate,
-  @required NepaliDateTime lastDate,
-  @required ValueChanged<NepaliDateTime> onDateChanged,
+  required BuildContext context,
+  required NepaliDateTime initialDate,
+  required NepaliDateTime firstDate,
+  required NepaliDateTime lastDate,
+  required ValueChanged<NepaliDateTime> onDateChanged,
   Language language = Language.english,
   DateOrder dateOrder = DateOrder.mdy,
 }) {
-  assert(firstDate.year >= 2000 && lastDate.year <= 2099,
-      'Invalid Date Range. Valid Range = [2000, 2099]');
-  assert(initialDate != null);
-  assert(firstDate != null);
-  assert(lastDate != null);
+  assert(firstDate.year >= 1970 && lastDate.year <= 2100,
+      'Invalid Date Range. Valid Range = [1970, 2100]');
   assert(!initialDate.isBefore(firstDate),
       'initialDate must be on or after firstDate');
   assert(!initialDate.isAfter(lastDate),
       'initialDate must be on or before lastDate');
   assert(
       !firstDate.isAfter(lastDate), 'lastDate must be on or after firstDate');
-  assert(context != null);
 
   showCupertinoModalPopup<void>(
     context: context,
@@ -525,31 +531,27 @@ void showCupertinoDatePicker({
   );
 }
 
-Future<NepaliDateTime> _showCupertinoDatePicker({
-  @required BuildContext context,
-  @required NepaliDateTime initialDate,
-  @required NepaliDateTime firstDate,
-  @required NepaliDateTime lastDate,
+Future<NepaliDateTime?> _showCupertinoDatePicker({
+  required BuildContext context,
+  required NepaliDateTime initialDate,
+  required NepaliDateTime firstDate,
+  required NepaliDateTime lastDate,
   Language language = Language.english,
   DateOrder dateOrder = DateOrder.mdy,
 }) async {
   assert(firstDate.year >= 2000 && lastDate.year <= 2099,
       'Invalid Date Range. Valid Range = [2000, 2099]');
-  assert(initialDate != null);
-  assert(firstDate != null);
-  assert(lastDate != null);
   assert(!initialDate.isBefore(firstDate),
       'initialDate must be on or after firstDate');
   assert(!initialDate.isAfter(lastDate),
       'initialDate must be on or before lastDate');
   assert(
       !firstDate.isAfter(lastDate), 'lastDate must be on or after firstDate');
-  assert(context != null);
 
   return await _showCupertinoPopup<NepaliDateTime>(
     context: context,
     builder: (BuildContext context) {
-      NepaliDateTime _selectedDate;
+      NepaliDateTime? _selectedDate;
       return Container(
         height: _kPickerSheetHeight + 40.0,
         padding: const EdgeInsets.only(top: 6.0),
@@ -569,7 +571,7 @@ Future<NepaliDateTime> _showCupertinoDatePicker({
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      FlatButton(
+                      TextButton(
                         child: Text(
                           language == Language.english
                               ? 'CANCEL'
@@ -578,7 +580,7 @@ Future<NepaliDateTime> _showCupertinoDatePicker({
                         onPressed: () => Navigator.pop(context),
                       ),
                       Spacer(),
-                      FlatButton(
+                      TextButton(
                         child: Text(
                           language == Language.english ? 'DONE' : 'ठिक छ',
                         ),
@@ -607,11 +609,11 @@ Future<NepaliDateTime> _showCupertinoDatePicker({
 }
 
 /// Shows nepali date picker of style that adapts as per the platform.
-Future<NepaliDateTime> showAdaptiveDatePicker({
-  @required BuildContext context,
-  @required NepaliDateTime initialDate,
-  @required NepaliDateTime firstDate,
-  @required NepaliDateTime lastDate,
+Future<NepaliDateTime?> showAdaptiveDatePicker({
+  required BuildContext context,
+  required NepaliDateTime initialDate,
+  required NepaliDateTime firstDate,
+  required NepaliDateTime lastDate,
   Language language = Language.english,
 
   /// Only for iOS
@@ -620,21 +622,16 @@ Future<NepaliDateTime> showAdaptiveDatePicker({
   /// Only for Android and Fuchsia
   DatePickerMode initialDatePickerMode = DatePickerMode.day,
 }) async {
-  assert(firstDate.year >= 2000 && lastDate.year <= 2099,
-      'Invalid Date Range. Valid Range = [2000, 2099]');
-  assert(initialDate != null);
-  assert(firstDate != null);
-  assert(lastDate != null);
+  assert(firstDate.year >= 1970 && lastDate.year <= 2100,
+      'Invalid Date Range. Valid Range = [1970, 2100]');
   assert(!initialDate.isBefore(firstDate),
       'initialDate must be on or after firstDate');
   assert(!initialDate.isAfter(lastDate),
       'initialDate must be on or before lastDate');
   assert(
       !firstDate.isAfter(lastDate), 'lastDate must be on or after firstDate');
-  assert(context != null);
 
   final theme = Theme.of(context);
-  assert(theme.platform != null);
   switch (theme.platform) {
     case TargetPlatform.android:
     case TargetPlatform.fuchsia:
@@ -658,13 +655,11 @@ Future<NepaliDateTime> showAdaptiveDatePicker({
         dateOrder: dateOrder,
       );
   }
-  assert(false);
-  return null;
 }
 
-Future<T> _showCupertinoPopup<T>({
-  @required BuildContext context,
-  @required WidgetBuilder builder,
+Future<T?> _showCupertinoPopup<T>({
+  required BuildContext context,
+  required WidgetBuilder builder,
 }) {
   return Navigator.of(context, rootNavigator: true).push(
     _CupertinoPopupRoute<T>(
@@ -676,9 +671,9 @@ Future<T> _showCupertinoPopup<T>({
 
 class _CupertinoPopupRoute<T> extends PopupRoute<T> {
   _CupertinoPopupRoute({
-    this.builder,
-    this.barrierLabel,
-    RouteSettings settings,
+    required this.builder,
+    required this.barrierLabel,
+    RouteSettings? settings,
   }) : super(settings: settings);
 
   final WidgetBuilder builder;
@@ -698,13 +693,12 @@ class _CupertinoPopupRoute<T> extends PopupRoute<T> {
   @override
   Duration get transitionDuration => Duration(milliseconds: 335);
 
-  Animation<double> _animation;
+  late Animation<double> _animation;
 
-  Tween<Offset> _offsetTween;
+  late Tween<Offset> _offsetTween;
 
   @override
   Animation<double> createAnimation() {
-    assert(_animation == null);
     _animation = CurvedAnimation(
       parent: super.createAnimation(),
 
