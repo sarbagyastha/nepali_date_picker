@@ -291,11 +291,11 @@ class _DateRangePickerDialogState extends State<_DateRangePickerDialog> {
     });
   }
 
-  void _handleStartDateChanged(NepaliDateTime date) {
+  void _handleStartDateChanged(NepaliDateTime? date) {
     setState(() => _selectedStart = date);
   }
 
-  void _handleEndDateChanged(NepaliDateTime date) {
+  void _handleEndDateChanged(NepaliDateTime? date) {
     setState(() => _selectedEnd = date);
   }
 
