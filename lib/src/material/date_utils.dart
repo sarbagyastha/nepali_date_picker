@@ -21,7 +21,7 @@ bool isSameDay(NepaliDateTime? dateA, NepaliDateTime? dateB) {
 
 /// Returns true if the two [NepaliDateTime] objects have the same month, and
 /// year, or are both null.
-bool isSameMonth(NepaliDateTime dateA, NepaliDateTime dateB) {
+bool isSameMonth(NepaliDateTime? dateA, NepaliDateTime? dateB) {
   return dateA?.year == dateB?.year && dateA?.month == dateB?.month;
 }
 

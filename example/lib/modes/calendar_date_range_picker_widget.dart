@@ -47,7 +47,7 @@ class _CalendarDateRangePickerWidgetState
     );
   }
 
-  String _format(NepaliDateTime dateTime) {
+  String _format(NepaliDateTime? dateTime) {
     if (dateTime == null) return '';
     return NepaliDateFormat.yMMMMEEEEd().format(dateTime);
   }
