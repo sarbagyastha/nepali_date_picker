@@ -26,20 +26,17 @@ const double _headerPaddingLandscape = 16.0;
 class DatePickerHeader extends StatelessWidget {
   /// Creates a header for use in a date picker dialog.
   const DatePickerHeader({
-    Key key,
-    @required this.helpText,
-    @required this.titleText,
+    Key? key,
+    required this.helpText,
+    required this.titleText,
     this.titleSemanticsLabel,
-    @required this.titleStyle,
-    @required this.orientation,
+    required this.titleStyle,
+    required this.orientation,
     this.isShort = false,
-    @required this.icon,
-    @required this.iconTooltip,
-    @required this.onIconPressed,
-  })  : assert(helpText != null),
-        assert(orientation != null),
-        assert(isShort != null),
-        super(key: key);
+    required this.icon,
+    required this.iconTooltip,
+    required this.onIconPressed,
+  }) : super(key: key);
 
   /// The text that is displayed at the top of the header.
   ///
@@ -50,7 +47,7 @@ class DatePickerHeader extends StatelessWidget {
   final String titleText;
 
   /// The semantic label associated with the [titleText].
-  final String titleSemanticsLabel;
+  final String? titleSemanticsLabel;
 
   /// The [TextStyle] that the title text is displayed with.
   final TextStyle titleStyle;
@@ -183,6 +180,5 @@ class DatePickerHeader extends StatelessWidget {
           ),
         );
     }
-    return null;
   }
 }
