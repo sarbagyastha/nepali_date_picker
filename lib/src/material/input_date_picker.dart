@@ -44,10 +44,10 @@ class InputDatePickerFormField extends StatefulWidget {
   /// [firstDate], [lastDate], and [autofocus] must be non-null.
   ///
   InputDatePickerFormField({
-    Key key,
-    NepaliDateTime initialDate,
-    @required NepaliDateTime firstDate,
-    @required NepaliDateTime lastDate,
+    Key? key,
+    NepaliDateTime? initialDate,
+    required NepaliDateTime firstDate,
+    required NepaliDateTime lastDate,
     this.onDateSubmitted,
     this.onDateSaved,
     this.selectableDayPredicate,
@@ -56,28 +56,25 @@ class InputDatePickerFormField extends StatefulWidget {
     this.fieldHintText,
     this.fieldLabelText,
     this.autofocus = false,
-  })  : assert(firstDate != null),
-        assert(lastDate != null),
-        assert(autofocus != null),
-        initialDate = initialDate != null ? utils.dateOnly(initialDate) : null,
+  })  : initialDate = initialDate != null ? utils.dateOnly(initialDate) : null,
         firstDate = utils.dateOnly(firstDate),
         lastDate = utils.dateOnly(lastDate),
         super(key: key) {
     assert(!this.lastDate.isBefore(this.firstDate),
         'lastDate ${this.lastDate} must be on or after firstDate ${this.firstDate}.');
-    assert(initialDate == null || !this.initialDate.isBefore(this.firstDate),
+    assert(initialDate == null || !this.initialDate!.isBefore(this.firstDate),
         'initialDate ${this.initialDate} must be on or after firstDate ${this.firstDate}.');
-    assert(initialDate == null || !this.initialDate.isAfter(this.lastDate),
+    assert(initialDate == null || !this.initialDate!.isAfter(this.lastDate),
         'initialDate ${this.initialDate} must be on or before lastDate ${this.lastDate}.');
     assert(
         selectableDayPredicate == null ||
             initialDate == null ||
-            selectableDayPredicate(this.initialDate),
+            selectableDayPredicate!(this.initialDate!),
         'Provided initialDate ${this.initialDate} must satisfy provided selectableDayPredicate.');
   }
 
   /// If provided, it will be used as the default value of the field.
-  final NepaliDateTime initialDate;
+  final NepaliDateTime? initialDate;
 
   /// The earliest allowable [DateTime] that the user can input.
   final NepaliDateTime firstDate;
@@ -88,36 +85,36 @@ class InputDatePickerFormField extends StatefulWidget {
   /// An optional method to call when the user indicates they are done editing
   /// the text in the field. Will only be called if the input represents a valid
   /// [NepaliDateTime].
-  final ValueChanged<NepaliDateTime> onDateSubmitted;
+  final ValueChanged<NepaliDateTime>? onDateSubmitted;
 
   /// An optional method to call with the final date when the form is
   /// saved via [FormState.save]. Will only be called if the input represents
   /// a valid [NepaliDateTime].
-  final ValueChanged<NepaliDateTime> onDateSaved;
+  final ValueChanged<NepaliDateTime>? onDateSaved;
 
   /// Function to provide full control over which [NepaliDateTime] can be selected.
-  final common.SelectableDayPredicate selectableDayPredicate;
+  final common.SelectableDayPredicate? selectableDayPredicate;
 
   /// The error text displayed if the entered date is not in the correct format.
-  final String errorFormatText;
+  final String? errorFormatText;
 
   /// The error text displayed if the date is not valid.
   ///
   /// A date is not valid if it is earlier than [firstDate], later than
   /// [lastDate], or doesn't pass the [selectableDayPredicate].
-  final String errorInvalidText;
+  final String? errorInvalidText;
 
   /// The hint text displayed in the [TextField].
   ///
   /// If this is null, it will default to the date format string. For example,
   /// 'mm/dd/yyyy' for en_US.
-  final String fieldHintText;
+  final String? fieldHintText;
 
   /// The label text displayed in the [TextField].
   ///
   /// If this is null, it will default to the words representing the date format
   /// string. For example, 'Month, Day, Year' for en_US.
-  final String fieldLabelText;
+  final String? fieldLabelText;
 
   /// {@macro flutter.widgets.editableText.autofocus}
   final bool autofocus;
@@ -129,8 +126,8 @@ class InputDatePickerFormField extends StatefulWidget {
 
 class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
   final TextEditingController _controller = TextEditingController();
-  NepaliDateTime _selectedDate;
-  String _inputText;
+  NepaliDateTime? _selectedDate;
+  String? _inputText;
   bool _autoSelected = false;
 
   @override
@@ -148,16 +145,35 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _updateValueForSelectedDate();
+  }
+
+  @override
+  void didUpdateWidget(InputDatePickerFormField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialDate != oldWidget.initialDate) {
+      // Can't update the form field in the middle of a build, so do it next frame
+      WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+        setState(() {
+          _selectedDate = widget.initialDate;
+          _updateValueForSelectedDate();
+        });
+      });
+    }
+  }
+
+  void _updateValueForSelectedDate() {
     if (_selectedDate != null) {
       // TODO: Support nepali input
-      _inputText = NepaliDateFormat.yMd(Language.english).format(_selectedDate);
+      _inputText =
+          NepaliDateFormat.yMd(Language.english).format(_selectedDate!);
       var textEditingValue = _controller.value.copyWith(text: _inputText);
       // Select the new text if we are auto focused and haven't selected the text before.
       if (widget.autofocus && !_autoSelected) {
         textEditingValue = textEditingValue.copyWith(
             selection: TextSelection(
           baseOffset: 0,
-          extentOffset: _inputText.length,
+          extentOffset: _inputText!.length,
         ));
         _autoSelected = true;
       }
@@ -165,23 +181,24 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
     }
   }
 
-  NepaliDateTime _parseDate(String text) {
-    if (RegExp(r'^2[01]\d{2}/(0[1-9]|1[0-2])/(0[1-9]|1[1-9]|2[1-9]|3[0-2])')
-        .hasMatch(text)) {
+  NepaliDateTime? _parseDate(String? text) {
+    if (text != null &&
+        RegExp(r'^2[01]\d{2}/(0[1-9]|1[0-2])/(0[1-9]|1[1-9]|2[1-9]|3[0-2])')
+            .hasMatch(text)) {
       return NepaliDateTime.parse(text.replaceAll('/', '-'));
     }
     return null;
   }
 
-  bool _isValidAcceptableDate(NepaliDateTime date) {
+  bool _isValidAcceptableDate(NepaliDateTime? date) {
     return date != null &&
         !date.isBefore(widget.firstDate) &&
         !date.isAfter(widget.lastDate) &&
         (widget.selectableDayPredicate == null ||
-            widget.selectableDayPredicate(date));
+            widget.selectableDayPredicate!(date));
   }
 
-  String _validateDate(String text) {
+  String? _validateDate(String? text) {
     final date = _parseDate(text);
     if (date == null) {
       return widget.errorFormatText ?? 'Invalid format.';
@@ -191,26 +208,21 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
     return null;
   }
 
-  void _handleSaved(String text) {
-    if (widget.onDateSaved != null) {
-      final date = _parseDate(text);
-      if (_isValidAcceptableDate(date)) {
-        _selectedDate = date;
-        _inputText = text;
-        widget.onDateSaved(date);
-      }
+  void _updateDate(String? text, ValueChanged<NepaliDateTime>? callback) {
+    final date = _parseDate(text);
+    if (_isValidAcceptableDate(date)) {
+      _selectedDate = date;
+      _inputText = text;
+      callback?.call(_selectedDate!);
     }
   }
 
-  void _handleSubmitted(String text) {
-    if (widget.onDateSubmitted != null) {
-      final date = _parseDate(text);
-      if (_isValidAcceptableDate(date)) {
-        _selectedDate = date;
-        _inputText = text;
-        widget.onDateSubmitted(date);
-      }
-    }
+  void _handleSaved(String? text) {
+    _updateDate(text, widget.onDateSaved);
+  }
+
+  void _handleSubmitted(String? text) {
+    _updateDate(text, widget.onDateSubmitted);
   }
 
   @override
@@ -219,39 +231,16 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
     return TextFormField(
       decoration: InputDecoration(
         border: inputTheme.border ?? const UnderlineInputBorder(),
-        filled: inputTheme.filled ?? true,
+        filled: inputTheme.filled,
         hintText: widget.fieldHintText ?? 'yyyy/mm/dd',
         labelText: widget.fieldLabelText ?? 'Enter Date',
       ),
       validator: _validateDate,
-      inputFormatters: <TextInputFormatter>[
-        _DateTextInputFormatter('/'),
-      ],
       keyboardType: TextInputType.datetime,
       onSaved: _handleSaved,
       onFieldSubmitted: _handleSubmitted,
       autofocus: widget.autofocus,
       controller: _controller,
-    );
-  }
-}
-
-class _DateTextInputFormatter extends TextInputFormatter {
-  _DateTextInputFormatter(this.separator);
-
-  final String separator;
-
-  final FilteringTextInputFormatter _filterFormatter =
-      // Only allow digits and separators (slash, dot, comma, hyphen, space).
-      FilteringTextInputFormatter.allow(RegExp(r'[\d\/\.,-\s]+'));
-
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    final filteredValue = _filterFormatter.formatEditUpdate(oldValue, newValue);
-    return filteredValue.copyWith(
-      // Replace any separator character with the given separator
-      text: filteredValue.text.replaceAll(RegExp(r'[\D]'), separator),
     );
   }
 }
