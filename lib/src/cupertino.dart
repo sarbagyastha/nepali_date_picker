@@ -150,7 +150,7 @@ class _CupertinoDatePicker extends StatefulWidget {
       case _PickerColumnType.month:
         for (var i = 1; i <= 12; i++) {
           final month = NepaliDateFormat.MMMM(language).format(
-            NepaliDateTime(0, i),
+            NepaliDateTime(1970, i),
           );
           if (longestText.length < month.length) longestText = month;
         }

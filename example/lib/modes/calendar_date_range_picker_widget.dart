@@ -25,8 +25,8 @@ class _CalendarDateRangePickerWidgetState
             child: CalendarDateRangePicker(
               initialStartDate: NepaliDateTime.now(),
               initialEndDate: NepaliDateTime.now().add(Duration(days: 5)),
-              firstDate: NepaliDateTime(2070),
-              lastDate: NepaliDateTime(2090),
+              firstDate: NepaliDateTime(1970),
+              lastDate: NepaliDateTime(2100),
               onStartDateChanged: (date) {
                 dateRange.first = date;
                 setState(() {});

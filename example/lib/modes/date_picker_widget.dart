@@ -52,7 +52,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                     _selectedDateTime = await showMaterialDatePicker(
                       context: context,
                       initialDate: _selectedDateTime ?? NepaliDateTime.now(),
-                      firstDate: NepaliDateTime(2000),
+                      firstDate: NepaliDateTime(1970, 2, 5),
                       lastDate: NepaliDateTime(2099, 11, 6),
                       initialDatePickerMode: DatePickerMode.day,
                     );
@@ -74,8 +74,8 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                     showCupertinoDatePicker(
                       context: context,
                       initialDate: _selectedDateTime ?? NepaliDateTime.now(),
-                      firstDate: NepaliDateTime(2000),
-                      lastDate: NepaliDateTime(2099, 12),
+                      firstDate: NepaliDateTime(1970),
+                      lastDate: NepaliDateTime(2100, 12),
                       language: NepaliUtils().language,
                       dateOrder: _dateOrder,
                       onDateChanged: (newDate) {
