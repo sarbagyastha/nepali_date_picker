@@ -18,13 +18,13 @@ class InputDateRangePicker extends StatefulWidget {
   /// Creates a row with two text fields configured to accept the start and end dates
   /// of a date range.
   InputDateRangePicker({
-    Key key,
-    NepaliDateTime initialStartDate,
-    NepaliDateTime initialEndDate,
-    @required NepaliDateTime firstDate,
-    @required NepaliDateTime lastDate,
-    @required this.onStartDateChanged,
-    @required this.onEndDateChanged,
+    Key? key,
+    NepaliDateTime? initialStartDate,
+    NepaliDateTime? initialEndDate,
+    required NepaliDateTime firstDate,
+    required NepaliDateTime lastDate,
+    required this.onStartDateChanged,
+    required this.onEndDateChanged,
     this.helpText,
     this.errorFormatText,
     this.errorInvalidText,
@@ -39,21 +39,15 @@ class InputDateRangePicker extends StatefulWidget {
             initialStartDate == null ? null : utils.dateOnly(initialStartDate),
         initialEndDate =
             initialEndDate == null ? null : utils.dateOnly(initialEndDate),
-        assert(firstDate != null),
         firstDate = utils.dateOnly(firstDate),
-        assert(lastDate != null),
         lastDate = utils.dateOnly(lastDate),
-        assert(firstDate != null),
-        assert(lastDate != null),
-        assert(autofocus != null),
-        assert(autovalidate != null),
         super(key: key);
 
   /// The [NepaliDateTime] that represents the start of the initial date range selection.
-  final NepaliDateTime initialStartDate;
+  final NepaliDateTime? initialStartDate;
 
   /// The [NepaliDateTime] that represents the end of the initial date range selection.
-  final NepaliDateTime initialEndDate;
+  final NepaliDateTime? initialEndDate;
 
   /// The earliest allowable [NepaliDateTime] that the user can select.
   final NepaliDateTime firstDate;
@@ -62,38 +56,38 @@ class InputDateRangePicker extends StatefulWidget {
   final NepaliDateTime lastDate;
 
   /// Called when the user changes the start date of the selected range.
-  final ValueChanged<NepaliDateTime> onStartDateChanged;
+  final ValueChanged<NepaliDateTime?>? onStartDateChanged;
 
   /// Called when the user changes the end date of the selected range.
-  final ValueChanged<NepaliDateTime> onEndDateChanged;
+  final ValueChanged<NepaliDateTime?>? onEndDateChanged;
 
   /// The text that is displayed at the top of the header.
   ///
   /// This is used to indicate to the user what they are selecting a date for.
-  final String helpText;
+  final String? helpText;
 
   /// Error text used to indicate the text in a field is not a valid date.
-  final String errorFormatText;
+  final String? errorFormatText;
 
   /// Error text used to indicate the date in a field is not in the valid range
   /// of [firstDate] - [lastDate].
-  final String errorInvalidText;
+  final String? errorInvalidText;
 
   /// Error text used to indicate the dates given don't form a valid date
   /// range (i.e. the start date is after the end date).
-  final String errorInvalidRangeText;
+  final String? errorInvalidRangeText;
 
   /// Hint text shown when the start date field is empty.
-  final String fieldStartHintText;
+  final String? fieldStartHintText;
 
   /// Hint text shown when the end date field is empty.
-  final String fieldEndHintText;
+  final String? fieldEndHintText;
 
   /// Label used for the start date field.
-  final String fieldStartLabelText;
+  final String? fieldStartLabelText;
 
   /// Label used for the end date field.
-  final String fieldEndLabelText;
+  final String? fieldEndLabelText;
 
   /// {@macro flutter.widgets.editableText.autofocus}
   final bool autofocus;
@@ -110,14 +104,14 @@ class InputDateRangePicker extends StatefulWidget {
 /// The current state of an [InputDateRangePicker]. Can be used to
 /// [validate] the date field entries.
 class InputDateRangePickerState extends State<InputDateRangePicker> {
-  String _startInputText;
-  String _endInputText;
-  NepaliDateTime _startDate;
-  NepaliDateTime _endDate;
-  TextEditingController _startController;
-  TextEditingController _endController;
-  String _startErrorText;
-  String _endErrorText;
+  late String _startInputText;
+  late String _endInputText;
+  NepaliDateTime? _startDate;
+  NepaliDateTime? _endDate;
+  late TextEditingController _startController;
+  late TextEditingController _endController;
+  String? _startErrorText;
+  String? _endErrorText;
   bool _autoSelected = false;
 
   @override
@@ -141,14 +135,14 @@ class InputDateRangePickerState extends State<InputDateRangePicker> {
     super.didChangeDependencies();
     if (_startDate != null) {
       _startInputText =
-          NepaliDateFormat.yMd(Language.english).format(_startDate);
+          NepaliDateFormat.yMd(Language.english).format(_startDate!);
       final selectText = widget.autofocus && !_autoSelected;
       _updateController(_startController, _startInputText, selectText);
       _autoSelected = selectText;
     }
 
     if (_endDate != null) {
-      _endInputText = NepaliDateFormat.yMd(Language.english).format(_endDate);
+      _endInputText = NepaliDateFormat.yMd(Language.english).format(_endDate!);
       _updateController(_endController, _endInputText, false);
     }
   }
@@ -163,7 +157,7 @@ class InputDateRangePickerState extends State<InputDateRangePicker> {
     var startError = _validateDate(_startDate);
     final endError = _validateDate(_endDate);
     if (startError == null && endError == null) {
-      if (_startDate.isAfter(_endDate)) {
+      if (_startDate!.isAfter(_endDate!)) {
         startError = widget.errorInvalidRangeText ??
             MaterialLocalizations.of(context).invalidDateRangeLabel;
       }
@@ -175,15 +169,16 @@ class InputDateRangePickerState extends State<InputDateRangePicker> {
     return startError == null && endError == null;
   }
 
-  NepaliDateTime _parseDate(String text) {
-    if (RegExp(r'^2[01]\d{2}/(0[1-9]|1[0-2])/(0[1-9]|1[1-9]|2[1-9]|3[0-2])')
-        .hasMatch(text)) {
+  NepaliDateTime? _parseDate(String? text) {
+    if (text != null &&
+        RegExp(r'^2[01]\d{2}/(0[1-9]|1[0-2])/(0[1-9]|1[1-9]|2[1-9]|3[0-2])')
+            .hasMatch(text)) {
       return NepaliDateTime.parse(text.replaceAll('/', '-'));
     }
     return null;
   }
 
-  String _validateDate(NepaliDateTime date) {
+  String? _validateDate(NepaliDateTime? date) {
     if (date == null) {
       return widget.errorFormatText ??
           MaterialLocalizations.of(context).invalidDateFormatLabel;
@@ -242,7 +237,7 @@ class InputDateRangePickerState extends State<InputDateRangePicker> {
             controller: _startController,
             decoration: InputDecoration(
               border: inputTheme.border ?? const UnderlineInputBorder(),
-              filled: inputTheme.filled ?? true,
+              filled: inputTheme.filled,
               hintText: widget.fieldStartHintText ?? localizations.dateHelpText,
               labelText: widget.fieldStartLabelText ??
                   localizations.dateRangeStartLabel,
@@ -259,7 +254,7 @@ class InputDateRangePickerState extends State<InputDateRangePicker> {
             controller: _endController,
             decoration: InputDecoration(
               border: inputTheme.border ?? const UnderlineInputBorder(),
-              filled: inputTheme.filled ?? true,
+              filled: inputTheme.filled,
               hintText: widget.fieldEndHintText ?? localizations.dateHelpText,
               labelText:
                   widget.fieldEndLabelText ?? localizations.dateRangeEndLabel,
