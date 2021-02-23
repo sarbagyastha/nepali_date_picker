@@ -84,32 +84,28 @@ const double _inputFormLandscapeHeight = 108.0;
 /// calendar date picker initially appear in the [DatePickerMode.year] or
 /// [DatePickerMode.day] mode. It defaults to [DatePickerMode.day], and
 /// must be non-null.
-Future<NepaliDateTime> showMaterialDatePicker({
-  @required BuildContext context,
-  @required NepaliDateTime initialDate,
-  @required NepaliDateTime firstDate,
-  @required NepaliDateTime lastDate,
-  NepaliDateTime currentDate,
+Future<NepaliDateTime?> showMaterialDatePicker({
+  required BuildContext context,
+  required NepaliDateTime initialDate,
+  required NepaliDateTime firstDate,
+  required NepaliDateTime lastDate,
+  NepaliDateTime? currentDate,
   DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
-  common.SelectableDayPredicate selectableDayPredicate,
-  String helpText,
-  String cancelText,
-  String confirmText,
-  Locale locale,
+  common.SelectableDayPredicate? selectableDayPredicate,
+  String? helpText,
+  String? cancelText,
+  String? confirmText,
+  Locale? locale,
   bool useRootNavigator = true,
-  RouteSettings routeSettings,
-  TextDirection textDirection,
-  TransitionBuilder builder,
+  RouteSettings? routeSettings,
+  TextDirection? textDirection,
+  TransitionBuilder? builder,
   DatePickerMode initialDatePickerMode = DatePickerMode.day,
-  String errorFormatText,
-  String errorInvalidText,
-  String fieldHintText,
-  String fieldLabelText,
+  String? errorFormatText,
+  String? errorInvalidText,
+  String? fieldHintText,
+  String? fieldLabelText,
 }) async {
-  assert(context != null);
-  assert(initialDate != null);
-  assert(firstDate != null);
-  assert(lastDate != null);
   initialDate = utils.dateOnly(initialDate);
   firstDate = utils.dateOnly(firstDate);
   lastDate = utils.dateOnly(lastDate);
@@ -121,9 +117,6 @@ Future<NepaliDateTime> showMaterialDatePicker({
       'initialDate $initialDate must be on or before lastDate $lastDate.');
   assert(selectableDayPredicate == null || selectableDayPredicate(initialDate),
       'Provided initialDate $initialDate must satisfy provided selectableDayPredicate.');
-  assert(initialEntryMode != null);
-  assert(useRootNavigator != null);
-  assert(initialDatePickerMode != null);
   assert(debugCheckHasMaterialLocalizations(context));
 
   Widget dialog = _DatePickerDialog(
@@ -170,11 +163,11 @@ Future<NepaliDateTime> showMaterialDatePicker({
 
 class _DatePickerDialog extends StatefulWidget {
   _DatePickerDialog({
-    Key key,
-    @required NepaliDateTime initialDate,
-    @required NepaliDateTime firstDate,
-    @required NepaliDateTime lastDate,
-    NepaliDateTime currentDate,
+    Key? key,
+    required NepaliDateTime initialDate,
+    required NepaliDateTime firstDate,
+    required NepaliDateTime lastDate,
+    NepaliDateTime? currentDate,
     this.initialEntryMode = DatePickerEntryMode.calendar,
     this.selectableDayPredicate,
     this.cancelText,
@@ -185,15 +178,10 @@ class _DatePickerDialog extends StatefulWidget {
     this.errorInvalidText,
     this.fieldHintText,
     this.fieldLabelText,
-  })  : assert(initialDate != null),
-        assert(firstDate != null),
-        assert(lastDate != null),
-        initialDate = utils.dateOnly(initialDate),
+  })  : initialDate = utils.dateOnly(initialDate),
         firstDate = utils.dateOnly(firstDate),
         lastDate = utils.dateOnly(lastDate),
         currentDate = utils.dateOnly(currentDate ?? NepaliDateTime.now()),
-        assert(initialEntryMode != null),
-        assert(initialCalendarMode != null),
         super(key: key) {
     assert(!this.lastDate.isBefore(this.firstDate),
         'lastDate ${this.lastDate} must be on or after firstDate ${this.firstDate}.');
@@ -203,7 +191,7 @@ class _DatePickerDialog extends StatefulWidget {
         'initialDate ${this.initialDate} must be on or before lastDate ${this.lastDate}.');
     assert(
         selectableDayPredicate == null ||
-            selectableDayPredicate(this.initialDate),
+            selectableDayPredicate!(this.initialDate),
         'Provided initialDate ${this.initialDate} must satisfy provided selectableDayPredicate');
   }
 
@@ -222,38 +210,38 @@ class _DatePickerDialog extends StatefulWidget {
   final DatePickerEntryMode initialEntryMode;
 
   /// Function to provide full control over which [NepaliDateTime] can be selected.
-  final common.SelectableDayPredicate selectableDayPredicate;
+  final common.SelectableDayPredicate? selectableDayPredicate;
 
   /// The text that is displayed on the cancel button.
-  final String cancelText;
+  final String? cancelText;
 
   /// The text that is displayed on the confirm button.
-  final String confirmText;
+  final String? confirmText;
 
   /// The text that is displayed at the top of the header.
   ///
   /// This is used to indicate to the user what they are selecting a date for.
-  final String helpText;
+  final String? helpText;
 
   /// The initial display of the calendar picker.
   final DatePickerMode initialCalendarMode;
 
-  final String errorFormatText;
+  final String? errorFormatText;
 
-  final String errorInvalidText;
+  final String? errorInvalidText;
 
-  final String fieldHintText;
+  final String? fieldHintText;
 
-  final String fieldLabelText;
+  final String? fieldLabelText;
 
   @override
   _DatePickerDialogState createState() => _DatePickerDialogState();
 }
 
 class _DatePickerDialogState extends State<_DatePickerDialog> {
-  DatePickerEntryMode _entryMode;
-  NepaliDateTime _selectedDate;
-  AutovalidateMode _autoValidateMode;
+  late DatePickerEntryMode _entryMode;
+  late NepaliDateTime _selectedDate;
+  late AutovalidateMode _autoValidateMode;
   final GlobalKey _calendarPickerKey = GlobalKey();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -267,9 +255,9 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
 
   void _handleOk() {
     if (_entryMode == DatePickerEntryMode.input) {
-      final form = _formKey.currentState;
+      final form = _formKey.currentState!;
       if (!form.validate()) {
-        setState(() => _autoValidateMode = AutovalidateMode.onUserInteraction);
+        setState(() => _autoValidateMode = AutovalidateMode.always);
         return;
       }
       form.save();
@@ -281,7 +269,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
     Navigator.pop(context);
   }
 
-  void _handelEntryModeToggle() {
+  void _handleEntryModeToggle() {
     setState(() {
       switch (_entryMode) {
         case DatePickerEntryMode.calendar:
@@ -289,7 +277,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
           _entryMode = DatePickerEntryMode.input;
           break;
         case DatePickerEntryMode.input:
-          _formKey.currentState.save();
+          _formKey.currentState!.save();
           _entryMode = DatePickerEntryMode.calendar;
           break;
       }
@@ -310,7 +298,6 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
           case Orientation.landscape:
             return _calendarLandscapeDialogSize;
         }
-        break;
       case DatePickerEntryMode.input:
         switch (orientation) {
           case Orientation.portrait:
@@ -318,9 +305,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
           case Orientation.landscape:
             return _inputLandscapeDialogSize;
         }
-        break;
     }
-    return null;
   }
 
   static final Map<LogicalKeySet, Intent> _formShortcutMap =
@@ -340,108 +325,126 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
     final textScaleFactor =
         math.min(MediaQuery.of(context).textScaleFactor, 1.3);
 
-    final dateText = _selectedDate != null
-        ? NepaliDateFormat(NepaliUtils().language == Language.english
-                ? 'EE, MMM d'
-                : 'EE, MMMM d')
-            .format(_selectedDate)
-        : 'Date';
-    final dateColor = colorScheme.brightness == Brightness.light
+    final dateText = NepaliDateFormat(NepaliUtils().language == Language.english
+            ? 'EE, MMM d'
+            : 'EE, MMMM d')
+        .format(_selectedDate);
+    final onPrimarySurface = colorScheme.brightness == Brightness.light
         ? colorScheme.onPrimary
         : colorScheme.onSurface;
     final dateStyle = orientation == Orientation.landscape
-        ? textTheme.headline5?.copyWith(color: dateColor)
-        : textTheme.headline4?.copyWith(color: dateColor);
+        ? textTheme.headline5?.copyWith(color: onPrimarySurface)
+        : textTheme.headline4?.copyWith(color: onPrimarySurface);
 
-    final Widget actions = ButtonBar(
-      buttonTextTheme: ButtonTextTheme.primary,
-      layoutBehavior: ButtonBarLayoutBehavior.constrained,
-      children: <Widget>[
-        FlatButton(
-          child: Text(
-              widget.cancelText ?? NepaliUtils().language == Language.english
-                  ? 'CANCEL'
-                  : 'रद्द गर्नुहोस'),
-          onPressed: _handleCancel,
-        ),
-        FlatButton(
-          child: Text(
-              widget.confirmText ?? NepaliUtils().language == Language.english
-                  ? 'OK'
-                  : 'ठिक छ'),
-          onPressed: _handleOk,
-        ),
-      ],
+    final Widget actions = Container(
+      alignment: AlignmentDirectional.centerEnd,
+      constraints: const BoxConstraints(minHeight: 52.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: OverflowBar(
+        spacing: 8,
+        children: <Widget>[
+          TextButton(
+            child: Text(
+              widget.cancelText ??
+                  (NepaliUtils().language == Language.english
+                      ? 'CANCEL'
+                      : 'रद्द गर्नुहोस'),
+            ),
+            onPressed: _handleCancel,
+          ),
+          TextButton(
+            child: Text(
+              widget.confirmText ??
+                  (NepaliUtils().language == Language.english ? 'OK' : 'ठिक छ'),
+            ),
+            onPressed: _handleOk,
+          ),
+        ],
+      ),
     );
 
+    cdp.CalendarDatePicker calendarDatePicker() {
+      return cdp.CalendarDatePicker(
+        key: _calendarPickerKey,
+        initialDate: _selectedDate,
+        firstDate: widget.firstDate,
+        lastDate: widget.lastDate,
+        currentDate: widget.currentDate,
+        onDateChanged: _handleDateChanged,
+        selectableDayPredicate: widget.selectableDayPredicate,
+        initialCalendarMode: widget.initialCalendarMode,
+      );
+    }
+
+    Form inputDatePicker() {
+      return Form(
+        key: _formKey,
+        autovalidateMode: _autoValidateMode,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          height: orientation == Orientation.portrait
+              ? _inputFormPortraitHeight
+              : _inputFormLandscapeHeight,
+          child: Shortcuts(
+            shortcuts: _formShortcutMap,
+            child: Column(
+              children: [
+                const Spacer(),
+                idp.InputDatePickerFormField(
+                  initialDate: _selectedDate,
+                  firstDate: widget.firstDate,
+                  lastDate: widget.lastDate,
+                  onDateSubmitted: _handleDateChanged,
+                  onDateSaved: _handleDateChanged,
+                  selectableDayPredicate: widget.selectableDayPredicate,
+                  errorFormatText: widget.errorFormatText,
+                  errorInvalidText: widget.errorInvalidText,
+                  fieldHintText: widget.fieldHintText,
+                  fieldLabelText: widget.fieldLabelText,
+                  autofocus: true,
+                ),
+                const Spacer(),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
     Widget picker;
-    IconData entryModeIcon;
-    String entryModeTooltip;
+    final Widget? entryModeButton;
     switch (_entryMode) {
       case DatePickerEntryMode.calendar:
-        picker = cdp.CalendarDatePicker(
-          key: _calendarPickerKey,
-          initialDate: _selectedDate,
-          firstDate: widget.firstDate,
-          lastDate: widget.lastDate,
-          currentDate: widget.currentDate,
-          onDateChanged: _handleDateChanged,
-          selectableDayPredicate: widget.selectableDayPredicate,
-          initialCalendarMode: widget.initialCalendarMode,
+        picker = calendarDatePicker();
+        entryModeButton = IconButton(
+          icon: const Icon(Icons.edit),
+          color: onPrimarySurface,
+          tooltip: 'Switch to input',
+          onPressed: _handleEntryModeToggle,
         );
-        entryModeIcon = Icons.edit;
-        entryModeTooltip = 'Switch to input';
         break;
 
       case DatePickerEntryMode.input:
-        picker = Form(
-          key: _formKey,
-          autovalidateMode: _autoValidateMode,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            height: orientation == Orientation.portrait
-                ? _inputFormPortraitHeight
-                : _inputFormLandscapeHeight,
-            child: Shortcuts(
-              shortcuts: _formShortcutMap,
-              child: Column(
-                children: [
-                  const Spacer(),
-                  idp.InputDatePickerFormField(
-                    initialDate: _selectedDate,
-                    firstDate: widget.firstDate,
-                    lastDate: widget.lastDate,
-                    onDateSubmitted: _handleDateChanged,
-                    onDateSaved: _handleDateChanged,
-                    selectableDayPredicate: widget.selectableDayPredicate,
-                    errorFormatText: widget.errorFormatText,
-                    errorInvalidText: widget.errorInvalidText,
-                    fieldHintText: widget.fieldHintText,
-                    fieldLabelText: widget.fieldLabelText,
-                    autofocus: true,
-                  ),
-                  const Spacer(),
-                ],
-              ),
-            ),
-          ),
+        picker = inputDatePicker();
+        entryModeButton = IconButton(
+          icon: const Icon(Icons.calendar_today),
+          color: onPrimarySurface,
+          tooltip: 'Switch to calendar',
+          onPressed: _handleEntryModeToggle,
         );
-        entryModeIcon = Icons.calendar_today;
-        entryModeTooltip = 'Switch to calendar';
         break;
     }
 
     final Widget header = DatePickerHeader(
-      helpText: widget.helpText ?? NepaliUtils().language == Language.english
-          ? 'SELECT DATE'
-          : 'मिति चयन गर्नुहोस',
+      helpText: widget.helpText ??
+          (NepaliUtils().language == Language.english
+              ? 'SELECT DATE'
+              : 'मिति चयन गर्नुहोस'),
       titleText: dateText,
       titleStyle: dateStyle,
       orientation: orientation,
       isShort: orientation == Orientation.landscape,
-      icon: entryModeIcon,
-      iconTooltip: entryModeTooltip,
-      onIconPressed: _handelEntryModeToggle,
+      entryModeButton: entryModeButton,
     );
 
     final dialogSize = _dialogSize(context) * textScaleFactor;
@@ -455,43 +458,46 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
           data: MediaQuery.of(context).copyWith(
             textScaleFactor: textScaleFactor,
           ),
-          child: Builder(builder: (BuildContext context) {
-            switch (orientation) {
-              case Orientation.portrait:
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    header,
-                    Expanded(child: picker),
-                    actions,
-                  ],
-                );
-              case Orientation.landscape:
-                return Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    header,
-                    Flexible(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Expanded(child: picker),
-                          actions,
-                        ],
+          child: Builder(
+            builder: (BuildContext context) {
+              switch (orientation) {
+                case Orientation.portrait:
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      header,
+                      Expanded(child: picker),
+                      actions,
+                    ],
+                  );
+                case Orientation.landscape:
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      header,
+                      Flexible(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Expanded(child: picker),
+                            actions,
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                );
-            }
-            return null;
-          }),
+                    ],
+                  );
+              }
+            },
+          ),
         ),
       ),
-      insetPadding:
-          const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+      insetPadding: const EdgeInsets.symmetric(
+        horizontal: 16.0,
+        vertical: 24.0,
+      ),
       clipBehavior: Clip.antiAlias,
     );
   }

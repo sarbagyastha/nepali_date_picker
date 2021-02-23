@@ -18,10 +18,9 @@ class NepaliDateTimeRange {
   ///
   /// [start] and [end] must be non-null.
   const NepaliDateTimeRange({
-    @required this.start,
-    @required this.end,
-  })  : assert(start != null),
-        assert(end != null);
+    required this.start,
+    required this.end,
+  });
 
   /// The start of the range of dates.
   final NepaliDateTime start;
@@ -37,7 +36,9 @@ class NepaliDateTimeRange {
   @override
   bool operator ==(Object other) {
     if (other.runtimeType != runtimeType) return false;
-    return other is NepaliDateTimeRange && other.start == start && other.end == end;
+    return other is NepaliDateTimeRange &&
+        other.start == start &&
+        other.end == end;
   }
 
   @override
