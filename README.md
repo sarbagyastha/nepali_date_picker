@@ -24,7 +24,7 @@ package.
 * Calendar Picker
 * Material Date Range Picker
 * Calendar Range Picker
-* Supports from 2000 B.S. to 2099 B.S.
+* Supports from 1970 B.S. to 2100 B.S.
 
 ## Usage
 

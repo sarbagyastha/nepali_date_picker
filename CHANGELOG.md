@@ -1,3 +1,8 @@
+## [5.0.0] - Feb 23, 2021
+**Breaking Change**
+* Migrated to null safety
+* Extended Support for BS Calendar from 1970 to 2100.
+
 ## [4.2.0+1] - Oct 4, 2020
 * Added `CalendarDateRangePicker` widget.
 * Added `showMaterialDateRangePicker` method.

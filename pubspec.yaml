@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  nepali_utils: ^3.0.0
+  nepali_utils: ^3.0.1
 
 dev_dependencies:
   flutter_test:
