@@ -1,3 +1,6 @@
+## [5.0.0-dev.0] - Feb 23, 2021
+Temporary Fix to support for Flutter 2.1.0+
+
 ## [5.0.0] - Feb 23, 2021
 **Breaking Change**
 * Migrated to null safety

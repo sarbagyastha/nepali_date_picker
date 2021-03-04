@@ -277,6 +277,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
           _entryMode = DatePickerEntryMode.input;
           break;
         case DatePickerEntryMode.input:
+        default:
           _formKey.currentState!.save();
           _entryMode = DatePickerEntryMode.calendar;
           break;
@@ -299,6 +300,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
             return _calendarLandscapeDialogSize;
         }
       case DatePickerEntryMode.input:
+      default:
         switch (orientation) {
           case Orientation.portrait:
             return _inputPortraitDialogSize;
@@ -425,6 +427,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
         break;
 
       case DatePickerEntryMode.input:
+      default:
         picker = inputDatePicker();
         entryModeButton = IconButton(
           icon: const Icon(Icons.calendar_today),
