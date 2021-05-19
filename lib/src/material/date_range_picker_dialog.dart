@@ -266,6 +266,7 @@ class _DateRangePickerDialogState extends State<_DateRangePickerDialog> {
           break;
 
         case DatePickerEntryMode.input:
+        default:
           // Validate the range dates
           if (_selectedStart != null &&
               (_selectedStart!.isBefore(widget.firstDate) ||
@@ -353,6 +354,7 @@ class _DateRangePickerDialogState extends State<_DateRangePickerDialog> {
         break;
 
       case DatePickerEntryMode.input:
+      default:
         contents = _InputDateRangePickerDialog(
           selectedStartDate: _selectedStart,
           selectedEndDate: _selectedEnd,
