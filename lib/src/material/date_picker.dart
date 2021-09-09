@@ -243,7 +243,7 @@ class _DatePickerDialog extends StatefulWidget {
 class _DatePickerDialogState extends State<_DatePickerDialog> {
   late DatePickerEntryMode _entryMode;
   late NepaliDateTime _selectedDate;
-  late AutovalidateMode _autoValidateMode;
+  late ValueNotifier<AutovalidateMode> _autoValidateMode;
   final GlobalKey _calendarPickerKey = GlobalKey();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -252,14 +252,20 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
     super.initState();
     _entryMode = widget.initialEntryMode;
     _selectedDate = widget.initialDate;
-    _autoValidateMode = AutovalidateMode.disabled;
+    _autoValidateMode = ValueNotifier(AutovalidateMode.disabled);
+  }
+
+  @override
+  void dispose() {
+    _autoValidateMode.dispose();
+    super.dispose();
   }
 
   void _handleOk() {
     if (_entryMode == DatePickerEntryMode.input) {
       final form = _formKey.currentState!;
       if (!form.validate()) {
-        setState(() => _autoValidateMode = AutovalidateMode.always);
+        _autoValidateMode.value = AutovalidateMode.always;
         return;
       }
       form.save();
@@ -275,7 +281,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
     setState(() {
       switch (_entryMode) {
         case DatePickerEntryMode.calendar:
-          _autoValidateMode = AutovalidateMode.disabled;
+          _autoValidateMode.value = AutovalidateMode.disabled;
           _entryMode = DatePickerEntryMode.input;
           break;
         case DatePickerEntryMode.input:
@@ -380,10 +386,16 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
       );
     }
 
-    Form inputDatePicker() {
-      return Form(
-        key: _formKey,
-        autovalidateMode: _autoValidateMode,
+    Widget inputDatePicker() {
+      return ValueListenableBuilder<AutovalidateMode>(
+        valueListenable: _autoValidateMode,
+        builder: (context, autoValidateMode, child) {
+          return Form(
+            key: _formKey,
+            autovalidateMode: autoValidateMode,
+            child: child!,
+          );
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           height: orientation == Orientation.portrait
