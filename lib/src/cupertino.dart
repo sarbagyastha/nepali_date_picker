@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
-import 'material/date_picker_dialog.dart';
+import 'material/date_picker.dart' show showMaterialDatePicker;
 import 'utils.dart';
 
 // Default aesthetic values obtained by comparing with iOS pickers.

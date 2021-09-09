@@ -3,9 +3,11 @@
 // found in the LICENSE file.
 
 export 'calendar_date_picker.dart' show CalendarDatePicker;
-export 'calendar_date_range_picker.dart' show CalendarDateRangePicker;
+export 'date_picker.dart'
+    show
+        CalendarDateRangePicker,
+        showMaterialDatePicker,
+        showMaterialDateRangePicker;
 export 'date_picker_common.dart'
     show SelectableDayPredicate, NepaliDateTimeRange;
-export 'date_picker_dialog.dart' show showMaterialDatePicker;
-export 'date_range_picker_dialog.dart' show showMaterialDateRangePicker;
-export 'input_date_picker.dart' show InputDatePickerFormField;
+export 'input_date_picker_form_field.dart' show InputDatePickerFormField;
