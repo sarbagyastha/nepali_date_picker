@@ -215,7 +215,7 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
           MaterialLocalizations.of(context).dateOutOfRangeLabel;
     } else if (!_isDayInMonth(date)) {
       // TODO: Localize the text.
-      return 'Invalid Day';
+      return 'Invalid Day.';
     }
     return null;
   }
