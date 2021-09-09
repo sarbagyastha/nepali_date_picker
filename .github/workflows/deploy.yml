@@ -1,4 +1,4 @@
-name: Khalti Tests
+name: Deploy Web App
 
 on:
   push:
