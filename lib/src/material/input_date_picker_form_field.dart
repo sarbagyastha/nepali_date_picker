@@ -201,6 +201,10 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
             widget.selectableDayPredicate!(date));
   }
 
+  bool _isDayInMonth(NepaliDateTime? date) {
+    return date != null && date.day <= date.totalDays;
+  }
+
   String? _validateDate(String? text) {
     final date = _parseDate(text);
     if (date == null) {
@@ -209,6 +213,9 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
     } else if (!_isValidAcceptableDate(date)) {
       return widget.errorInvalidText ??
           MaterialLocalizations.of(context).dateOutOfRangeLabel;
+    } else if (!_isDayInMonth(date)) {
+      // TODO: Localize the text.
+      return 'Invalid Day';
     }
     return null;
   }
