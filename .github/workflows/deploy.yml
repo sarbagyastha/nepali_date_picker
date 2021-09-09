@@ -6,11 +6,8 @@ on:
       - master
 
 jobs:
-  tester:
-    if: github.event.label.name == 'Ready'
+  deploy:
     runs-on: ubuntu-latest
-    env:
-      MINION_ROOT: .
 
     steps:
       - name: Check out current repository
