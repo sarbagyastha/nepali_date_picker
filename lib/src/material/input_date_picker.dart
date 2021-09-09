@@ -178,6 +178,9 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
         _autoSelected = true;
       }
       _controller.value = textEditingValue;
+    } else {
+      _inputText = '';
+      _controller.value = _controller.value.copyWith(text: _inputText);
     }
   }
 
@@ -201,9 +204,11 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
   String? _validateDate(String? text) {
     final date = _parseDate(text);
     if (date == null) {
-      return widget.errorFormatText ?? 'Invalid format.';
+      return widget.errorFormatText ??
+          MaterialLocalizations.of(context).invalidDateFormatLabel;
     } else if (!_isValidAcceptableDate(date)) {
-      return widget.errorInvalidText ?? 'Out of range.';
+      return widget.errorInvalidText ??
+          MaterialLocalizations.of(context).dateOutOfRangeLabel;
     }
     return null;
   }
@@ -227,13 +232,14 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = MaterialLocalizations.of(context);
     final inputTheme = Theme.of(context).inputDecorationTheme;
     return TextFormField(
       decoration: InputDecoration(
         border: inputTheme.border ?? const UnderlineInputBorder(),
         filled: inputTheme.filled,
         hintText: widget.fieldHintText ?? 'yyyy/mm/dd',
-        labelText: widget.fieldLabelText ?? 'Enter Date',
+        labelText: widget.fieldLabelText ?? localizations.dateInputLabel,
       ),
       validator: _validateDate,
       keyboardType: TextInputType.datetime,
