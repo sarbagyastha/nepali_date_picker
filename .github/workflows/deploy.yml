@@ -1,0 +1,32 @@
+name: Khalti Tests
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  tester:
+    if: github.event.label.name == 'Ready'
+    runs-on: ubuntu-latest
+    env:
+      MINION_ROOT: .
+
+    steps:
+      - name: Check out current repository
+        uses: actions/checkout@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+
+      - name: Build Web App
+        run: flutter build web
+        working-directory: example
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./example/build/web
