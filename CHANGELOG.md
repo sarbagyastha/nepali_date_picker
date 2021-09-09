@@ -1,3 +1,8 @@
+## [5.2.0] - Sept 9, 2021
+* Fixed issue where validation error was not being shown for the first time in Input Date Picker.
+* Added day validation to Input Date Picker.
+* Fixed issue where day 10 & 20 could not be entered in input date picker [#12](https://github.com/sarbagyastha/nepali_date_picker/pull/12). Thanks to [@AmritAcharya](https://github.com/Amritacharya).
+
 ## [5.1.0] - May 19, 2021
 * Compatible with `flutter >= 2.1.0`
 
