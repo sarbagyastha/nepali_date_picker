@@ -1266,15 +1266,7 @@ class CalendarDateRangePicker extends StatefulWidget {
         firstDate = utils.dateOnly(firstDate),
         lastDate = utils.dateOnly(lastDate),
         currentDate = utils.dateOnly(currentDate ?? NepaliDateTime.now()),
-        super(key: key) {
-    assert(
-        this.initialStartDate == null ||
-            this.initialEndDate == null ||
-            !this.initialStartDate!.isAfter(initialEndDate!),
-        'initialStartDate must be on or before initialEndDate.');
-    assert(!this.lastDate.isBefore(this.firstDate),
-        'firstDate must be on or before lastDate.');
-  }
+        super(key: key);
 
   /// The [NepaliDateTime] that represents the start of the initial date range selection.
   final NepaliDateTime? initialStartDate;
@@ -1384,6 +1376,7 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
         widget.onStartDateChanged?.call(_startDate!);
         if (_endDate != null) {
           _endDate = null;
+        } else {
           widget.onEndDateChanged?.call(_endDate!);
         }
       }
