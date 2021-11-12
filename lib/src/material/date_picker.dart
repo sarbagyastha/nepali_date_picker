@@ -1114,8 +1114,8 @@ class _CalendarRangePickerDialog extends StatelessWidget {
   final NepaliDateTime firstDate;
   final NepaliDateTime lastDate;
   final NepaliDateTime? currentDate;
-  final ValueChanged<NepaliDateTime> onStartDateChanged;
-  final ValueChanged<NepaliDateTime> onEndDateChanged;
+  final ValueChanged<NepaliDateTime?> onStartDateChanged;
+  final ValueChanged<NepaliDateTime?> onEndDateChanged;
   final VoidCallback? onConfirm;
   final VoidCallback? onCancel;
   final String confirmText;
@@ -1284,10 +1284,10 @@ class CalendarDateRangePicker extends StatefulWidget {
   final NepaliDateTime currentDate;
 
   /// Called when the user changes the start date of the selected range.
-  final ValueChanged<NepaliDateTime>? onStartDateChanged;
+  final ValueChanged<NepaliDateTime?> onStartDateChanged;
 
   /// Called when the user changes the end date of the selected range.
-  final ValueChanged<NepaliDateTime>? onEndDateChanged;
+  final ValueChanged<NepaliDateTime?> onEndDateChanged;
 
   @override
   _CalendarDateRangePickerState createState() =>
@@ -1370,14 +1370,14 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
           _endDate == null &&
           !date.isBefore(_startDate!)) {
         _endDate = date;
-        widget.onEndDateChanged?.call(_endDate!);
+        widget.onEndDateChanged.call(_endDate!);
       } else {
         _startDate = date;
-        widget.onStartDateChanged?.call(_startDate!);
+        widget.onStartDateChanged.call(_startDate!);
         if (_endDate != null) {
           _endDate = null;
         } else {
-          widget.onEndDateChanged?.call(_endDate!);
+          widget.onEndDateChanged.call(_endDate!);
         }
       }
     });
