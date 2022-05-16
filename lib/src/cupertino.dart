@@ -342,7 +342,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
     // automatically scrolls to a valid one.
     final desiredDay = selectedDay % daysInCurrentMonth;
     if (desiredDay != selectedDay) {
-      SchedulerBinding.instance!.addPostFrameCallback((Duration timestamp) {
+      SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
         dayController.animateToItem(
           // The next valid date is also the amount of days overflown.
           dayController.selectedItem - desiredDay,
