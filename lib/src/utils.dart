@@ -16,7 +16,7 @@ String formattedMonth(
     case 2:
       return _isEnglish ? 'Jestha' : 'जेष्ठ';
     case 3:
-      return _isEnglish ? 'Ashadh' : 'अषाढ';
+      return _isEnglish ? 'Ashadh' : 'आषाढ';
     case 4:
       return _isEnglish ? 'Shrawan' : 'श्रावण';
     case 5:
@@ -24,15 +24,15 @@ String formattedMonth(
     case 6:
       return _isEnglish ? 'Ashwin' : 'आश्विन';
     case 7:
-      return _isEnglish ? 'Kartik' : 'कार्तिक';
+      return _isEnglish ? 'Kartik' : 'कार्त्तिक';
     case 8:
-      return _isEnglish ? 'Mangsir' : 'मंसिर';
+      return _isEnglish ? 'Mangsir' : 'मङ्सिर';
     case 9:
       return _isEnglish ? 'Poush' : 'पौष';
     case 10:
       return _isEnglish ? 'Magh' : 'माघ';
     case 11:
-      return _isEnglish ? 'Falgun' : 'फाल्गुन';
+      return _isEnglish ? 'Falgun' : 'फाल्गुण';
     case 12:
       return _isEnglish ? 'Chaitra' : 'चैत्र';
     default:
