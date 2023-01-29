@@ -3,27 +3,30 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "main.dart.js": "393c5a9912e9b621cb65e3eeaeb1c933",
-"version.json": "26bcb9f27db50c91cdc2d032c1c80cd6",
+  "flutter.js": "1cfe996e845b3a8a33f57607e8b09ee4",
+"index.html": "d8116decfff8d36eed84693988ee31f8",
+"/": "d8116decfff8d36eed84693988ee31f8",
+"main.dart.js": "8b8ba45e4d9c683001d3c69cf39b5460",
 "manifest.json": "15f73b7e8a8209c2206210b3ac8dea1b",
+"favicon.png": "6a230dbbfc9637190207ec0a27c80163",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
-"index.html": "2ea0e9bb22366010df74bf7c13654fb1",
-"/": "2ea0e9bb22366010df74bf7c13654fb1",
-"assets/NOTICES": "38bd1c09844825247948696046ab7970",
-"assets/fonts/MaterialIcons-Regular.otf": "4e6447691c9509f7acdbf8a931a85ca1",
-"assets/AssetManifest.json": "99914b932bd37a50b983c5e7c90ae93b",
 "assets/FontManifest.json": "7b2a36307916a9721811788013e65289",
-"favicon.png": "6a230dbbfc9637190207ec0a27c80163"
+"assets/NOTICES": "88408ff4fe08d9ca5cae09ae5f5eaceb",
+"assets/fonts/MaterialIcons-Regular.otf": "e7069dfd19b331be16bed984668fe080",
+"assets/AssetManifest.json": "99914b932bd37a50b983c5e7c90ae93b",
+"canvaskit/canvaskit.wasm": "3de12d898ec208a5f31362cc00f09b9e",
+"canvaskit/canvaskit.js": "97937cb4c2c2073c968525a3e08c86a3",
+"canvaskit/profiling/canvaskit.wasm": "371bc4e204443b0d5e774d64a046eb99",
+"canvaskit/profiling/canvaskit.js": "c21852696bc1cc82e8894d851c01921a",
+"version.json": "c484571ba138ec59d421410d4276829a"
 };
 
 // The application shell files that are downloaded before a service worker can
 // start.
 const CORE = [
-  "/",
-"main.dart.js",
+  "main.dart.js",
 "index.html",
-"assets/NOTICES",
 "assets/AssetManifest.json",
 "assets/FontManifest.json"];
 // During install, the TEMP cache is populated with the application shell files.
@@ -122,9 +125,11 @@ self.addEventListener("fetch", (event) => {
     .then((cache) =>  {
       return cache.match(event.request).then((response) => {
         // Either respond with the cached resource, or perform a fetch and
-        // lazily populate the cache.
+        // lazily populate the cache only if the resource was successfully fetched.
         return response || fetch(event.request).then((response) => {
-          cache.put(event.request, response.clone());
+          if (response && Boolean(response.ok)) {
+            cache.put(event.request, response.clone());
+          }
           return response;
         });
       })
