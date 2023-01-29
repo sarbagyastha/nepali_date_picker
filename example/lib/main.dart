@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
                   NepaliUtils().language == Language.english ? 'ने' : 'En',
                   style: Theme.of(context)
                       .textTheme
-                      .headline6
+                      .titleLarge
                       ?.copyWith(color: Colors.white),
                 ),
                 onPressed: () {
