@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart' hide CalendarDatePicker;
-import 'package:flutter/painting.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
@@ -39,7 +38,7 @@ class CalendarDatePickerWidget extends StatelessWidget {
                     NepaliUtils().language == Language.english
                         ? '${dayToBuild.day}'
                         : NepaliUnicode.convert('${dayToBuild.day}'),
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
                 if (events.any((event) => _dayEquals(event.date, dayToBuild)))
@@ -147,7 +146,7 @@ class TodayWidget extends StatelessWidget {
                       .toUpperCase(),
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1
+                      .bodyLarge
                       ?.copyWith(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
@@ -156,7 +155,7 @@ class TodayWidget extends StatelessWidget {
             Spacer(),
             Text(
               NepaliDateFormat.d().format(today),
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
             Spacer(),

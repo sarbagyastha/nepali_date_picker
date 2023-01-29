@@ -3,8 +3,9 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:nepali_utils/nepali_utils.dart';
+
+import 'date_picker_common.dart';
 
 /// Returns a [NepaliDateTime] with just the date of the original, but no time set.
 NepaliDateTime dateOnly(NepaliDateTime date) {

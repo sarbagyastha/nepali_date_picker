@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
@@ -153,7 +152,7 @@ class _InputDatePickerFormFieldState extends State<InputDatePickerFormField> {
     super.didUpdateWidget(oldWidget);
     if (widget.initialDate != oldWidget.initialDate) {
       // Can't update the form field in the middle of a build, so do it next frame
-      WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+      WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {
         setState(() {
           _selectedDate = widget.initialDate;
           _updateValueForSelectedDate();

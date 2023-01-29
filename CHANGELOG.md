@@ -1,3 +1,10 @@
+## [5.3.1] - Jan 29, 2023
+* Made changes necessary for Flutter 3.7
+* Added screenshots for pub.dev
+
+## [5.3.0] - May 16, 2022
+* Updated minimum flutter version to `v3.0.0`
+
 ## [5.2.0] - Sept 9, 2021
 * Fixed issue where validation error was not being shown for the first time in Input Date Picker.
 * Added day validation to Input Date Picker.

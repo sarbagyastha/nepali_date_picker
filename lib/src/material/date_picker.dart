@@ -4,8 +4,6 @@
 
 import 'dart:math' as math;
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -343,8 +341,8 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
         ? colorScheme.onPrimary
         : colorScheme.onSurface;
     final dateStyle = orientation == Orientation.landscape
-        ? textTheme.headline5?.copyWith(color: onPrimarySurface)
-        : textTheme.headline4?.copyWith(color: onPrimarySurface);
+        ? textTheme.headlineSmall?.copyWith(color: onPrimarySurface)
+        : textTheme.headlineMedium?.copyWith(color: onPrimarySurface);
 
     final Widget actions = Container(
       alignment: AlignmentDirectional.centerEnd,
@@ -590,7 +588,7 @@ class DatePickerHeader extends StatelessWidget {
     final onPrimarySurfaceColor =
         isDark ? colorScheme.onSurface : colorScheme.onPrimary;
 
-    final helpStyle = textTheme.overline?.copyWith(
+    final helpStyle = textTheme.labelSmall?.copyWith(
       color: onPrimarySurfaceColor,
     );
 
@@ -1137,7 +1135,7 @@ class _CalendarRangePickerDialog extends StatelessWidget {
         localizations, selectedStartDate, selectedEndDate);
     final endDateText = utils.formatRangeEndDate(localizations,
         selectedStartDate, selectedEndDate, NepaliDateTime.now());
-    final headlineStyle = textTheme.headline5;
+    final headlineStyle = textTheme.headlineSmall;
     final startDateStyle = headlineStyle?.apply(
         color: selectedStartDate != null
             ? headerForeground
@@ -1146,7 +1144,7 @@ class _CalendarRangePickerDialog extends StatelessWidget {
         color: selectedEndDate != null
             ? headerForeground
             : headerDisabledForeground);
-    final saveButtonStyle = textTheme.button?.apply(
+    final saveButtonStyle = textTheme.labelLarge?.apply(
         color: onConfirm != null ? headerForeground : headerDisabledForeground);
 
     return SafeArea(
@@ -1180,7 +1178,7 @@ class _CalendarRangePickerDialog extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         helpText,
-                        style: textTheme.overline!.apply(
+                        style: textTheme.labelSmall!.apply(
                           color: headerForeground,
                         ),
                       ),
@@ -1666,7 +1664,7 @@ class _DayHeaders extends StatelessWidget {
     final themeData = Theme.of(context);
     final colorScheme = themeData.colorScheme;
     final textStyle =
-        themeData.textTheme.subtitle2!.apply(color: colorScheme.onSurface);
+        themeData.textTheme.titleSmall!.apply(color: colorScheme.onSurface);
     final localizations = MaterialLocalizations.of(context);
     final labels = _getDayHeaders(textStyle, localizations);
 
@@ -1821,7 +1819,6 @@ class _MonthItem extends StatefulWidget {
     required this.firstDate,
     required this.lastDate,
     required this.displayedMonth,
-    this.dragStartBehavior = DragStartBehavior.start,
   })  : assert(!firstDate.isAfter(lastDate)),
         assert(selectedDateStart == null ||
             !selectedDateStart.isBefore(firstDate)),
@@ -1858,25 +1855,6 @@ class _MonthItem extends StatefulWidget {
 
   /// The month whose days are displayed by this picker.
   final NepaliDateTime displayedMonth;
-
-  /// Determines the way that drag start behavior is handled.
-  ///
-  /// If set to [DragStartBehavior.start], the drag gesture used to scroll a
-  /// date picker wheel will begin upon the detection of a drag gesture. If set
-  /// to [DragStartBehavior.down] it will begin when a down event is first
-  /// detected.
-  ///
-  /// In general, setting this to [DragStartBehavior.start] will make drag
-  /// animation smoother and setting it to [DragStartBehavior.down] will make
-  /// drag behavior feel slightly more reactive.
-  ///
-  /// By default, the drag start behavior is [DragStartBehavior.start].
-  ///
-  /// See also:
-  ///
-  ///  * [DragGestureRecognizer.dragStartBehavior], which gives an example for
-  ///    the different behaviors.
-  final DragStartBehavior dragStartBehavior;
 
   @override
   _MonthItemState createState() => _MonthItemState();
@@ -1958,7 +1936,7 @@ class _MonthItemState extends State<_MonthItem> {
         dayToBuild.isBefore(widget.firstDate);
 
     BoxDecoration? decoration;
-    var itemStyle = textTheme.bodyText2;
+    var itemStyle = textTheme.bodyMedium;
 
     final isRangeSelected =
         widget.selectedDateStart != null && widget.selectedDateEnd != null;
@@ -1979,7 +1957,7 @@ class _MonthItemState extends State<_MonthItem> {
     if (isSelectedDayStart || isSelectedDayEnd) {
       // The selected start and end dates gets a circle background
       // highlight, and a contrasting text color.
-      itemStyle = textTheme.bodyText2?.apply(color: colorScheme.onPrimary);
+      itemStyle = textTheme.bodyMedium?.apply(color: colorScheme.onPrimary);
       decoration = BoxDecoration(
         color: colorScheme.primary,
         shape: BoxShape.circle,
@@ -2004,12 +1982,12 @@ class _MonthItemState extends State<_MonthItem> {
         textDirection: textDirection,
       );
     } else if (isDisabled) {
-      itemStyle = textTheme.bodyText2
+      itemStyle = textTheme.bodyMedium
           ?.apply(color: colorScheme.onSurface.withOpacity(0.38));
     } else if (utils.isSameDay(widget.currentDate, dayToBuild)) {
       // The current day gets a different text color and a circle stroke
       // border.
-      itemStyle = textTheme.bodyText2?.apply(color: colorScheme.primary);
+      itemStyle = textTheme.bodyMedium?.apply(color: colorScheme.primary);
       decoration = BoxDecoration(
         border: Border.all(color: colorScheme.primary, width: 1),
         shape: BoxShape.circle,
@@ -2160,7 +2138,7 @@ class _MonthItemState extends State<_MonthItem> {
           child: ExcludeSemantics(
             child: Text(
               NepaliDateFormat.yMMMM().format(widget.displayedMonth),
-              style: textTheme.bodyText2!
+              style: textTheme.bodyMedium!
                   .apply(color: themeData.colorScheme.onSurface),
             ),
           ),
@@ -2314,8 +2292,8 @@ class _InputDateRangePickerDialog extends StatelessWidget {
         ? colorScheme.onPrimary
         : colorScheme.onSurface;
     final dateStyle = orientation == Orientation.landscape
-        ? textTheme.headline5?.apply(color: dateColor)
-        : textTheme.headline4?.apply(color: dateColor);
+        ? textTheme.headlineSmall?.apply(color: dateColor)
+        : textTheme.headlineMedium?.apply(color: dateColor);
     final dateText = _formatDateRange(
         context, selectedStartDate, selectedEndDate, currentDate!);
     final semanticDateText = selectedStartDate != null &&
