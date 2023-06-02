@@ -1148,7 +1148,7 @@ class NepaliYearPicker extends StatefulWidget {
   /// The currently selected date.
   ///
   /// This date is highlighted in the picker.
-  final NepaliDateTime selectedDate;
+  final NepaliDateTime? selectedDate;
 
   /// Called when the user picks a year.
   final ValueChanged<NepaliDateTime> onChanged;
@@ -1168,7 +1168,9 @@ class _NepaliYearPickerState extends State<NepaliYearPicker> {
     super.initState();
 
     // Set the scroll position to approximately center the initial year.
-    final initialYearIndex = widget.selectedDate.year - widget.firstDate.year;
+    final initialYearIndex =
+        (widget.selectedDate?.year ?? widget.currentDate.year) -
+            widget.firstDate.year;
     final initialYearRow = initialYearIndex ~/ _yearPickerColumnCount;
     // Move the offset down by 2 rows to approximately center it.
     final centeredYearRow = initialYearRow - 2;
@@ -1184,7 +1186,7 @@ class _NepaliYearPickerState extends State<NepaliYearPicker> {
     // Backfill the _YearPicker with disabled years if necessary.
     final offset = _itemCount < minYears ? (minYears - _itemCount) ~/ 2 : 0;
     final year = widget.firstDate.year + index - offset;
-    final isSelected = year == widget.selectedDate.year;
+    final isSelected = year == widget.selectedDate?.year;
     final isCurrentYear = year == widget.currentDate.year;
     final isDisabled =
         year < widget.firstDate.year || year > widget.lastDate.year;
@@ -1343,7 +1345,7 @@ class NepaliMonthPicker extends StatefulWidget {
   /// The currently selected date.
   ///
   /// This date is highlighted in the picker.
-  final int selectedMonth;
+  final int? selectedMonth;
 
   /// Called when the user picks a month.
   final ValueChanged<int> onChanged;
@@ -1358,14 +1360,7 @@ class _NepaliMonthPickerState extends State<NepaliMonthPicker> {
   @override
   void initState() {
     super.initState();
-
-    // Set the scroll position to approximately center the initial year.
-    final initialMonthIndex = widget.selectedMonth - widget.firstMonth;
-    final initialMonthRow = initialMonthIndex ~/ _yearPickerColumnCount;
-    // Move the offset down by 2 rows to approximately center it.
-    final centeredYearRow = initialMonthRow - 2;
-    final scrollOffset = centeredYearRow * _yearPickerRowHeight;
-    scrollController = ScrollController(initialScrollOffset: scrollOffset);
+    scrollController = ScrollController();
   }
 
   Widget _buildMonthItem(BuildContext context, int index) {

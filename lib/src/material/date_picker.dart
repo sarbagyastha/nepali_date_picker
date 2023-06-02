@@ -708,22 +708,28 @@ class DatePickerHeader extends StatelessWidget {
 /// inherited widgets like [Theme].
 ///
 /// Use [showMaterialYearPicker] function like this
+///
 /// ```dart
-/// final today = NepaliDateTime.now();
-/// final selectedYear = await showMaterialYearPicker(
-///   context: context,
-///   firstYear: NepaliDateTime(today.year - 3),
-///   lastYear: NepaliDateTime(today.year + 5),
-///   selectedYear: NepaliDateTime(today.year + 1),
-/// );
-/// print(selectedYear);
-/// print("***");
+///
+/// NepaliDateTime? _selectedYear;
+/// ...
+/// onTap: () {
+///   final today = NepaliDateTime.now();
+///   final _selectedYear = await showMaterialYearPicker(
+///     context: context,
+///     firstYear: NepaliDateTime(today.year - 3),
+///     lastYear: NepaliDateTime(today.year + 5),
+///     selectedYear: _selectedYear,
+///   );
+///   print("Do something useful with year $_selectedYear");
+/// }
+/// ...
 /// ```
 Future<NepaliDateTime?> showMaterialYearPicker({
   required BuildContext context,
   required NepaliDateTime firstYear,
   required NepaliDateTime lastYear,
-  required NepaliDateTime selectedYear,
+  NepaliDateTime? selectedYear,
   String? helpText,
   NepaliDateTime? currentYear,
   Locale? locale,
@@ -846,22 +852,29 @@ Future<NepaliDateTime?> showMaterialYearPicker({
 /// inherited widgets like [Theme].
 ///
 /// Use [showMaterialMonthPicker] function like this
+///
 /// ```dart
-/// final today = NepaliDateTime.now();
-/// final selectedMonth = await showMaterialMonthPicker(
-///   context: context,
-///   firstMonth: 2,
-///   lastMonth: 9,
-///   selectedMonth: 4,
-/// );
-/// print(selectedMonth);
-/// print("***");
+///
+/// NepaliDateTime? _selectedMonth;
+/// ...
+/// onTap: () {
+///   final pickedMonth = await showMaterialMonthPicker(
+///     context: context,
+///     firstMonth: 2,
+///     lastMonth: 9,
+///     selectedMonth: _selectedMonth?.month,
+///   );
+///   _selectedMonth = pickedMonth == null
+///       ? null
+///       : NepaliDateTime(NepaliDateTime.now().year, pickedMonth);
+///   print("Do something useful with month $_selectedMonth");
+/// }
 /// ```
 Future<int?> showMaterialMonthPicker({
   required BuildContext context,
   int firstMonth = 1,
   int lastMonth = 12,
-  required int selectedMonth,
+  int? selectedMonth,
   String? helpText,
   int? currentMonth,
   Locale? locale,
