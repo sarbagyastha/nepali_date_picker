@@ -674,7 +674,8 @@ class DatePickerHeader extends StatelessWidget {
 /// Shows a dialog containing a Material Design year picker.
 ///
 /// The returned [Future] resolves to the year selected by the user when the
-/// user confirms the dialog. If the user cancels the dialog, null is returned.
+/// user taps on a year in the dialog. If the user taps outside of the dialog,
+/// null is returned.
 ///
 /// The [firstYear] is the earliest allowable year. The [lastYear] is the last
 /// allowable date. For each of these [DateTime] parameters, only their year is
