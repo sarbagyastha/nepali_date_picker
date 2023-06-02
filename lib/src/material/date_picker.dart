@@ -671,6 +671,135 @@ class DatePickerHeader extends StatelessWidget {
   }
 }
 
+/// Shows a dialog containing a Material Design year picker.
+///
+/// The returned [Future] resolves to the year selected by the user when the
+/// user confirms the dialog. If the user cancels the dialog, null is returned.
+///
+/// The [firstYear] is the earliest allowable year. The [lastYear] is the last
+/// allowable date. For each of these [DateTime] parameters, only their year is
+/// considered. Rest of it's fields (month, date, and time) are ignored.
+///
+/// The [currentYear] represents the current year. This year will be subtly
+/// highlighted in the year grid. If null, the year field of `DateTime.now()`
+/// will be used.
+///
+/// The [selectedYear] represents the selected year. This will be highlighted in
+/// the year grid. If null, the year field of `DateTime.now()`
+/// will be used.
+///
+/// The [onChanged] argument ia a function callback to provides the year user
+/// has picked.
+///
+/// The [context], [useRootNavigator] and [routeSettings] arguments are passed
+/// to [showDialog], the documentation for which discusses how it is used.
+/// [context] and [useRootNavigator] must be non-null.
+///
+/// The [builder] parameter can be used to wrap the dialog widget to add
+/// inherited widgets like [Theme].
+///
+/// Use [showMaterialYearPicker] function like this
+/// ```dart
+/// final today = NepaliDateTime.now();
+/// final selectedYear = await showMaterialYearPicker(
+///   context: context,
+///   firstYear: NepaliDateTime(today.year - 3),
+///   lastYear: NepaliDateTime(today.year + 5),
+///   selectedYear: NepaliDateTime(today.year + 1),
+/// );
+/// print(selectedYear);
+/// print("***");
+/// ```
+Future<NepaliDateTime?> showMaterialYearPicker({
+  required BuildContext context,
+  required NepaliDateTime firstYear,
+  required NepaliDateTime lastYear,
+  required NepaliDateTime selectedYear,
+  String? helpText,
+  NepaliDateTime? currentYear,
+  Locale? locale,
+  bool useRootNavigator = true,
+  RouteSettings? routeSettings,
+  TextDirection? textDirection,
+  TransitionBuilder? builder,
+}) async {
+  firstYear = utils.yearOnly(firstYear);
+  lastYear = utils.yearOnly(lastYear);
+  assert(!lastYear.isBefore(firstYear),
+      'lastYear $lastYear must be on or after firstYear $firstYear.');
+  assert(debugCheckHasMaterialLocalizations(context));
+
+  Widget picker = cdp.NepaliYearPicker(
+    // When user opens `NepaliYearPicker` from `showMaterialDatePicker()` and
+    // then change the year we don't want month and date field to change. For
+    // that reason `initialDate` is used. But in this case i.e.
+    // `showMaterialYearPicker()` we want those fields to reset to `01` so it is
+    // not essential here.
+    initialDate: firstYear,
+    firstDate: firstYear,
+    lastDate: lastYear,
+    currentDate: currentYear ?? NepaliDateTime.now(),
+    selectedDate: selectedYear,
+    onChanged: (NepaliDateTime value) => Navigator.pop(context, value),
+  );
+
+  if (textDirection != null) {
+    picker = Directionality(
+      textDirection: textDirection,
+      child: picker,
+    );
+  }
+
+  if (locale != null) {
+    picker = Localizations.override(
+      context: context,
+      locale: locale,
+      child: picker,
+    );
+  }
+
+  picker = Dialog(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16),
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              helpText ??
+                  (NepaliUtils().language == Language.english
+                      ? 'SELECT YEAR'
+                      : 'साल चयन गर्नुहोस'),
+              style: Theme.of(context).textTheme.labelSmall,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
+        Expanded(child: picker),
+      ],
+    ),
+    insetPadding: const EdgeInsets.symmetric(
+      horizontal: 16.0,
+      vertical: 24.0,
+    ),
+    clipBehavior: Clip.antiAlias,
+  );
+
+  final newSelectedYear = showDialog<NepaliDateTime>(
+    context: context,
+    useRootNavigator: useRootNavigator,
+    routeSettings: routeSettings,
+    builder: (BuildContext context) {
+      return builder == null ? picker : builder(context, picker);
+    },
+  );
+
+  return newSelectedYear;
+}
+
 /// Shows a full screen modal dialog containing a Material Design date range
 /// picker.
 ///

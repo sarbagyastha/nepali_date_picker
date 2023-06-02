@@ -277,7 +277,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
       case DatePickerMode.year:
         return Padding(
           padding: const EdgeInsets.only(top: _subHeaderHeight),
-          child: _YearPicker(
+          child: NepaliYearPicker(
             key: _yearPickerKey,
             currentDate: widget.currentDate,
             firstDate: widget.firstDate,
@@ -1115,12 +1115,12 @@ class _DayPickerGridDelegate extends SliverGridDelegate {
 const _DayPickerGridDelegate _dayPickerGridDelegate = _DayPickerGridDelegate();
 
 /// A scrollable list of years to allow picking a year.
-class _YearPicker extends StatefulWidget {
+class NepaliYearPicker extends StatefulWidget {
   /// Creates a year picker.
   ///
   /// The [currentDate, [firstDate], [lastDate], [selectedDate], and [onChanged]
   /// arguments must be non-null. The [lastDate] must be after the [firstDate].
-  _YearPicker({
+  NepaliYearPicker({
     Key? key,
     required this.currentDate,
     required this.firstDate,
@@ -1154,10 +1154,10 @@ class _YearPicker extends StatefulWidget {
   final ValueChanged<NepaliDateTime> onChanged;
 
   @override
-  _YearPickerState createState() => _YearPickerState();
+  _NepaliYearPickerState createState() => _NepaliYearPickerState();
 }
 
-class _YearPickerState extends State<_YearPicker> {
+class _NepaliYearPickerState extends State<NepaliYearPicker> {
   late ScrollController scrollController;
 
   // The approximate number of years necessary to fill the available space.

@@ -12,6 +12,12 @@ NepaliDateTime dateOnly(NepaliDateTime date) {
   return NepaliDateTime(date.year, date.month, date.day);
 }
 
+/// Returns a [NepaliDateTime] with just the year of the original, but no month,
+/// day and time set.
+NepaliDateTime yearOnly(NepaliDateTime date) {
+  return NepaliDateTime(date.year);
+}
+
 /// Returns true if the two [NepaliDateTime] objects have the same day, month, and
 /// year, or are both null.
 bool isSameDay(NepaliDateTime? dateA, NepaliDateTime? dateB) {
