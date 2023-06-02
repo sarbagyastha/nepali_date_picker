@@ -8,6 +8,7 @@ export 'date_picker.dart'
         CalendarDateRangePicker,
         showMaterialDatePicker,
         showMaterialDateRangePicker,
+        showMaterialMonthPicker,
         showMaterialYearPicker;
 export 'date_picker_common.dart'
     show SelectableDayPredicate, NepaliDateTimeRange;

@@ -1311,3 +1311,157 @@ class _YearPickerGridDelegate extends SliverGridDelegate {
 
 const _YearPickerGridDelegate _yearPickerGridDelegate =
     _YearPickerGridDelegate();
+
+/// A scrollable list of months to allow picking a month.
+class NepaliMonthPicker extends StatefulWidget {
+  /// Creates a month picker.
+  ///
+  /// The [currentMonth], [firstMonth], [lastMonth], [selectedMonth], and
+  /// [onChanged] arguments must be non-null. The [lastMonth] must be after the
+  /// [firstMonth].
+  NepaliMonthPicker({
+    Key? key,
+    required this.currentMonth,
+    required this.firstMonth,
+    required this.lastMonth,
+    required this.selectedMonth,
+    required this.onChanged,
+  })  : assert(firstMonth <= lastMonth),
+        super(key: key);
+
+  /// The current date.
+  ///
+  /// This date is subtly highlighted in the picker.
+  final int currentMonth;
+
+  /// The earliest date the user is permitted to pick.
+  final int firstMonth;
+
+  /// The latest date the user is permitted to pick.
+  final int lastMonth;
+
+  /// The currently selected date.
+  ///
+  /// This date is highlighted in the picker.
+  final int selectedMonth;
+
+  /// Called when the user picks a month.
+  final ValueChanged<int> onChanged;
+
+  @override
+  _NepaliMonthPickerState createState() => _NepaliMonthPickerState();
+}
+
+class _NepaliMonthPickerState extends State<NepaliMonthPicker> {
+  late ScrollController scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Set the scroll position to approximately center the initial year.
+    final initialMonthIndex = widget.selectedMonth - widget.firstMonth;
+    final initialMonthRow = initialMonthIndex ~/ _yearPickerColumnCount;
+    // Move the offset down by 2 rows to approximately center it.
+    final centeredYearRow = initialMonthRow - 2;
+    final scrollOffset = centeredYearRow * _yearPickerRowHeight;
+    scrollController = ScrollController(initialScrollOffset: scrollOffset);
+  }
+
+  Widget _buildMonthItem(BuildContext context, int index) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    // Backfill the _MonthPicker with disabled months firstMonth is not 1.
+    final offset = widget.firstMonth - 1;
+    final month = widget.firstMonth + index - offset;
+    final isSelected = month == widget.selectedMonth;
+    final isCurrentMonth = month == widget.currentMonth;
+    final isDisabled = month < widget.firstMonth || month > widget.lastMonth;
+    const decorationHeight = 36.0;
+    const decorationWidth = 72.0;
+
+    Color textColor;
+    if (isSelected) {
+      textColor = colorScheme.onPrimary;
+    } else if (isDisabled) {
+      textColor = colorScheme.onSurface.withOpacity(0.38);
+    } else if (isCurrentMonth) {
+      textColor = colorScheme.primary;
+    } else {
+      textColor = colorScheme.onSurface.withOpacity(0.87);
+    }
+    final itemStyle = textTheme.bodyLarge?.apply(color: textColor);
+
+    BoxDecoration? decoration;
+    if (isSelected) {
+      decoration = BoxDecoration(
+        color: colorScheme.primary,
+        borderRadius: BorderRadius.circular(decorationHeight / 2),
+        shape: BoxShape.rectangle,
+      );
+    } else if (isCurrentMonth && !isDisabled) {
+      decoration = BoxDecoration(
+        border: Border.all(
+          color: colorScheme.primary,
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(decorationHeight / 2),
+        shape: BoxShape.rectangle,
+      );
+    }
+
+    Widget monthItem = Center(
+      child: Container(
+        decoration: decoration,
+        height: decorationHeight,
+        width: decorationWidth,
+        child: Center(
+          child: Semantics(
+            selected: isSelected,
+            child: Text(
+              NepaliDateFormat.MMMM(NepaliUtils().language).format(
+                NepaliDateTime(
+                  NepaliDateTime.now().year,
+                  month,
+                ),
+              ),
+              style: itemStyle,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    if (isDisabled) {
+      monthItem = ExcludeSemantics(child: monthItem);
+    } else {
+      monthItem = InkWell(
+        key: ValueKey<int>(month),
+        onTap: () => widget.onChanged(month),
+        child: monthItem,
+      );
+    }
+
+    return monthItem;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        const Divider(),
+        Expanded(
+          child: GridView.builder(
+            controller: scrollController,
+            gridDelegate: _yearPickerGridDelegate,
+            itemBuilder: _buildMonthItem,
+            itemCount: 12,
+            padding: const EdgeInsets.symmetric(horizontal: _yearPickerPadding),
+          ),
+        ),
+        const Divider(),
+      ],
+    );
+  }
+}

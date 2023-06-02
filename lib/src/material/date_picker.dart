@@ -809,6 +809,143 @@ Future<NepaliDateTime?> showMaterialYearPicker({
   return newSelectedYear;
 }
 
+/// Shows a dialog containing a Material Design month picker.
+///
+/// The returned [Future] resolves to the month selected by the user when the
+/// user taps on a month in the dialog. If the user taps outside of the dialog,
+/// null is returned.
+///
+/// The [firstMonth] is the earliest allowable month. The [lastMonth] is the
+/// last allowable date. Default value for [firstMonth] is 1 and for [lastMonth]
+/// is 12.
+///
+/// The [currentMonth] represents the current month. This month will be subtly
+/// highlighted in the month grid. If null, the month field of `DateTime.now()`
+/// will be used.
+///
+/// The [selectedMonth] represents the selected month. This will be highlighted
+/// in the month grid.
+///
+/// Optional strings for the [helpText] allow you to override the default text
+/// used as label on the top of the dialog.
+///
+/// An optional [locale] argument can be used to set the locale for the date
+/// picker. It defaults to the ambient locale provided by [Localizations].
+///
+/// An optional [textDirection] argument can be used to set the text direction
+/// ([TextDirection.ltr] or [TextDirection.rtl]) for the date picker. It
+/// defaults to the ambient text direction provided by [Directionality]. If both
+/// [locale] and [textDirection] are non-null, [textDirection] overrides the
+/// direction chosen for the [locale].
+///
+/// The [context], [useRootNavigator] and [routeSettings] arguments are passed
+/// to [showDialog], the documentation for which discusses how it is used.
+/// [context] and [useRootNavigator] must be non-null.
+///
+/// The [builder] parameter can be used to wrap the dialog widget to add
+/// inherited widgets like [Theme].
+///
+/// Use [showMaterialMonthPicker] function like this
+/// ```dart
+/// final today = NepaliDateTime.now();
+/// final selectedMonth = await showMaterialMonthPicker(
+///   context: context,
+///   firstMonth: 2,
+///   lastMonth: 9,
+///   selectedMonth: 4,
+/// );
+/// print(selectedMonth);
+/// print("***");
+/// ```
+Future<int?> showMaterialMonthPicker({
+  required BuildContext context,
+  int firstMonth = 1,
+  int lastMonth = 12,
+  required int selectedMonth,
+  String? helpText,
+  int? currentMonth,
+  Locale? locale,
+  bool useRootNavigator = true,
+  RouteSettings? routeSettings,
+  TextDirection? textDirection,
+  TransitionBuilder? builder,
+}) async {
+  assert(firstMonth >= 1, 'firstMonth $firstMonth cannot be smaller than 1.');
+  assert(lastMonth <= 12, 'lastMonth $lastMonth cannot be greater than 12.');
+  assert(firstMonth <= lastMonth,
+      'lastMonth $lastMonth must be on or after firstMonth $firstMonth.');
+  assert(debugCheckHasMaterialLocalizations(context));
+
+  Widget picker = cdp.NepaliMonthPicker(
+    firstMonth: firstMonth,
+    lastMonth: lastMonth,
+    currentMonth: currentMonth ?? NepaliDateTime.now().month,
+    selectedMonth: selectedMonth,
+    onChanged: (int value) => Navigator.pop(context, value),
+  );
+
+  if (textDirection != null) {
+    picker = Directionality(
+      textDirection: textDirection,
+      child: picker,
+    );
+  }
+
+  if (locale != null) {
+    picker = Localizations.override(
+      context: context,
+      locale: locale,
+      child: picker,
+    );
+  }
+
+  picker = Dialog(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16),
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              helpText ??
+                  (NepaliUtils().language == Language.english
+                      ? 'SELECT Month'
+                      : 'महिना चयन गर्नुहोस'),
+              style: Theme.of(context).textTheme.labelSmall,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 52.0 * 4 + // Height of each row * No. of rows
+              16.0 + // Padding of 16.0 at top
+              16.0, // Padding of 16.0 at bottom
+          child: picker,
+        ),
+      ],
+    ),
+    insetPadding: const EdgeInsets.symmetric(
+      horizontal: 16.0,
+      vertical: 24.0,
+    ),
+    clipBehavior: Clip.antiAlias,
+  );
+
+  final newSelectedMonth = showDialog<int>(
+    context: context,
+    useRootNavigator: useRootNavigator,
+    routeSettings: routeSettings,
+    builder: (BuildContext context) {
+      return builder == null ? picker : builder(context, picker);
+    },
+  );
+
+  return newSelectedMonth;
+}
+
 /// Shows a full screen modal dialog containing a Material Design date range
 /// picker.
 ///
