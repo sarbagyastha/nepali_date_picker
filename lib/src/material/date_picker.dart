@@ -686,11 +686,19 @@ class DatePickerHeader extends StatelessWidget {
 /// will be used.
 ///
 /// The [selectedYear] represents the selected year. This will be highlighted in
-/// the year grid. If null, the year field of `DateTime.now()`
-/// will be used.
+/// the year grid.
 ///
-/// The [onChanged] argument ia a function callback to provides the year user
-/// has picked.
+/// Optional strings for the [helpText] allow you to override the default text
+/// used as label on the top of the dialog.
+///
+/// An optional [locale] argument can be used to set the locale for the date
+/// picker. It defaults to the ambient locale provided by [Localizations].
+///
+/// An optional [textDirection] argument can be used to set the text direction
+/// ([TextDirection.ltr] or [TextDirection.rtl]) for the date picker. It
+/// defaults to the ambient text direction provided by [Directionality]. If both
+/// [locale] and [textDirection] are non-null, [textDirection] overrides the
+/// direction chosen for the [locale].
 ///
 /// The [context], [useRootNavigator] and [routeSettings] arguments are passed
 /// to [showDialog], the documentation for which discusses how it is used.
