@@ -1118,7 +1118,7 @@ const _DayPickerGridDelegate _dayPickerGridDelegate = _DayPickerGridDelegate();
 class NepaliYearPicker extends StatefulWidget {
   /// Creates a year picker.
   ///
-  /// The [currentDate, [firstDate], [lastDate], [selectedDate], and [onChanged]
+  /// The [currentDate], [firstDate], [lastDate], [selectedDate], and [onChanged]
   /// arguments must be non-null. The [lastDate] must be after the [firstDate].
   NepaliYearPicker({
     Key? key,
