@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart' hide CalendarDatePicker;
+import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
 /// Calendar Picker Example
-class CalendarDatePickerWidget extends StatelessWidget {
+class NepaliCalendarWidget extends StatelessWidget {
   final ValueNotifier<NepaliDateTime> _selectedDate =
       ValueNotifier(NepaliDateTime.now());
 
@@ -25,7 +25,16 @@ class CalendarDatePickerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CalendarDatePicker(
+        NepaliCalendar(
+          monthYearPickerStyle: TextStyle(
+              color: Colors.purpleAccent,
+              fontWeight: FontWeight.bold,
+              fontSize: 24),
+          //Color to left right button
+          rightLeftButtonColor: Colors.red,
+          //Styles to Week Row
+          weekHeaderStyle: TextStyle(
+              color: Colors.purple, fontWeight: FontWeight.bold, fontSize: 26),
           initialDate: NepaliDateTime.now(),
           firstDate: NepaliDateTime(2070),
           lastDate: NepaliDateTime(2090),
@@ -38,7 +47,10 @@ class CalendarDatePickerWidget extends StatelessWidget {
                     NepaliUtils().language == Language.english
                         ? '${dayToBuild.day}'
                         : NepaliUnicode.convert('${dayToBuild.day}'),
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
                 if (events.any((event) => _dayEquals(event.date, dayToBuild)))

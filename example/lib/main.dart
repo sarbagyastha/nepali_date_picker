@@ -4,8 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:nepali_utils/nepali_utils.dart';
-
-import 'modes/calendar_date_picker_widget.dart';
+import 'modes/nepali_calendar_widget.dart';
 import 'modes/calendar_date_range_picker_widget.dart';
 import 'modes/date_picker_widget.dart';
 import 'modes/date_range_picker_widget.dart';
@@ -36,8 +35,8 @@ class _MyAppState extends State<MyApp> {
             bottom: TabBar(
               isScrollable: true,
               tabs: [
+                Tab(text: 'Nepali Calendar'),
                 Tab(text: 'Date Picker'),
-                Tab(text: 'Calendar'),
                 Tab(text: 'Date Range Picker'),
                 Tab(text: 'Calendar Range'),
               ],
@@ -63,8 +62,8 @@ class _MyAppState extends State<MyApp> {
           ),
           body: TabBarView(
             children: [
+              NepaliCalendarWidget(),
               DatePickerWidget(),
-              CalendarDatePickerWidget(),
               DateRangePickerWidget(),
               CalendarDateRangePickerWidget(),
             ],

@@ -1,3 +1,9 @@
+## [5.3.2] - Oct 7, 2023
+* Changed name to NepaliClander of a widget as it was confusing to the inbuilt widget
+* Added Styles to the calender
+* Converted to Nepali Text
+
+
 ## [5.3.1] - Jan 29, 2023
 * Made changes necessary for Flutter 3.7
 * Added screenshots for pub.dev
