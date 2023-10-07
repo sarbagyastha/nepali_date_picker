@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide CalendarDatePicker;
+import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 ///

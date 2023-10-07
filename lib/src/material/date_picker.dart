@@ -7,9 +7,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:nepali_date_picker/src/material/nepali_calender.dart';
 import 'package:nepali_utils/nepali_utils.dart';
-
-import 'calendar_date_picker.dart' as cdp;
 import 'date_picker_common.dart' as common;
 import 'date_picker_common.dart';
 import 'date_utils.dart' as utils;
@@ -371,8 +370,8 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
       ),
     );
 
-    cdp.CalendarDatePicker calendarDatePicker() {
-      return cdp.CalendarDatePicker(
+    NepaliCalendar calendarDatePicker() {
+      return NepaliCalendar(
         key: _calendarPickerKey,
         initialDate: _selectedDate,
         firstDate: widget.firstDate,

@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
-import 'package:nepali_utils/nepali_utils.dart';
 
 import 'date_picker_common.dart' as common;
 import 'date_utils.dart' as utils;

@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
@@ -20,7 +21,6 @@ const int _maxDayPickerRowCount = 6; // A 31 day month that starts on Saturday.
 // One extra row for the day-of-week header.
 const double _maxDayPickerHeight =
     _dayPickerRowHeight * (_maxDayPickerRowCount + 1);
-const double _monthPickerHorizontalPadding = 8.0;
 
 const int _yearPickerColumnCount = 3;
 const double _yearPickerPadding = 16.0;
@@ -39,7 +39,7 @@ const double _monthNavButtonsWidth = 108.0;
 /// The calendar picker widget is rarely used directly. Instead, consider using
 /// [showMaterialDatePicker], which will create a dialog that uses this as well as provides
 /// a text entry option.
-class CalendarDatePicker extends StatefulWidget {
+class NepaliCalendar extends StatefulWidget {
   /// Creates a calender date picker
   ///
   /// It will display a grid of days for the [initialDate]'s month. The day
@@ -67,7 +67,7 @@ class CalendarDatePicker extends StatefulWidget {
   ///
   /// If [selectableDayPredicate] is non-null, it must return `true` for the
   /// [initialDate].
-  CalendarDatePicker({
+  NepaliCalendar({
     Key? key,
     required NepaliDateTime initialDate,
     required NepaliDateTime firstDate,
@@ -80,6 +80,9 @@ class CalendarDatePicker extends StatefulWidget {
     this.selectedDayDecoration,
     this.todayDecoration,
     this.dayBuilder,
+    this.rightLeftButtonColor = Colors.grey,
+    this.monthYearPickerStyle,
+    this.weekHeaderStyle,
   })  : initialDate = utils.dateOnly(initialDate),
         firstDate = utils.dateOnly(firstDate),
         lastDate = utils.dateOnly(lastDate),
@@ -103,6 +106,15 @@ class CalendarDatePicker extends StatefulWidget {
       'Provided initialDate ${this.initialDate} must satisfy provided selectableDayPredicate.',
     );
   }
+
+  ///Week Header Style
+  final TextStyle? weekHeaderStyle;
+
+  /// Button Color
+  final Color rightLeftButtonColor;
+
+  /// Month Year Picker TextStyle
+  final TextStyle? monthYearPickerStyle;
 
   /// The initially selected [NepaliDateTime] that the picker should display.
   final NepaliDateTime initialDate;
@@ -138,10 +150,10 @@ class CalendarDatePicker extends StatefulWidget {
   final common.SelectableDayPredicate? selectableDayPredicate;
 
   @override
-  _CalendarDatePickerState createState() => _CalendarDatePickerState();
+  _NepaliCalendarState createState() => _NepaliCalendarState();
 }
 
-class _CalendarDatePickerState extends State<CalendarDatePicker> {
+class _NepaliCalendarState extends State<NepaliCalendar> {
   bool _announcedInitialDate = false;
   late DatePickerMode _mode;
   late NepaliDateTime _currentDisplayedMonthDate;
@@ -162,7 +174,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
   }
 
   @override
-  void didUpdateWidget(CalendarDatePicker oldWidget) {
+  void didUpdateWidget(NepaliCalendar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.initialCalendarMode != oldWidget.initialCalendarMode) {
       _mode = widget.initialCalendarMode;
@@ -261,6 +273,9 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
     switch (_mode) {
       case DatePickerMode.day:
         return _MonthPicker(
+          weekHeaderStyle: widget.weekHeaderStyle ??
+              TextStyle(color: Colors.red[900], fontWeight: FontWeight.bold),
+          rightLeftButtonColor: widget.rightLeftButtonColor,
           key: _monthPickerKey,
           initialMonth: _currentDisplayedMonthDate,
           currentDate: widget.currentDate,
@@ -300,6 +315,8 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
         ),
         _DatePickerModeToggleButton(
           mode: _mode,
+          monthYearPickerStyle: widget.monthYearPickerStyle ??
+              TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           title: NepaliDateFormat.yMMMM().format(_currentDisplayedMonthDate),
           onTitlePressed: () {
             // Toggle the day/year mode.
@@ -324,7 +341,11 @@ class _DatePickerModeToggleButton extends StatefulWidget {
     required this.mode,
     required this.title,
     required this.onTitlePressed,
+    required this.monthYearPickerStyle,
   });
+
+  /// Month Year Picker TextStyle
+  final TextStyle monthYearPickerStyle;
 
   /// The current display of the calendar picker.
   final DatePickerMode mode;
@@ -348,6 +369,7 @@ class _DatePickerModeToggleButtonState
   @override
   void initState() {
     super.initState();
+
     _controller = AnimationController(
       value: widget.mode == DatePickerMode.year ? 0.5 : 0,
       upperBound: 0.5,
@@ -372,10 +394,6 @@ class _DatePickerModeToggleButtonState
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-    final controlColor = colorScheme.onSurface.withOpacity(0.60);
-
     return Container(
       padding: const EdgeInsetsDirectional.only(start: 16, end: 4),
       height: _subHeaderHeight,
@@ -383,10 +401,12 @@ class _DatePickerModeToggleButtonState
         children: <Widget>[
           Flexible(
             child: Semantics(
-              label: 'Select year',
+              label: NepaliUtils().language == Language.english
+                  ? 'Select year'
+                  : 'वर्ष चयन',
               excludeSemantics: true,
               button: true,
-              child: Container(
+              child: SizedBox(
                 height: _subHeaderHeight,
                 child: InkWell(
                   onTap: widget.onTitlePressed,
@@ -395,19 +415,16 @@ class _DatePickerModeToggleButtonState
                     child: Row(
                       children: <Widget>[
                         Flexible(
-                          child: Text(
-                            widget.title,
-                            overflow: TextOverflow.ellipsis,
-                            style: textTheme.titleSmall?.copyWith(
-                              color: controlColor,
-                            ),
-                          ),
+                          child: Text(widget.title,
+                              overflow: TextOverflow.ellipsis,
+                              style: widget.monthYearPickerStyle),
                         ),
                         RotationTransition(
                           turns: _controller,
-                          child: Icon(
+                          child: const Icon(
                             Icons.arrow_drop_down,
-                            color: controlColor,
+                            color: Colors.grey,
+                            size: 25,
                           ),
                         ),
                       ],
@@ -447,6 +464,8 @@ class _MonthPicker extends StatefulWidget {
     this.todayDecoration,
     this.dayBuilder,
     this.selectableDayPredicate,
+    required this.rightLeftButtonColor,
+    required this.weekHeaderStyle,
   })  : assert(!firstDate.isAfter(lastDate)),
         assert(!selectedDate.isBefore(firstDate)),
         assert(!selectedDate.isAfter(lastDate)),
@@ -454,6 +473,12 @@ class _MonthPicker extends StatefulWidget {
 
   /// The initial month to display
   final NepaliDateTime initialMonth;
+
+  ///Left Right Button Color
+  final Color rightLeftButtonColor;
+
+  ///Week Header Style
+  final TextStyle weekHeaderStyle;
 
   /// The current date.
   ///
@@ -500,6 +525,7 @@ class _MonthPicker extends StatefulWidget {
 class _MonthPickerState extends State<_MonthPicker> {
   final GlobalKey _pageViewKey = GlobalKey();
   late NepaliDateTime _currentMonth;
+
   late NepaliDateTime _nextMonthDate;
   late NepaliDateTime _previousMonthDate;
   late PageController _pageController;
@@ -760,6 +786,7 @@ class _MonthPickerState extends State<_MonthPicker> {
     return _DayPicker(
       key: ValueKey<NepaliDateTime>(month),
       selectedDate: widget.selectedDate,
+      weekHeaderStyle: widget.weekHeaderStyle,
       currentDate: widget.currentDate,
       onChanged: _handleDateSelected,
       firstDate: widget.firstDate,
@@ -778,8 +805,6 @@ class _MonthPickerState extends State<_MonthPicker> {
         '${NepaliUtils().language == Language.english ? 'Previous Month' : 'अघिल्लो महिना'} ${NepaliDateFormat.yMMMM().format(_previousMonthDate)}';
     final nextTooltipText =
         '${NepaliUtils().language == Language.english ? 'Next Month' : 'अर्को महिना'} ${NepaliDateFormat.yMMMM().format(_nextMonthDate)}';
-    final controlColor =
-        Theme.of(context).colorScheme.onSurface.withOpacity(0.60);
 
     return Semantics(
       child: Column(
@@ -792,14 +817,16 @@ class _MonthPickerState extends State<_MonthPicker> {
                 const Spacer(),
                 IconButton(
                   icon: const Icon(Icons.chevron_left),
-                  color: controlColor,
+                  color: widget.rightLeftButtonColor,
+                  iconSize: 35,
                   tooltip: _isDisplayingFirstMonth ? null : previousTooltipText,
                   onPressed:
                       _isDisplayingFirstMonth ? null : _handlePreviousMonth,
                 ),
                 IconButton(
                   icon: const Icon(Icons.chevron_right),
-                  color: controlColor,
+                  color: widget.rightLeftButtonColor,
+                  iconSize: 35,
                   tooltip: _isDisplayingLastMonth ? null : nextTooltipText,
                   onPressed: _isDisplayingLastMonth ? null : _handleNextMonth,
                 ),
@@ -877,6 +904,7 @@ class _DayPicker extends StatefulWidget {
     this.selectedDayDecoration,
     this.dayBuilder,
     this.selectableDayPredicate,
+    required this.weekHeaderStyle,
   })  : assert(!firstDate.isAfter(lastDate)),
         assert(!selectedDate.isBefore(firstDate)),
         assert(!selectedDate.isAfter(lastDate)),
@@ -886,6 +914,9 @@ class _DayPicker extends StatefulWidget {
   ///
   /// This date is highlighted in the picker.
   final NepaliDateTime selectedDate;
+
+  ///Week Header Style
+  final TextStyle weekHeaderStyle;
 
   /// The current date at the time the picker is displayed.
   final NepaliDateTime currentDate;
@@ -958,14 +989,14 @@ class _DayPickerState extends State<_DayPicker> {
 
   /// Builds widgets showing abbreviated days of week. The first widget in the
   /// returned list corresponds to the first day of week for the current locale.
-  List<Widget> _dayHeaders(TextStyle? headerStyle) {
+  List<Widget> _dayHeaders(TextStyle weekHeaderStyle) {
     return (NepaliUtils().language == Language.english
             ? ['S', 'M', 'T', 'W', 'T', 'F', 'S']
             : ['आ', 'सो', 'मं', 'बु', 'वि', 'शु', 'श'])
         .map<Widget>(
           (label) => ExcludeSemantics(
             child: Center(
-              child: Text(label, style: headerStyle),
+              child: Text(label, style: weekHeaderStyle),
             ),
           ),
         )
@@ -974,17 +1005,15 @@ class _DayPickerState extends State<_DayPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    const colorScheme = Colors.blue;
     final textTheme = Theme.of(context).textTheme;
-    final headerStyle = textTheme.bodySmall?.apply(
-      color: colorScheme.onSurface.withOpacity(0.60),
-    );
+
     final dayStyle = textTheme.bodySmall;
-    final enabledDayColor = colorScheme.onSurface.withOpacity(0.87);
-    final disabledDayColor = colorScheme.onSurface.withOpacity(0.38);
-    final selectedDayColor = colorScheme.onPrimary;
-    final selectedDayBackground = colorScheme.primary;
-    final todayColor = colorScheme.primary;
+    const enabledDayColor = colorScheme;
+    const disabledDayColor = colorScheme;
+    const selectedDayColor = Colors.red;
+    const selectedDayBackground = Colors.green;
+    const todayColor = Colors.orange;
 
     final year = widget.displayedMonth.year;
     final month = widget.displayedMonth.month;
@@ -992,7 +1021,7 @@ class _DayPickerState extends State<_DayPicker> {
     final daysInMonth = utils.getDaysInMonth(year, month);
     final dayOffset = utils.firstDayOffset(year, month);
 
-    final dayItems = _dayHeaders(headerStyle);
+    final dayItems = _dayHeaders(widget.weekHeaderStyle);
     var day = -dayOffset;
     while (day < daysInMonth) {
       day++;
@@ -1014,7 +1043,7 @@ class _DayPickerState extends State<_DayPicker> {
           // contrasting text color.
           dayColor = selectedDayColor;
           decoration = widget.selectedDayDecoration ??
-              BoxDecoration(
+              const BoxDecoration(
                 color: selectedDayBackground,
                 shape: BoxShape.circle,
               );
@@ -1072,19 +1101,12 @@ class _DayPickerState extends State<_DayPicker> {
         dayItems.add(dayWidget);
       }
     }
+    const columnCount = DateTime.daysPerWeek;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: _monthPickerHorizontalPadding,
-      ),
-      child: GridView.custom(
-        physics: const ClampingScrollPhysics(),
-        gridDelegate: _dayPickerGridDelegate,
-        childrenDelegate: SliverChildListDelegate(
-          dayItems,
-          addRepaintBoundaries: false,
-        ),
-      ),
+    return LayoutGrid(
+      columnSizes: List<TrackSize>.generate(columnCount, (index) => auto),
+      rowSizes: List<TrackSize>.generate(7, (index) => auto),
+      children: dayItems,
     );
   }
 }
