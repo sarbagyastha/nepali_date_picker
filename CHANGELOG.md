@@ -1,6 +1,7 @@
 ## [5.3.2] - Oct 7, 2023
-* Changed name to NepaliClander of a widget as it was confusing to the inbuilt widget
-* Added Styles to the calender
+* Give user option to add custom styles and color to the calendar
+* Changed name to NepaliCalendar of a widget as it was confusing to the inbuilt widget
+* Added Styles to the calendar
 * Converted to Nepali Text
 
 
