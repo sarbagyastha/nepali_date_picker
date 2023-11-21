@@ -27,7 +27,6 @@ linter:
     - prefer_iterable_whereType
     - prefer_function_declarations_over_variables
     - unnecessary_lambdas
-    - prefer_equal_for_default_values
     - avoid_init_to_null
     - unnecessary_getters_setters
     #- unnecessary_getters # prefer # Disabled pending fix: https://github.com/dart-lang/linter/issues/23

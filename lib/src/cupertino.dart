@@ -448,7 +448,7 @@ class _CupertinoDatePickerDateState extends State<_CupertinoDatePicker> {
     }
 
     return MediaQuery(
-      data: const MediaQueryData(textScaleFactor: 1.0),
+      data: MediaQueryData(textScaler: TextScaler.noScaling),
       child: NotificationListener<ScrollEndNotification>(
         onNotification: _keepInValidRange,
         child: DefaultTextStyle.merge(

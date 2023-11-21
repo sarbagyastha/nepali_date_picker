@@ -1,3 +1,6 @@
+## [5.3.2] - Nov 21, 2023
+* Bumps dependencies to latest version.
+
 ## [5.3.1] - Jan 29, 2023
 * Made changes necessary for Flutter 3.7
 * Added screenshots for pub.dev
