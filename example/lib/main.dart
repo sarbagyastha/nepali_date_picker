@@ -3,6 +3,8 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:nepali_date_picker_example/modes/month_picker_widget.dart';
+import 'package:nepali_date_picker_example/modes/year_picker_widget.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
 import 'modes/calendar_date_picker_widget.dart';
@@ -28,7 +30,7 @@ class _MyAppState extends State<MyApp> {
       ),
       title: 'Nepali Date Picker Demo',
       home: DefaultTabController(
-        length: 4,
+        length: 6,
         child: Scaffold(
           appBar: AppBar(
             title: Text("Nepali Date Picker"),
@@ -40,6 +42,8 @@ class _MyAppState extends State<MyApp> {
                 Tab(text: 'Calendar'),
                 Tab(text: 'Date Range Picker'),
                 Tab(text: 'Calendar Range'),
+                Tab(text: 'Year Picker'),
+                Tab(text: 'Month Picker'),
               ],
             ),
             actions: [
@@ -67,6 +71,8 @@ class _MyAppState extends State<MyApp> {
               CalendarDatePickerWidget(),
               DateRangePickerWidget(),
               CalendarDateRangePickerWidget(),
+              YearPickerWidget(),
+              MonthPickerWidget(),
             ],
           ),
         ),
