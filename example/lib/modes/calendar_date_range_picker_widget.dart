@@ -28,12 +28,16 @@ class _CalendarDateRangePickerWidgetState
               firstDate: NepaliDateTime(1970),
               lastDate: NepaliDateTime(2100),
               onStartDateChanged: (date) {
-                dateRange.first = date;
-                setState(() {});
+                if (date != null) {
+                  dateRange.first = date;
+                  setState(() {});
+                }
               },
               onEndDateChanged: (date) {
-                dateRange.last = date;
-                setState(() {});
+                if (date != null) {
+                  dateRange.last = date;
+                  setState(() {});
+                }
               },
             ),
           ),
