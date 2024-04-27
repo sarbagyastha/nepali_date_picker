@@ -53,7 +53,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                       context: context,
                       initialDate: _selectedDateTime ?? NepaliDateTime.now(),
                       firstDate: NepaliDateTime(1970, 2, 5),
-                      lastDate: NepaliDateTime(2099, 11, 6),
+                      lastDate: NepaliDateTime(2250, 11, 6),
                       initialDatePickerMode: DatePickerMode.day,
                     );
                     if (_selectedDateTime != null && _showTimerPicker) {
