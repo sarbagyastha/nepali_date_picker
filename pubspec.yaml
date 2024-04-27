@@ -1,6 +1,6 @@
 name: nepali_date_picker
 description: Material and Cupertino Styled Date Picker, Date Range Picker and Calendar with Bikram Sambat(Nepali) Support.
-version: 6.0.0
+version: 6.0.1
 homepage: https://github.com/sarbagyastha/nepali_date_picker
 
 environment:
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  nepali_utils: ^3.0.4
+  nepali_utils: ^3.0.5
 
 dev_dependencies:
   flutter_test:

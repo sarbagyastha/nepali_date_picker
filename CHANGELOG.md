@@ -1,3 +1,7 @@
+## 6.0.1
+**Apr 27, 2024**
+- Adds support for Bikram Sambat support up to 2250 BS.
+
 ## 6.0.0
 **Nov 21, 2023**
 - Requires `flutter >= 3.16.0`.
