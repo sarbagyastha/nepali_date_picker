@@ -119,7 +119,7 @@ Future<NepaliDateTime?> showMaterialDatePicker({
       'Provided initialDate $initialDate must satisfy provided selectableDayPredicate.');
   assert(debugCheckHasMaterialLocalizations(context));
 
-  Widget dialog = _DatePickerDialog(
+  Widget dialog = NepaliDatePickerDialog(
     initialDate: initialDate,
     firstDate: firstDate,
     lastDate: lastDate,
@@ -161,9 +161,11 @@ Future<NepaliDateTime?> showMaterialDatePicker({
   );
 }
 
-class _DatePickerDialog extends StatefulWidget {
-  _DatePickerDialog({
-    Key? key,
+/// A Material-style date picker dialog.
+class NepaliDatePickerDialog extends StatefulWidget {
+  /// A Material-style date picker dialog.
+  NepaliDatePickerDialog({
+    super.key,
     required NepaliDateTime initialDate,
     required NepaliDateTime firstDate,
     required NepaliDateTime lastDate,
@@ -181,8 +183,7 @@ class _DatePickerDialog extends StatefulWidget {
   })  : initialDate = utils.dateOnly(initialDate),
         firstDate = utils.dateOnly(firstDate),
         lastDate = utils.dateOnly(lastDate),
-        currentDate = utils.dateOnly(currentDate ?? NepaliDateTime.now()),
-        super(key: key) {
+        currentDate = utils.dateOnly(currentDate ?? NepaliDateTime.now()) {
     assert(!this.lastDate.isBefore(this.firstDate),
         'lastDate ${this.lastDate} must be on or after firstDate ${this.firstDate}.');
     assert(!this.initialDate.isBefore(this.firstDate),
@@ -235,10 +236,10 @@ class _DatePickerDialog extends StatefulWidget {
   final String? fieldLabelText;
 
   @override
-  _DatePickerDialogState createState() => _DatePickerDialogState();
+  _NepaliDatePickerDialogState createState() => _NepaliDatePickerDialogState();
 }
 
-class _DatePickerDialogState extends State<_DatePickerDialog> {
+class _NepaliDatePickerDialogState extends State<NepaliDatePickerDialog> {
   late DatePickerEntryMode _entryMode;
   late NepaliDateTime _selectedDate;
   late ValueNotifier<AutovalidateMode> _autoValidateMode;
