@@ -40,13 +40,6 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 50.0),
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
-                    ),
-                  ),
-                ),
                 onPressed: () async {
                   if (_design == 'm') {
                     _selectedDateTime = await showMaterialDatePicker(
@@ -88,17 +81,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                     );
                   }
                 },
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'SELECT DATE',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                ),
+                child: Text('SELECT DATE'),
               ),
             ),
             SizedBox(height: 20),

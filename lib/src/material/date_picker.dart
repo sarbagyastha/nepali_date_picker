@@ -119,7 +119,7 @@ Future<NepaliDateTime?> showMaterialDatePicker({
       'Provided initialDate $initialDate must satisfy provided selectableDayPredicate.');
   assert(debugCheckHasMaterialLocalizations(context));
 
-  Widget dialog = _DatePickerDialog(
+  Widget dialog = NepaliDatePickerDialog(
     initialDate: initialDate,
     firstDate: firstDate,
     lastDate: lastDate,
@@ -161,9 +161,11 @@ Future<NepaliDateTime?> showMaterialDatePicker({
   );
 }
 
-class _DatePickerDialog extends StatefulWidget {
-  _DatePickerDialog({
-    Key? key,
+/// A Material-style date picker dialog.
+class NepaliDatePickerDialog extends StatefulWidget {
+  /// A Material-style date picker dialog.
+  NepaliDatePickerDialog({
+    super.key,
     required NepaliDateTime initialDate,
     required NepaliDateTime firstDate,
     required NepaliDateTime lastDate,
@@ -178,11 +180,11 @@ class _DatePickerDialog extends StatefulWidget {
     this.errorInvalidText,
     this.fieldHintText,
     this.fieldLabelText,
+    this.onDateChanged,
   })  : initialDate = utils.dateOnly(initialDate),
         firstDate = utils.dateOnly(firstDate),
         lastDate = utils.dateOnly(lastDate),
-        currentDate = utils.dateOnly(currentDate ?? NepaliDateTime.now()),
-        super(key: key) {
+        currentDate = utils.dateOnly(currentDate ?? NepaliDateTime.now()) {
     assert(!this.lastDate.isBefore(this.firstDate),
         'lastDate ${this.lastDate} must be on or after firstDate ${this.firstDate}.');
     assert(!this.initialDate.isBefore(this.firstDate),
@@ -207,6 +209,10 @@ class _DatePickerDialog extends StatefulWidget {
   /// The [NepaliDateTime] representing today. It will be highlighted in the day grid.
   final NepaliDateTime currentDate;
 
+  /// The initial mode of date entry method for the date picker dialog.
+  ///
+  /// See [DatePickerEntryMode] for more details on the different data entry
+  /// modes available.
   final DatePickerEntryMode initialEntryMode;
 
   /// Function to provide full control over which [NepaliDateTime] can be selected.
@@ -234,11 +240,14 @@ class _DatePickerDialog extends StatefulWidget {
 
   final String? fieldLabelText;
 
+  /// Called when the user selects a date in the picker.
+  final ValueChanged<NepaliDateTime>? onDateChanged;
+
   @override
-  _DatePickerDialogState createState() => _DatePickerDialogState();
+  _NepaliDatePickerDialogState createState() => _NepaliDatePickerDialogState();
 }
 
-class _DatePickerDialogState extends State<_DatePickerDialog> {
+class _NepaliDatePickerDialogState extends State<NepaliDatePickerDialog> {
   late DatePickerEntryMode _entryMode;
   late NepaliDateTime _selectedDate;
   late ValueNotifier<AutovalidateMode> _autoValidateMode;
@@ -293,6 +302,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
 
   void _handleDateChanged(NepaliDateTime date) {
     setState(() => _selectedDate = date);
+    widget.onDateChanged?.call(date);
   }
 
   Size _dialogSize(BuildContext context) {

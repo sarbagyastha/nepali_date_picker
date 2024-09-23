@@ -83,9 +83,7 @@ class CalendarDatePickerWidget extends StatelessWidget {
               return ListView.separated(
                 itemCount: event.eventTitles.length,
                 itemBuilder: (context, index) => ListTile(
-                  leading: TodayWidget(
-                    today: date,
-                  ),
+                  leading: TodayWidget(today: date),
                   title: Text(event!.eventTitles[index]),
                   onTap: () {},
                 ),
@@ -123,11 +121,11 @@ class TodayWidget extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: SizedBox(
-        width: 60,
-        height: 60,
+      child: AspectRatio(
+        aspectRatio: 1,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.max,
           children: [
             DecoratedBox(
               decoration: BoxDecoration(
@@ -146,19 +144,17 @@ class TodayWidget extends StatelessWidget {
                       .toUpperCase(),
                   style: Theme.of(context)
                       .textTheme
-                      .bodyLarge
+                      .bodyMedium
                       ?.copyWith(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
               ),
             ),
-            Spacer(),
             Text(
               NepaliDateFormat.d().format(today),
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleMedium,
               textAlign: TextAlign.center,
             ),
-            Spacer(),
           ],
         ),
       ),

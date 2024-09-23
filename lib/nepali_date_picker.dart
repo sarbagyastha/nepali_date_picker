@@ -7,4 +7,5 @@ export 'package:nepali_utils/src/nepali_date_format.dart';
 export 'package:nepali_utils/src/nepali_date_time.dart';
 
 export 'src/cupertino.dart';
+export 'src/fused_date_picker_dialog.dart';
 export 'src/material/pickers.dart';
