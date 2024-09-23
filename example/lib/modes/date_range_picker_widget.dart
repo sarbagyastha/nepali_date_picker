@@ -34,13 +34,6 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 50.0),
             child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-              ),
               onPressed: () async {
                 _selectedDateTimeRange = await showMaterialDateRangePicker(
                   context: context,
@@ -49,17 +42,7 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
                 );
                 setState(() {});
               },
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'SELECT DATE RANGE',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-              ),
+              child: Text('SELECT DATE RANGE'),
             ),
           ),
         ],

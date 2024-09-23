@@ -23,9 +23,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-      ),
+      theme: ThemeData(colorSchemeSeed: Colors.deepPurple),
       title: 'Nepali Date Picker Demo',
       home: DefaultTabController(
         length: 4,
