@@ -208,6 +208,10 @@ class NepaliDatePickerDialog extends StatefulWidget {
   /// The [NepaliDateTime] representing today. It will be highlighted in the day grid.
   final NepaliDateTime currentDate;
 
+  /// The initial mode of date entry method for the date picker dialog.
+  ///
+  /// See [DatePickerEntryMode] for more details on the different data entry
+  /// modes available.
   final DatePickerEntryMode initialEntryMode;
 
   /// Function to provide full control over which [NepaliDateTime] can be selected.
