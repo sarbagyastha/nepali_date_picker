@@ -80,15 +80,23 @@ class _HomePageState extends State<HomePage> {
             DateRangePickerWidget(),
             CalendarDateRangePickerWidget(),
             Scaffold(
-              body: Center(
-                child: ElevatedButton(
-                  onPressed: () => showFusedDatePickerDialog(
-                    context: context,
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2090),
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final datetime = await showFusedDatePickerDialog(
+                          context: context,
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2090),
+                        );
+                        print(datetime);
+                      },
+                      child: Text('Show Fused Date Picker'),
+                    ),
                   ),
-                  child: Text('Show Fused Date Picker'),
-                ),
+                ],
               ),
             ),
           ],

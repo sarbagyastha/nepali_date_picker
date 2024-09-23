@@ -180,6 +180,7 @@ class NepaliDatePickerDialog extends StatefulWidget {
     this.errorInvalidText,
     this.fieldHintText,
     this.fieldLabelText,
+    this.onDateChanged,
   })  : initialDate = utils.dateOnly(initialDate),
         firstDate = utils.dateOnly(firstDate),
         lastDate = utils.dateOnly(lastDate),
@@ -238,6 +239,9 @@ class NepaliDatePickerDialog extends StatefulWidget {
   final String? fieldHintText;
 
   final String? fieldLabelText;
+
+  /// Called when the user selects a date in the picker.
+  final ValueChanged<NepaliDateTime>? onDateChanged;
 
   @override
   _NepaliDatePickerDialogState createState() => _NepaliDatePickerDialogState();
@@ -298,6 +302,7 @@ class _NepaliDatePickerDialogState extends State<NepaliDatePickerDialog> {
 
   void _handleDateChanged(NepaliDateTime date) {
     setState(() => _selectedDate = date);
+    widget.onDateChanged?.call(date);
   }
 
   Size _dialogSize(BuildContext context) {

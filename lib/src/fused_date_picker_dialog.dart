@@ -24,6 +24,7 @@ class FusedDatePickerDialog extends StatefulWidget {
 
 class _FusedDatePickerDialogState extends State<FusedDatePickerDialog> {
   CalendarMode _mode = CalendarMode.bs;
+  DateTime? _selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +41,15 @@ class _FusedDatePickerDialogState extends State<FusedDatePickerDialog> {
           CalendarMode.ad => DatePickerDialog(
               firstDate: widget.firstDate,
               lastDate: widget.lastDate,
+              currentDate: _selectedDate,
             ),
           CalendarMode.bs => NepaliDatePickerDialog(
               initialDate: NepaliDateTime.now(),
               firstDate: widget.firstDate.toNepaliDateTime(),
               lastDate: widget.lastDate.toNepaliDateTime(),
+              onDateChanged: (date) {
+                _selectedDate = date.toDateTime();
+              },
             ),
         }
       ],
@@ -128,12 +133,12 @@ class _AdBsToggleState extends State<_AdBsToggle> {
 }
 
 /// Shows a dialog containing a date picker.
-Future<void> showFusedDatePickerDialog({
+Future<DateTime?> showFusedDatePickerDialog({
   required BuildContext context,
   required DateTime firstDate,
   required DateTime lastDate,
 }) async {
-  await showDialog<void>(
+  return showDialog<DateTime>(
     context: context,
     builder: (context) {
       return Localizations.override(
