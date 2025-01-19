@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
-import 'package:nepali_utils/nepali_utils.dart';
 
 /// Calendar Picker Example
 class CalendarDatePickerWidget extends StatelessWidget {

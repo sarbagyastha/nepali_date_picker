@@ -93,7 +93,9 @@ enum DateOrder {
   ydm,
 }
 
+/// Cupertino styled nepali date picker.
 class NepaliCupertinoDatePicker extends StatefulWidget {
+  /// Constructs an instance of [NepaliCupertinoDatePicker].
   NepaliCupertinoDatePicker({
     required this.onDateChanged,
     NepaliDateTime? initialDate,
@@ -120,8 +122,10 @@ class NepaliCupertinoDatePicker extends StatefulWidget {
   /// null.
   final ValueChanged<NepaliDateTime> onDateChanged;
 
+  /// The language of the picker.
   final Language language;
 
+  /// The arrangement of columns in the picker.
   final DateOrder dateOrder;
 
   @override

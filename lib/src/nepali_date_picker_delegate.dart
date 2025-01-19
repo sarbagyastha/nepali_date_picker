@@ -3,7 +3,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
+/// A delegate that supplies Bikram Sambat date information for a date picker.
 class NepaliDatePickerDelegate implements DatePickerDelegate {
+  /// Creates a delegate that supplies Bikram Sambat date information for a date picker.
   const NepaliDatePickerDelegate();
 
   @override

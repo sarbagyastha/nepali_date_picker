@@ -3,6 +3,11 @@ import 'package:nepali_utils/nepali_utils.dart';
 
 import 'nepali_date_picker_delegate.dart';
 
+/// Shows a dialog containing a Material Design date picker
+/// with Bikram Sambat Calendar.
+///
+/// The returned [Future] resolves to the date selected by the user when the
+/// user confirms the dialog. If the user cancels the dialog, null is returned.
 Future<NepaliDateTime?> showNepaliDatePicker({
   required BuildContext context,
   NepaliDateTime? initialDate,
@@ -111,6 +116,12 @@ Future<NepaliDateTime?> showNepaliDatePicker({
   );
 }
 
+/// Shows a full screen modal dialog containing a Material Design date range
+/// picker with Bikram Sambat Calendar.
+///
+/// The returned [Future] resolves to the [DateTimeRange] selected by the user
+/// when the user saves their selection. If the user cancels the dialog, null is
+/// returned.
 Future<DateTimeRange<NepaliDateTime>?> showNepaliDateRangePicker({
   required BuildContext context,
   DateTimeRange<NepaliDateTime>? initialDateRange,
