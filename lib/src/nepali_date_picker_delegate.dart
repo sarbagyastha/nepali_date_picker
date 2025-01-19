@@ -112,12 +112,6 @@ class NepaliDatePickerDelegate implements DatePickerDelegate {
     return NepaliDateTime(dateTime.year, dateTime.month, dateTime.day);
   }
 
-  Language _getLanguage(MaterialLocalizations localizations) {
-    return localizations is MaterialLocalizationNe
-        ? Language.nepali
-        : Language.english;
-  }
-
   @override
   String formatShortDate(
     NepaliDateTime date,
@@ -133,5 +127,20 @@ class NepaliDatePickerDelegate implements DatePickerDelegate {
     MaterialLocalizations localizations,
   ) {
     return NepaliDateFormat('MMMM d', _getLanguage(localizations)).format(date);
+  }
+
+  @override
+  String formatFullDate(
+    NepaliDateTime date,
+    MaterialLocalizations localizations,
+  ) {
+    return NepaliDateFormat('EEEE, MMMM d, y', _getLanguage(localizations))
+        .format(date);
+  }
+
+  Language _getLanguage(MaterialLocalizations localizations) {
+    return localizations is MaterialLocalizationNe
+        ? Language.nepali
+        : Language.english;
   }
 }
