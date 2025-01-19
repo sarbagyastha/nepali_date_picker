@@ -4,7 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:nepali_utils/nepali_utils.dart';
+import 'package:nepali_date_picker_example/locale_scope.dart';
 
 import 'modes/calendar_date_picker_widget.dart';
 import 'modes/calendar_date_range_picker_widget.dart';
@@ -22,60 +22,63 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-      ),
-      title: 'Nepali Date Picker Demo',
-      locale: Locale('ne', 'NP'),
-      supportedLocales: [
-        Locale('en', 'US'),
-        Locale('ne', 'NP'),
-      ],
-      localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      home: DefaultTabController(
-        length: 4,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text("Nepali Date Picker"),
-            centerTitle: true,
-            bottom: TabBar(
-              isScrollable: true,
-              tabs: [
-                Tab(text: 'Date Picker'),
-                Tab(text: 'Calendar'),
-                Tab(text: 'Date Range Picker'),
-                Tab(text: 'Calendar Range'),
-              ],
-            ),
-            actions: [
-              IconButton(
-                icon: Text(
-                  NepaliUtils().language == Language.english ? 'ने' : 'En',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: Colors.white),
-                ),
-                onPressed: () {
-                  NepaliUtils().language =
-                      NepaliUtils().language == Language.english
-                          ? Language.nepali
-                          : Language.english;
-                  setState(() {});
-                },
+    return LocaleScope(
+      builder: (_, locale) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.deepPurple,
+          ),
+          title: 'Nepali Date Picker Demo',
+          locale: locale,
+          supportedLocales: [
+            Locale('en', 'US'),
+            Locale('ne', 'NP'),
+          ],
+          localizationsDelegates: GlobalMaterialLocalizations.delegates,
+          home: HomePage(),
+        );
+      },
+    );
+  }
+}
+
+///
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Nepali Date Picker"),
+          centerTitle: true,
+          bottom: TabBar(
+            isScrollable: true,
+            tabs: [
+              Tab(text: 'Date Picker'),
+              Tab(text: 'Calendar'),
+              Tab(text: 'Date Range Picker'),
+              Tab(text: 'Calendar Range'),
+            ],
+          ),
+          actions: [
+            IconButton.filledTonal(
+              icon: Text(
+                LocaleScope.of(context).isNepali ? 'ने' : 'En',
               ),
-            ],
-          ),
-          body: TabBarView(
-            children: [
-              DatePickerWidget(),
-              CalendarDatePickerWidget(),
-              DateRangePickerWidget(),
-              CalendarDateRangePickerWidget(),
-            ],
-          ),
+              onPressed: () => LocaleScope.of(context).toggleLocale(),
+            ),
+            const SizedBox(width: 8),
+          ],
+        ),
+        body: TabBarView(
+          children: [
+            DatePickerWidget(),
+            CalendarDatePickerWidget(),
+            DateRangePickerWidget(),
+            CalendarDateRangePickerWidget(),
+          ],
         ),
       ),
     );
