@@ -16,6 +16,8 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
       - uses: subosito/flutter-action@v2
+        with:
+          git-source: https://github.com/sarbagyastha/flutter.git
       - uses: sarbagyastha/flutter-gh-pages@main
         with:
           workingDir: example
