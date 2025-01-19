@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 
+/// Events
+final List<Event> _events = [
+  Event(date: NepaliDateTime.now(), eventTitles: ['Today 1', 'Today 2']),
+  Event(
+      date: NepaliDateTime.now().add(Duration(days: 30)),
+      eventTitles: ['Holiday 1', 'Holiday 2']),
+  Event(
+      date: NepaliDateTime.now().subtract(Duration(days: 5)),
+      eventTitles: ['Event 1', 'Event 2']),
+  Event(
+      date: NepaliDateTime.now().add(Duration(days: 8)),
+      eventTitles: ['Seminar 1', 'Seminar 2']),
+];
+
 /// Calendar Picker Example
 class CalendarDatePickerWidget extends StatelessWidget {
   final ValueNotifier<NepaliDateTime> _selectedDate =
       ValueNotifier(NepaliDateTime.now());
-
-  /// Events
-  final List<Event> events = [
-    Event(date: NepaliDateTime.now(), eventTitles: ['Today 1', 'Today 2']),
-    Event(
-        date: NepaliDateTime.now().add(Duration(days: 30)),
-        eventTitles: ['Holiday 1', 'Holiday 2']),
-    Event(
-        date: NepaliDateTime.now().subtract(Duration(days: 5)),
-        eventTitles: ['Event 1', 'Event 2']),
-    Event(
-        date: NepaliDateTime.now().add(Duration(days: 8)),
-        eventTitles: ['Seminar 1', 'Seminar 2']),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class CalendarDatePickerWidget extends StatelessWidget {
           onDateChanged: (date) => _selectedDate.value = date as NepaliDateTime,
           delegate: const NepaliDatePickerDelegate(),
           selectableDayPredicate: (date) {
-            return events.any(
+            return _events.any(
               (event) => _dayEquals(event.date, date as NepaliDateTime),
             );
           },
@@ -47,7 +47,7 @@ class CalendarDatePickerWidget extends StatelessWidget {
             builder: (context, date, _) {
               Event? event;
               try {
-                event = events.firstWhere((e) => _dayEquals(e.date, date));
+                event = _events.firstWhere((e) => _dayEquals(e.date, date));
               } on StateError {
                 event = null;
               }
