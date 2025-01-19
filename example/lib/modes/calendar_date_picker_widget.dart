@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide CalendarDatePicker;
+import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
@@ -29,8 +29,9 @@ class CalendarDatePickerWidget extends StatelessWidget {
           initialDate: NepaliDateTime.now(),
           firstDate: NepaliDateTime(2070),
           lastDate: NepaliDateTime(2090),
-          onDateChanged: (date) => _selectedDate.value = date,
-          dayBuilder: (dayToBuild) {
+          onDateChanged: (date) => _selectedDate.value = date as NepaliDateTime,
+          delegate: const NepaliDatePickerDelegate(),
+          /*dayBuilder: (dayToBuild) {
             return Stack(
               children: <Widget>[
                 Center(
@@ -61,7 +62,7 @@ class CalendarDatePickerWidget extends StatelessWidget {
           todayDecoration: BoxDecoration(
             gradient: LinearGradient(colors: [Colors.yellow, Colors.orange]),
             shape: BoxShape.circle,
-          ),
+          ),*/
         ),
         Expanded(
           child: ValueListenableBuilder<NepaliDateTime>(

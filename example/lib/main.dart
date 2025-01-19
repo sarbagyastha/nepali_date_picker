@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
 import 'modes/calendar_date_picker_widget.dart';
@@ -27,6 +28,12 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.deepPurple,
       ),
       title: 'Nepali Date Picker Demo',
+      locale: Locale('ne', 'NP'),
+      supportedLocales: [
+        Locale('en', 'US'),
+        Locale('ne', 'NP'),
+      ],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
       home: DefaultTabController(
         length: 4,
         child: Scaffold(

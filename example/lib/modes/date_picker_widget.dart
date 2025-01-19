@@ -42,7 +42,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
               child: FilledButton(
                 onPressed: () async {
                   if (_design == 'm') {
-                    _selectedDateTime = await showMaterialDatePicker(
+                    _selectedDateTime = await showNepaliDatePicker(
                       context: context,
                       initialDate: _selectedDateTime ?? NepaliDateTime.now(),
                       firstDate: NepaliDateTime(1970, 2, 5),

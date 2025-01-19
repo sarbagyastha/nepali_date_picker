@@ -10,7 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  nepali_utils: ^3.0.5
+  flutter_localizations:
+    sdk: flutter
+  nepali_utils: ^3.0.6
 
 dev_dependencies:
   flutter_test:
