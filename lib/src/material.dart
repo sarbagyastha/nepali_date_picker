@@ -189,6 +189,7 @@ Future<DateTimeRange<NepaliDateTime>?> showNepaliDateRangePicker({
   assert(debugCheckHasMaterialLocalizations(context));
 
   Widget dialog = DateRangePickerDialog(
+    delegate: delegate,
     initialDateRange: initialDateRange,
     firstDate: firstDate,
     lastDate: lastDate,

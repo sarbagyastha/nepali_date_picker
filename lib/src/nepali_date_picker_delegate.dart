@@ -117,4 +117,21 @@ class NepaliDatePickerDelegate implements DatePickerDelegate {
         ? Language.nepali
         : Language.english;
   }
+
+  @override
+  String formatShortDate(
+    NepaliDateTime date,
+    MaterialLocalizations localizations,
+  ) {
+    return NepaliDateFormat('MMMM d, y', _getLanguage(localizations))
+        .format(date);
+  }
+
+  @override
+  String formatShortMonthDay(
+    NepaliDateTime date,
+    MaterialLocalizations localizations,
+  ) {
+    return NepaliDateFormat('MMMM d', _getLanguage(localizations)).format(date);
+  }
 }
