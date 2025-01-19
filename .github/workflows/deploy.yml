@@ -2,7 +2,9 @@ name: Deploy to Web
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - m3
 
 jobs:
   web-deploy:
