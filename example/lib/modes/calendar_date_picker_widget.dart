@@ -23,6 +23,7 @@ class CalendarDatePickerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CalendarDatePicker(
           initialDate: NepaliDateTime.now(),
@@ -30,38 +31,15 @@ class CalendarDatePickerWidget extends StatelessWidget {
           lastDate: NepaliDateTime(2090),
           onDateChanged: (date) => _selectedDate.value = date as NepaliDateTime,
           delegate: const NepaliDatePickerDelegate(),
-          /*dayBuilder: (dayToBuild) {
-            return Stack(
-              children: <Widget>[
-                Center(
-                  child: Text(
-                    NepaliUtils().language == Language.english
-                        ? '${dayToBuild.day}'
-                        : NepaliUnicode.convert('${dayToBuild.day}'),
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ),
-                if (events.any((event) => _dayEquals(event.date, dayToBuild)))
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      width: 6,
-                      height: 6,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Colors.purple),
-                    ),
-                  )
-              ],
+          selectableDayPredicate: (date) {
+            return events.any(
+              (event) => _dayEquals(event.date, date as NepaliDateTime),
             );
           },
-          selectedDayDecoration: BoxDecoration(
-            color: Colors.deepOrange,
-            shape: BoxShape.circle,
-          ),
-          todayDecoration: BoxDecoration(
-            gradient: LinearGradient(colors: [Colors.yellow, Colors.orange]),
-            shape: BoxShape.circle,
-          ),*/
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: Text('Events', style: Theme.of(context).textTheme.titleMedium),
         ),
         Expanded(
           child: ValueListenableBuilder<NepaliDateTime>(
@@ -82,12 +60,26 @@ class CalendarDatePickerWidget extends StatelessWidget {
 
               return ListView.separated(
                 itemCount: event.eventTitles.length,
-                itemBuilder: (context, index) => ListTile(
-                  leading: TodayWidget(today: date),
-                  title: Text(event!.eventTitles[index]),
-                  onTap: () {},
-                ),
-                separatorBuilder: (context, _) => Divider(),
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    leading: TodayWidget(today: date),
+                    title: Text(event!.eventTitles[index]),
+                    onTap: () {
+                      ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(
+                          SnackBar(
+                            content: Text(event!.eventTitles[index]),
+                          ),
+                        );
+                    },
+                  );
+                },
+                separatorBuilder: (context, _) => Divider(height: 1),
               );
             },
           ),
@@ -116,9 +108,9 @@ class TodayWidget extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Material(
-      elevation: 4,
+      color: theme.colorScheme.primaryContainer,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: AspectRatio(
         aspectRatio: 1,
@@ -129,8 +121,8 @@ class TodayWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 color: theme.colorScheme.primary,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
                 ),
               ),
               child: Padding(
