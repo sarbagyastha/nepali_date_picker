@@ -35,11 +35,11 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
             padding: EdgeInsets.symmetric(horizontal: 50.0),
             child: FilledButton(
               onPressed: () async {
-                _selectedDateTimeRange = await showDateRangePicker(
+                _selectedDateTimeRange = await showNepaliDateRangePicker(
                   context: context,
                   firstDate: NepaliDateTime(2020),
                   lastDate: NepaliDateTime(2099),
-                ) as DateTimeRange<NepaliDateTime>?;
+                );
                 setState(() {});
               },
               child: Text('SELECT DATE RANGE'),

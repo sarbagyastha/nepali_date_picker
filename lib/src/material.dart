@@ -220,7 +220,7 @@ Future<DateTimeRange<NepaliDateTime>?> showNepaliDateRangePicker({
         Localizations.override(context: context, locale: locale, child: dialog);
   }
 
-  return showDialog<DateTimeRange<NepaliDateTime>>(
+  final range = await showDialog<DateTimeRange>(
     context: context,
     barrierDismissible: barrierDismissible,
     barrierColor: barrierColor,
@@ -232,5 +232,12 @@ Future<DateTimeRange<NepaliDateTime>?> showNepaliDateRangePicker({
       return builder == null ? dialog : builder(context, dialog);
     },
     anchorPoint: anchorPoint,
+  );
+
+  if (range == null) return null;
+
+  return DateTimeRange(
+    start: NepaliDateTime(range.start.year, range.start.month, range.start.day),
+    end: NepaliDateTime(range.end.year, range.end.month, range.end.day),
   );
 }
