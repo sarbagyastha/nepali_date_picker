@@ -19,6 +19,7 @@ jobs:
         with:
           git-source: https://github.com/sarbagyastha/flutter.git
           channel: main
+          cache: false
       - uses: sarbagyastha/flutter-gh-pages@main
         with:
           workingDir: example
