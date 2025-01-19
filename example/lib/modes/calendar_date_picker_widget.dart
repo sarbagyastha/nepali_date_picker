@@ -84,9 +84,7 @@ class CalendarDatePickerWidget extends StatelessWidget {
               return ListView.separated(
                 itemCount: event.eventTitles.length,
                 itemBuilder: (context, index) => ListTile(
-                  leading: TodayWidget(
-                    today: date,
-                  ),
+                  leading: TodayWidget(today: date),
                   title: Text(event!.eventTitles[index]),
                   onTap: () {},
                 ),
@@ -112,27 +110,25 @@ class TodayWidget extends StatelessWidget {
   final NepaliDateTime today;
 
   ///
-  const TodayWidget({
-    Key? key,
-    required this.today,
-  }) : super(key: key);
+  const TodayWidget({required this.today, super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Material(
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: SizedBox(
-        width: 60,
-        height: 60,
+      child: AspectRatio(
+        aspectRatio: 1,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             DecoratedBox(
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
+                color: theme.colorScheme.primary,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
@@ -141,25 +137,17 @@ class TodayWidget extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 2),
                 child: Text(
-                  NepaliDateFormat.EEEE()
-                      .format(today)
-                      .substring(0, 3)
-                      .toUpperCase(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: Colors.white),
+                  NepaliDateFormat.E().format(today).toUpperCase(),
+                  style:
+                      theme.textTheme.bodyMedium?.copyWith(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
               ),
             ),
-            Spacer(),
             Text(
               NepaliDateFormat.d().format(today),
-              style: Theme.of(context).textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
-            Spacer(),
           ],
         ),
       ),
