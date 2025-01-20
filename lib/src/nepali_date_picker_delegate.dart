@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:nepali_utils/nepali_utils.dart';
+import 'package:intl/intl.dart';
+
+const _compactDatePattern = 'y-MM-dd';
 
 /// A delegate that supplies Bikram Sambat date information for a date picker.
 class NepaliDatePickerDelegate implements DatePickerDelegate {
@@ -98,9 +101,17 @@ class NepaliDatePickerDelegate implements DatePickerDelegate {
     NepaliDateTime date,
     MaterialLocalizations localizations,
   ) {
-    return NepaliDateFormat('EE, MMMM d', _getLanguage(localizations)).format(
-      date,
-    );
+    final language = _getLanguage(localizations);
+    return NepaliDateFormat('EE, MMMM d', language).format(date);
+  }
+
+  @override
+  String formatCompactDate(
+    NepaliDateTime date,
+    MaterialLocalizations localizations,
+  ) {
+    final language = _getLanguage(localizations);
+    return NepaliDateFormat(_compactDatePattern, language).format(date);
   }
 
   @override
@@ -108,10 +119,13 @@ class NepaliDatePickerDelegate implements DatePickerDelegate {
     String? inputString,
     MaterialLocalizations localizations,
   ) {
-    final dateTime = localizations.parseCompactDate(inputString);
-    if (dateTime == null) return null;
-
-    return NepaliDateTime(dateTime.year, dateTime.month, dateTime.day);
+    if (inputString == null) return null;
+    try {
+      final dateTime = DateFormat(_compactDatePattern).parseStrict(inputString);
+      return NepaliDateTime(dateTime.year, dateTime.month, dateTime.day);
+    } on FormatException {
+      return null;
+    }
   }
 
   @override
@@ -119,8 +133,8 @@ class NepaliDatePickerDelegate implements DatePickerDelegate {
     NepaliDateTime date,
     MaterialLocalizations localizations,
   ) {
-    return NepaliDateFormat('MMMM d, y', _getLanguage(localizations))
-        .format(date);
+    final language = _getLanguage(localizations);
+    return NepaliDateFormat('MMMM d, y', language).format(date);
   }
 
   @override
@@ -136,8 +150,13 @@ class NepaliDatePickerDelegate implements DatePickerDelegate {
     NepaliDateTime date,
     MaterialLocalizations localizations,
   ) {
-    return NepaliDateFormat('EEEE, MMMM d, y', _getLanguage(localizations))
-        .format(date);
+    final language = _getLanguage(localizations);
+    return NepaliDateFormat('EEEE, MMMM d, y', language).format(date);
+  }
+
+  @override
+  String dateHelpText(MaterialLocalizations localizations) {
+    return 'yyyy-mm-dd';
   }
 
   Language _getLanguage(MaterialLocalizations localizations) {
