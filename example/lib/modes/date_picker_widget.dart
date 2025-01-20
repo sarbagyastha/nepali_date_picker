@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:nepali_utils/nepali_utils.dart';
@@ -19,38 +20,57 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
   Widget build(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            SizedBox(
-              height: 20.0,
-            ),
-            if (_selectedDateTime != null)
-              Text(
-                'Selected Date: ${NepaliDateFormat("EEE, MMMM d, y hh:mm aa").format(_selectedDateTime!)}',
-                style: TextStyle(
-                  fontWeight: FontWeight.w300,
-                  fontSize: 18.0,
+          children: [
+            Card(
+              margin: EdgeInsets.zero,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 8,
                 ),
-                textAlign: TextAlign.center,
+                child: _selectedDateTime == null
+                    ? Text(
+                        'No Date Picked!',
+                        textAlign: TextAlign.center,
+                      )
+                    : Column(
+                        spacing: 16,
+                        children: [
+                          Text(
+                            NepaliDateFormat("EEE, MMMM d, y hh:mm aa")
+                                .format(_selectedDateTime!),
+                            style: Theme.of(context).textTheme.titleLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            DateFormat("EEE, MMMM d, y hh:mm aa")
+                                .format(_selectedDateTime!.toDateTime()),
+                            style: Theme.of(context).textTheme.titleSmall,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
               ),
+            ),
             SizedBox(height: 20),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 50.0),
-              child: FilledButton(
-                onPressed: () async {
-                  if (_design == 'm') {
-                    _selectedDateTime = await showNepaliDatePicker(
-                      context: context,
-                      initialDate: _selectedDateTime ?? NepaliDateTime.now(),
-                      firstDate: NepaliDateTime(1970, 2, 5),
-                      lastDate: NepaliDateTime(2250, 11, 6),
-                      initialDatePickerMode: DatePickerMode.day,
-                    );
-                    if (_selectedDateTime != null && _showTimerPicker) {
-                      var timeOfDay = await showTimePicker(
+            FilledButton.tonal(
+              onPressed: () async {
+                if (_design == 'm') {
+                  _selectedDateTime = await showNepaliDatePicker(
+                    context: context,
+                    initialDate: _selectedDateTime ?? NepaliDateTime.now(),
+                    firstDate: NepaliDateTime(1970, 2, 5),
+                    lastDate: NepaliDateTime(2250, 11, 6),
+                    initialDatePickerMode: DatePickerMode.day,
+                  );
+                  if (_selectedDateTime != null) {
+                    if (_showTimerPicker) {
+                      final timeOfDay = await showTimePicker(
                         context: context,
                         initialTime: TimeOfDay.fromDateTime(
                           _selectedDateTime!.toDateTime(),
@@ -61,28 +81,36 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                         timeOfDay?.minute ?? 0,
                         0,
                       );
+                    } else {
+                      final timeOfDay = TimeOfDay.now();
+                      _selectedDateTime = _selectedDateTime!.mergeTime(
+                        timeOfDay.hour,
+                        timeOfDay.minute,
+                        0,
+                      );
                     }
-                    setState(() {});
-                  } else {
-                    showCupertinoDatePicker(
-                      context: context,
-                      initialDate: _selectedDateTime ?? NepaliDateTime.now(),
-                      firstDate: NepaliDateTime(1970),
-                      lastDate: NepaliDateTime(2100, 12),
-                      language: NepaliUtils().language,
-                      dateOrder: _dateOrder,
-                      onDateChanged: (newDate) {
-                        final timeOfDay = TimeOfDay.now();
-                        setState(() {
-                          _selectedDateTime = newDate.mergeTime(
-                              timeOfDay.hour, timeOfDay.minute, 0);
-                        });
-                      },
-                    );
                   }
-                },
-                child: Text('SELECT DATE'),
-              ),
+
+                  setState(() {});
+                } else {
+                  showCupertinoDatePicker(
+                    context: context,
+                    initialDate: _selectedDateTime ?? NepaliDateTime.now(),
+                    firstDate: NepaliDateTime(1970),
+                    lastDate: NepaliDateTime(2100, 12),
+                    language: NepaliUtils().language,
+                    dateOrder: _dateOrder,
+                    onDateChanged: (newDate) {
+                      final timeOfDay = TimeOfDay.now();
+                      setState(() {
+                        _selectedDateTime = newDate.mergeTime(
+                            timeOfDay.hour, timeOfDay.minute, 0);
+                      });
+                    },
+                  );
+                }
+              },
+              child: Text('PICK DATE'),
             ),
             SizedBox(height: 20),
             Row(

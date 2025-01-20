@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
+import 'package:intl/intl.dart';
 
 ///
 class DateRangePickerWidget extends StatefulWidget {
@@ -16,24 +17,58 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (_selectedDateTimeRange != null)
-            Text(
-              'From Date: ${NepaliDateFormat("EEE, MMMM d, y").format(_selectedDateTimeRange!.start)}\n\n'
-              'To Date: ${NepaliDateFormat("EEE, MMMM d, y").format(_selectedDateTimeRange!.end)}',
-              style: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: 18.0,
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Card(
+              margin: EdgeInsets.zero,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 8,
+                ),
+                child: _selectedDateTimeRange == null
+                    ? Text(
+                        'No Date Range Picked!',
+                        textAlign: TextAlign.center,
+                      )
+                    : Column(
+                        spacing: 16,
+                        children: [
+                          Text(
+                            NepaliDateFormat("EEE, MMMM d, y")
+                                .format(_selectedDateTimeRange!.start),
+                            style: Theme.of(context).textTheme.titleLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            DateFormat("EEE, MMMM d, y").format(
+                                _selectedDateTimeRange!.start.toDateTime()),
+                            style: Theme.of(context).textTheme.titleSmall,
+                            textAlign: TextAlign.center,
+                          ),
+                          Icon(Icons.arrow_downward_rounded),
+                          Text(
+                            NepaliDateFormat("EEE, MMMM d, y")
+                                .format(_selectedDateTimeRange!.end),
+                            style: Theme.of(context).textTheme.titleLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            DateFormat("EEE, MMMM d, y").format(
+                                _selectedDateTimeRange!.end.toDateTime()),
+                            style: Theme.of(context).textTheme.titleSmall,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
               ),
-              textAlign: TextAlign.center,
             ),
-          SizedBox(height: 20),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 50.0),
-            child: FilledButton(
+            SizedBox(height: 20),
+            FilledButton.tonal(
               onPressed: () async {
                 _selectedDateTimeRange = await showNepaliDateRangePicker(
                   context: context,
@@ -42,10 +77,10 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
                 );
                 setState(() {});
               },
-              child: Text('SELECT DATE RANGE'),
+              child: Text('PICK DATE RANGE'),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

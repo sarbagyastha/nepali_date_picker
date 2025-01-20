@@ -72,13 +72,29 @@ class HomePage extends StatelessWidget {
             const SizedBox(width: 8),
           ],
         ),
-        body: TabBarView(
-          children: [
-            DatePickerWidget(),
-            CalendarDatePickerWidget(),
-            DateRangePickerWidget(),
-            CalendarDateRangePickerWidget(),
-          ],
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Material(
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 500),
+                child: TabBarView(
+                  children: [
+                    DatePickerWidget(),
+                    CalendarDatePickerWidget(),
+                    DateRangePickerWidget(),
+                    CalendarDateRangePickerWidget(),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
