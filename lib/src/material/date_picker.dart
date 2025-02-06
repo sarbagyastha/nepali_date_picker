@@ -923,7 +923,7 @@ Future<int?> showMaterialMonthPicker({
             child: Text(
               helpText ??
                   (NepaliUtils().language == Language.english
-                      ? 'SELECT Month'
+                      ? 'SELECT MONTH'
                       : 'महिना चयन गर्नुहोस'),
               style: Theme.of(context).textTheme.labelSmall,
               maxLines: 1,
