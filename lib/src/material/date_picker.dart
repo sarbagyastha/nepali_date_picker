@@ -1415,7 +1415,7 @@ class _CalendarRangePickerDialog extends StatelessWidget {
     final headerForeground = colorScheme.brightness == Brightness.light
         ? colorScheme.onPrimary
         : colorScheme.onSurface;
-    final headerDisabledForeground = headerForeground.withOpacity(0.38);
+    final headerDisabledForeground = headerForeground.withValues(alpha:0.38);
     final startDateText = utils.formatRangeStartDate(
         localizations, selectedStartDate, selectedEndDate);
     final endDateText = utils.formatRangeEndDate(localizations,
@@ -2180,7 +2180,7 @@ class _MonthItemState extends State<_MonthItem> {
   }
 
   Color _highlightColor(BuildContext context) {
-    return Theme.of(context).colorScheme.primary.withOpacity(0.12);
+    return Theme.of(context).colorScheme.primary.withValues(alpha:0.12);
   }
 
   void _dayFocusChanged(bool focused) {
@@ -2268,7 +2268,7 @@ class _MonthItemState extends State<_MonthItem> {
       );
     } else if (isDisabled) {
       itemStyle = textTheme.bodyMedium
-          ?.apply(color: colorScheme.onSurface.withOpacity(0.38));
+          ?.apply(color: colorScheme.onSurface.withValues(alpha:0.38));
     } else if (utils.isSameDay(widget.currentDate, dayToBuild)) {
       // The current day gets a different text color and a circle stroke
       // border.
@@ -2324,7 +2324,7 @@ class _MonthItemState extends State<_MonthItem> {
         focusNode: _dayFocusNodes[day - 1],
         onTap: () => widget.onChanged(dayToBuild),
         radius: _monthItemRowHeight / 2 + 4,
-        splashColor: colorScheme.primary.withOpacity(0.38),
+        splashColor: colorScheme.primary.withValues(alpha:0.38),
         onFocusChange: _dayFocusChanged,
         child: dayWidget,
       );

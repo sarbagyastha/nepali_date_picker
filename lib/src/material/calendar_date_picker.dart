@@ -374,7 +374,7 @@ class _DatePickerModeToggleButtonState
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    final controlColor = colorScheme.onSurface.withOpacity(0.60);
+    final controlColor = colorScheme.onSurface.withValues(alpha: 0.60);
 
     return Container(
       padding: const EdgeInsetsDirectional.only(start: 16, end: 4),
@@ -779,7 +779,7 @@ class _MonthPickerState extends State<_MonthPicker> {
     final nextTooltipText =
         '${NepaliUtils().language == Language.english ? 'Next Month' : 'अर्को महिना'} ${NepaliDateFormat.yMMMM().format(_nextMonthDate)}';
     final controlColor =
-        Theme.of(context).colorScheme.onSurface.withOpacity(0.60);
+        Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.60);
 
     return Semantics(
       child: Column(
@@ -977,11 +977,11 @@ class _DayPickerState extends State<_DayPicker> {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final headerStyle = textTheme.bodySmall?.apply(
-      color: colorScheme.onSurface.withOpacity(0.60),
+      color: colorScheme.onSurface.withValues(alpha: 0.60),
     );
     final dayStyle = textTheme.bodySmall;
-    final enabledDayColor = colorScheme.onSurface.withOpacity(0.87);
-    final disabledDayColor = colorScheme.onSurface.withOpacity(0.38);
+    final enabledDayColor = colorScheme.onSurface.withValues(alpha: 0.87);
+    final disabledDayColor = colorScheme.onSurface.withValues(alpha: 0.38);
     final selectedDayColor = colorScheme.onPrimary;
     final selectedDayBackground = colorScheme.primary;
     final todayColor = colorScheme.primary;
@@ -1052,7 +1052,7 @@ class _DayPickerState extends State<_DayPicker> {
             focusNode: _dayFocusNodes[day - 1],
             onTap: () => widget.onChanged(dayToBuild),
             radius: _dayPickerRowHeight / 2 + 4,
-            splashColor: selectedDayBackground.withOpacity(0.38),
+            splashColor: selectedDayBackground.withValues(alpha: 0.38),
             child: Semantics(
               // We want the day of month to be spoken first irrespective of the
               // locale-specific preferences or TextDirection. This is because
@@ -1197,11 +1197,11 @@ class _NepaliYearPickerState extends State<NepaliYearPicker> {
     if (isSelected) {
       textColor = colorScheme.onPrimary;
     } else if (isDisabled) {
-      textColor = colorScheme.onSurface.withOpacity(0.38);
+      textColor = colorScheme.onSurface.withValues(alpha: 0.38);
     } else if (isCurrentYear) {
       textColor = colorScheme.primary;
     } else {
-      textColor = colorScheme.onSurface.withOpacity(0.87);
+      textColor = colorScheme.onSurface.withValues(alpha: 0.87);
     }
     final itemStyle = textTheme.bodyLarge?.apply(color: textColor);
 
@@ -1380,11 +1380,11 @@ class _NepaliMonthPickerState extends State<NepaliMonthPicker> {
     if (isSelected) {
       textColor = colorScheme.onPrimary;
     } else if (isDisabled) {
-      textColor = colorScheme.onSurface.withOpacity(0.38);
+      textColor = colorScheme.onSurface.withValues(alpha: 0.38);
     } else if (isCurrentMonth) {
       textColor = colorScheme.primary;
     } else {
-      textColor = colorScheme.onSurface.withOpacity(0.87);
+      textColor = colorScheme.onSurface.withValues(alpha: 0.87);
     }
     final itemStyle = textTheme.bodyLarge?.apply(color: textColor);
 
