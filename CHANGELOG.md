@@ -1,25 +1,45 @@
-## [5.3.1] - Jan 29, 2023
-* Made changes necessary for Flutter 3.7
-* Added screenshots for pub.dev
+## 6.0.1
+**Apr 27, 2024**
+- Adds support for Bikram Sambat support up to 2250 BS.
 
-## [5.3.0] - May 16, 2022
-* Updated minimum flutter version to `v3.0.0`
+## 6.0.0
+**Nov 21, 2023**
+- Requires `flutter >= 3.16.0`.
 
-## [5.2.0] - Sept 9, 2021
-* Fixed issue where validation error was not being shown for the first time in Input Date Picker.
-* Added day validation to Input Date Picker.
-* Fixed issue where day 10 & 20 could not be entered in input date picker [#12](https://github.com/sarbagyastha/nepali_date_picker/pull/12). Thanks to [@AmritAcharya](https://github.com/Amritacharya).
+## 5.3.3
+**Nov 21, 2023**
+- Supports `flutter < 3.16.0`.
 
-## [5.1.0] - May 19, 2021
-* Compatible with `flutter >= 2.1.0`
+## 5.3.2
+**Nov 21, 2023**
+-Bumps dependencies to latest version.
+
+## 5.3.1
+**Jan 29, 2023**
+- Made changes necessary for Flutter 3.7
+- Added screenshots for pub.dev
+
+## 5.3.0
+**May 16, 2022**
+- Updated minimum flutter version to `v3.0.0`
+
+## 5.2.0
+**Sept 9, 2021**
+- Fixed issue where validation error was not being shown for the first time in Input Date Picker.
+- Added day validation to Input Date Picker.
+- Fixed issue where day 10 & 20 could not be entered in input date picker [#12](https://github.com/sarbagyastha/nepali_date_picker/pull/12). Thanks to [@AmritAcharya](https://github.com/Amritacharya).
+
+## 5.1.0
+**May 19, 2021**
+- Compatible with `flutter >= 2.1.0`
 
 ## [5.1.0-dev.0] - Feb 23, 2021
-Temporary Fix to support for Flutter 2.1.0+
+- Temporary Fix to support for Flutter 2.1.0+
 
 ## [5.0.0] - Feb 23, 2021
 **Breaking Change**
-* Migrated to null safety
-* Extended Support for BS Calendar from 1970 to 2100.
+- Migrated to null safety
+-Extended Support for BS Calendar from 1970 to 2100.
 
 ## [4.2.0+1] - Oct 4, 2020
 * Added `CalendarDateRangePicker` widget.

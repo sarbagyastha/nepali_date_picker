@@ -330,8 +330,8 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
     final textTheme = theme.textTheme;
     // Constrain the textScaleFactor to the largest supported value to prevent
     // layout issues.
-    final textScaleFactor =
-        math.min(MediaQuery.of(context).textScaleFactor, 1.3);
+    final textScaler =
+        MediaQuery.textScalerOf(context).clamp(maxScaleFactor: 1.3);
 
     final dateText = NepaliDateFormat(NepaliUtils().language == Language.english
             ? 'EE, MMM d'
@@ -462,7 +462,8 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
       entryModeButton: entryModeButton,
     );
 
-    final dialogSize = _dialogSize(context) * textScaleFactor;
+    // ignore: deprecated_member_use
+    final dialogSize = _dialogSize(context) * textScaler.textScaleFactor;
     return Dialog(
       child: AnimatedContainer(
         width: dialogSize.width,
@@ -470,9 +471,7 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
         duration: _dialogSizeAnimationDuration,
         curve: Curves.easeIn,
         child: MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaleFactor: textScaleFactor,
-          ),
+          data: MediaQuery.of(context).copyWith(textScaler: textScaler),
           child: Builder(
             builder: (BuildContext context) {
               switch (orientation) {
@@ -1245,7 +1244,7 @@ class _DateRangePickerDialogState extends State<_DateRangePickerDialog> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final orientation = mediaQuery.orientation;
-    final textScaleFactor = math.min(mediaQuery.textScaleFactor, 1.3);
+    final textScaler = mediaQuery.textScaler.clamp(maxScaleFactor: 1.3);
     final localizations = MaterialLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
     final onPrimarySurface = colors.brightness == Brightness.light
@@ -1362,9 +1361,7 @@ class _DateRangePickerDialogState extends State<_DateRangePickerDialog> {
         duration: _dialogSizeAnimationDuration,
         curve: Curves.easeIn,
         child: MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaleFactor: textScaleFactor,
-          ),
+          data: MediaQuery.of(context).copyWith(textScaler: textScaler),
           child: Builder(builder: (BuildContext context) {
             return contents;
           }),

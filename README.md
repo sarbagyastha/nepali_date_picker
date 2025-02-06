@@ -24,7 +24,7 @@ package.
 * Calendar Picker
 * Material Date Range Picker
 * Calendar Range Picker
-* Supports from 1970 B.S. to 2100 B.S.
+* Supports from 1970 B.S. to 2250 B.S.
 
 ## Note
 Use Version 5.0.0 for `flutter < 2.1.0`
