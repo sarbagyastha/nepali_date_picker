@@ -277,7 +277,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
       case DatePickerMode.year:
         return Padding(
           padding: const EdgeInsets.only(top: _subHeaderHeight),
-          child: _YearPicker(
+          child: NepaliYearPicker(
             key: _yearPickerKey,
             currentDate: widget.currentDate,
             firstDate: widget.firstDate,
@@ -374,7 +374,7 @@ class _DatePickerModeToggleButtonState
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    final controlColor = colorScheme.onSurface.withOpacity(0.60);
+    final controlColor = colorScheme.onSurface.withValues(alpha: 0.60);
 
     return Container(
       padding: const EdgeInsetsDirectional.only(start: 16, end: 4),
@@ -779,7 +779,7 @@ class _MonthPickerState extends State<_MonthPicker> {
     final nextTooltipText =
         '${NepaliUtils().language == Language.english ? 'Next Month' : 'अर्को महिना'} ${NepaliDateFormat.yMMMM().format(_nextMonthDate)}';
     final controlColor =
-        Theme.of(context).colorScheme.onSurface.withOpacity(0.60);
+        Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.60);
 
     return Semantics(
       child: Column(
@@ -977,11 +977,11 @@ class _DayPickerState extends State<_DayPicker> {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final headerStyle = textTheme.bodySmall?.apply(
-      color: colorScheme.onSurface.withOpacity(0.60),
+      color: colorScheme.onSurface.withValues(alpha: 0.60),
     );
     final dayStyle = textTheme.bodySmall;
-    final enabledDayColor = colorScheme.onSurface.withOpacity(0.87);
-    final disabledDayColor = colorScheme.onSurface.withOpacity(0.38);
+    final enabledDayColor = colorScheme.onSurface.withValues(alpha: 0.87);
+    final disabledDayColor = colorScheme.onSurface.withValues(alpha: 0.38);
     final selectedDayColor = colorScheme.onPrimary;
     final selectedDayBackground = colorScheme.primary;
     final todayColor = colorScheme.primary;
@@ -1052,7 +1052,7 @@ class _DayPickerState extends State<_DayPicker> {
             focusNode: _dayFocusNodes[day - 1],
             onTap: () => widget.onChanged(dayToBuild),
             radius: _dayPickerRowHeight / 2 + 4,
-            splashColor: selectedDayBackground.withOpacity(0.38),
+            splashColor: selectedDayBackground.withValues(alpha: 0.38),
             child: Semantics(
               // We want the day of month to be spoken first irrespective of the
               // locale-specific preferences or TextDirection. This is because
@@ -1115,12 +1115,12 @@ class _DayPickerGridDelegate extends SliverGridDelegate {
 const _DayPickerGridDelegate _dayPickerGridDelegate = _DayPickerGridDelegate();
 
 /// A scrollable list of years to allow picking a year.
-class _YearPicker extends StatefulWidget {
+class NepaliYearPicker extends StatefulWidget {
   /// Creates a year picker.
   ///
-  /// The [currentDate, [firstDate], [lastDate], [selectedDate], and [onChanged]
+  /// The [currentDate], [firstDate], [lastDate], [selectedDate], and [onChanged]
   /// arguments must be non-null. The [lastDate] must be after the [firstDate].
-  _YearPicker({
+  NepaliYearPicker({
     Key? key,
     required this.currentDate,
     required this.firstDate,
@@ -1148,16 +1148,16 @@ class _YearPicker extends StatefulWidget {
   /// The currently selected date.
   ///
   /// This date is highlighted in the picker.
-  final NepaliDateTime selectedDate;
+  final NepaliDateTime? selectedDate;
 
   /// Called when the user picks a year.
   final ValueChanged<NepaliDateTime> onChanged;
 
   @override
-  _YearPickerState createState() => _YearPickerState();
+  _NepaliYearPickerState createState() => _NepaliYearPickerState();
 }
 
-class _YearPickerState extends State<_YearPicker> {
+class _NepaliYearPickerState extends State<NepaliYearPicker> {
   late ScrollController scrollController;
 
   // The approximate number of years necessary to fill the available space.
@@ -1168,7 +1168,9 @@ class _YearPickerState extends State<_YearPicker> {
     super.initState();
 
     // Set the scroll position to approximately center the initial year.
-    final initialYearIndex = widget.selectedDate.year - widget.firstDate.year;
+    final initialYearIndex =
+        (widget.selectedDate?.year ?? widget.currentDate.year) -
+            widget.firstDate.year;
     final initialYearRow = initialYearIndex ~/ _yearPickerColumnCount;
     // Move the offset down by 2 rows to approximately center it.
     final centeredYearRow = initialYearRow - 2;
@@ -1184,7 +1186,7 @@ class _YearPickerState extends State<_YearPicker> {
     // Backfill the _YearPicker with disabled years if necessary.
     final offset = _itemCount < minYears ? (minYears - _itemCount) ~/ 2 : 0;
     final year = widget.firstDate.year + index - offset;
-    final isSelected = year == widget.selectedDate.year;
+    final isSelected = year == widget.selectedDate?.year;
     final isCurrentYear = year == widget.currentDate.year;
     final isDisabled =
         year < widget.firstDate.year || year > widget.lastDate.year;
@@ -1195,11 +1197,11 @@ class _YearPickerState extends State<_YearPicker> {
     if (isSelected) {
       textColor = colorScheme.onPrimary;
     } else if (isDisabled) {
-      textColor = colorScheme.onSurface.withOpacity(0.38);
+      textColor = colorScheme.onSurface.withValues(alpha: 0.38);
     } else if (isCurrentYear) {
       textColor = colorScheme.primary;
     } else {
-      textColor = colorScheme.onSurface.withOpacity(0.87);
+      textColor = colorScheme.onSurface.withValues(alpha: 0.87);
     }
     final itemStyle = textTheme.bodyLarge?.apply(color: textColor);
 
@@ -1311,3 +1313,150 @@ class _YearPickerGridDelegate extends SliverGridDelegate {
 
 const _YearPickerGridDelegate _yearPickerGridDelegate =
     _YearPickerGridDelegate();
+
+/// A scrollable list of months to allow picking a month.
+class NepaliMonthPicker extends StatefulWidget {
+  /// Creates a month picker.
+  ///
+  /// The [currentMonth], [firstMonth], [lastMonth], [selectedMonth], and
+  /// [onChanged] arguments must be non-null. The [lastMonth] must be after the
+  /// [firstMonth].
+  NepaliMonthPicker({
+    Key? key,
+    required this.currentMonth,
+    required this.firstMonth,
+    required this.lastMonth,
+    required this.selectedMonth,
+    required this.onChanged,
+  })  : assert(firstMonth <= lastMonth),
+        super(key: key);
+
+  /// The current date.
+  ///
+  /// This date is subtly highlighted in the picker.
+  final int currentMonth;
+
+  /// The earliest date the user is permitted to pick.
+  final int firstMonth;
+
+  /// The latest date the user is permitted to pick.
+  final int lastMonth;
+
+  /// The currently selected date.
+  ///
+  /// This date is highlighted in the picker.
+  final int? selectedMonth;
+
+  /// Called when the user picks a month.
+  final ValueChanged<int> onChanged;
+
+  @override
+  _NepaliMonthPickerState createState() => _NepaliMonthPickerState();
+}
+
+class _NepaliMonthPickerState extends State<NepaliMonthPicker> {
+  late ScrollController scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController = ScrollController();
+  }
+
+  Widget _buildMonthItem(BuildContext context, int index) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    // Backfill the _MonthPicker with disabled months firstMonth is not 1.
+    final offset = widget.firstMonth - 1;
+    final month = widget.firstMonth + index - offset;
+    final isSelected = month == widget.selectedMonth;
+    final isCurrentMonth = month == widget.currentMonth;
+    final isDisabled = month < widget.firstMonth || month > widget.lastMonth;
+    const decorationHeight = 36.0;
+    const decorationWidth = 72.0;
+
+    Color textColor;
+    if (isSelected) {
+      textColor = colorScheme.onPrimary;
+    } else if (isDisabled) {
+      textColor = colorScheme.onSurface.withValues(alpha: 0.38);
+    } else if (isCurrentMonth) {
+      textColor = colorScheme.primary;
+    } else {
+      textColor = colorScheme.onSurface.withValues(alpha: 0.87);
+    }
+    final itemStyle = textTheme.bodyLarge?.apply(color: textColor);
+
+    BoxDecoration? decoration;
+    if (isSelected) {
+      decoration = BoxDecoration(
+        color: colorScheme.primary,
+        borderRadius: BorderRadius.circular(decorationHeight / 2),
+        shape: BoxShape.rectangle,
+      );
+    } else if (isCurrentMonth && !isDisabled) {
+      decoration = BoxDecoration(
+        border: Border.all(
+          color: colorScheme.primary,
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(decorationHeight / 2),
+        shape: BoxShape.rectangle,
+      );
+    }
+
+    Widget monthItem = Center(
+      child: Container(
+        decoration: decoration,
+        height: decorationHeight,
+        width: decorationWidth,
+        child: Center(
+          child: Semantics(
+            selected: isSelected,
+            child: Text(
+              NepaliDateFormat.MMMM(NepaliUtils().language).format(
+                NepaliDateTime(
+                  NepaliDateTime.now().year,
+                  month,
+                ),
+              ),
+              style: itemStyle,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    if (isDisabled) {
+      monthItem = ExcludeSemantics(child: monthItem);
+    } else {
+      monthItem = InkWell(
+        key: ValueKey<int>(month),
+        onTap: () => widget.onChanged(month),
+        child: monthItem,
+      );
+    }
+
+    return monthItem;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        const Divider(),
+        Expanded(
+          child: GridView.builder(
+            controller: scrollController,
+            gridDelegate: _yearPickerGridDelegate,
+            itemBuilder: _buildMonthItem,
+            itemCount: 12,
+            padding: const EdgeInsets.symmetric(horizontal: _yearPickerPadding),
+          ),
+        ),
+        const Divider(),
+      ],
+    );
+  }
+}
