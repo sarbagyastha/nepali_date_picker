@@ -9,4 +9,4 @@ export 'package:nepali_utils/src/nepali_date_time.dart';
 export 'src/adaptive.dart';
 export 'src/cupertino.dart';
 export 'src/material.dart';
-export 'src/nepali_date_picker_delegate.dart';
+export 'src/nepali_calendar_delegate.dart';

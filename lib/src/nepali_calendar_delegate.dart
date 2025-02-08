@@ -6,10 +6,25 @@ import 'package:nepali_utils/nepali_utils.dart';
 
 const _compactDatePattern = 'y-MM-dd';
 
-/// A delegate that supplies Bikram Sambat date information for a date picker.
-class NepaliDatePickerDelegate implements DatePickerDelegate {
-  /// Creates a delegate that supplies Bikram Sambat date information for a date picker.
-  const NepaliDatePickerDelegate();
+/// A [CalendarDelegate] implementation for the Nepali (Bikram Sambat) calendar system.
+///
+/// The Nepali calendar, also known as the **Bikram Sambat (BS) calendar**,
+/// is the official calendar of Nepal and differs from the Gregorian calendar
+/// in terms of year calculation, month lengths, and leap year rules.
+///
+/// Features:
+/// - **Lunisolar structure**: The number of days in each month varies between **28 to 32 days**.
+/// - **Ahead of the Gregorian calendar**: The Bikram Sambat year is typically **56-57 years**
+///   ahead of the Gregorian year.
+/// - **Months start on different days** each year, unlike fixed weekday-based calendars.
+/// - **Leap years follow distinct rules** that are different from the Gregorian system.
+///
+/// This delegate allows [CalendarDatePicker] to interpret and navigate dates
+/// based on the Nepali calendar system.
+class NepaliCalendarDelegate implements CalendarDelegate {
+  /// Creates a [NepaliCalendarDelegate] for interpreting dates
+  /// according to the Nepali (Bikram Sambat) calendar system.
+  const NepaliCalendarDelegate();
 
   @override
   NepaliDateTime now() => NepaliDateTime.now();

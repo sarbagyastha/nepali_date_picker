@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
-import 'nepali_date_picker_delegate.dart';
+import 'nepali_calendar_delegate.dart';
 
 /// Shows a dialog containing a Material Design date picker
 /// with Bikram Sambat Calendar.
@@ -38,10 +38,11 @@ Future<NepaliDateTime?> showNepaliDatePicker({
   final Icon? switchToInputEntryModeIcon,
   final Icon? switchToCalendarEntryModeIcon,
 }) async {
-  const delegate = NepaliDatePickerDelegate();
-  initialDate = initialDate == null ? null : delegate.dateOnly(initialDate);
-  firstDate = delegate.dateOnly(firstDate);
-  lastDate = delegate.dateOnly(lastDate);
+  const calendarDelegate = NepaliCalendarDelegate();
+  initialDate =
+      initialDate == null ? null : calendarDelegate.dateOnly(initialDate);
+  firstDate = calendarDelegate.dateOnly(firstDate);
+  lastDate = calendarDelegate.dateOnly(lastDate);
   assert(
     !lastDate.isBefore(firstDate),
     'lastDate $lastDate must be on or after firstDate $firstDate.',
@@ -63,7 +64,7 @@ Future<NepaliDateTime?> showNepaliDatePicker({
   assert(debugCheckHasMaterialLocalizations(context));
 
   Widget dialog = DatePickerDialog(
-    delegate: delegate,
+    calendarDelegate: calendarDelegate,
     initialDate: initialDate,
     firstDate: firstDate,
     lastDate: lastDate,
@@ -154,11 +155,12 @@ Future<DateTimeRange<NepaliDateTime>?> showNepaliDateRangePicker({
   final Icon? switchToCalendarEntryModeIcon,
   SelectableDayForRangePredicate? selectableDayPredicate,
 }) async {
-  const delegate = NepaliDatePickerDelegate();
-  initialDateRange =
-      initialDateRange == null ? null : delegate.datesOnly(initialDateRange);
-  firstDate = delegate.dateOnly(firstDate);
-  lastDate = delegate.dateOnly(lastDate);
+  const calendarDelegate = NepaliCalendarDelegate();
+  initialDateRange = initialDateRange == null
+      ? null
+      : calendarDelegate.datesOnly(initialDateRange);
+  firstDate = calendarDelegate.dateOnly(firstDate);
+  lastDate = calendarDelegate.dateOnly(lastDate);
   assert(
     !lastDate.isBefore(firstDate),
     'lastDate $lastDate must be on or after firstDate $firstDate.',
@@ -196,11 +198,12 @@ Future<DateTimeRange<NepaliDateTime>?> showNepaliDateRangePicker({
             initialDateRange.end, initialDateRange.start, initialDateRange.end),
     "initialDateRange's end date must be selectable.",
   );
-  currentDate = delegate.dateOnly(currentDate ?? delegate.now());
+  currentDate =
+      calendarDelegate.dateOnly(currentDate ?? calendarDelegate.now());
   assert(debugCheckHasMaterialLocalizations(context));
 
   Widget dialog = DateRangePickerDialog(
-    delegate: delegate,
+    calendarDelegate: calendarDelegate,
     initialDateRange: initialDateRange,
     firstDate: firstDate,
     lastDate: lastDate,
