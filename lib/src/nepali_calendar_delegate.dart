@@ -21,7 +21,7 @@ const _compactDatePattern = 'y-MM-dd';
 ///
 /// This delegate allows [CalendarDatePicker] to interpret and navigate dates
 /// based on the Nepali calendar system.
-class NepaliCalendarDelegate implements CalendarDelegate {
+class NepaliCalendarDelegate extends CalendarDelegate<NepaliDateTime> {
   /// Creates a [NepaliCalendarDelegate] for interpreting dates
   /// according to the Nepali (Bikram Sambat) calendar system.
   const NepaliCalendarDelegate();
@@ -35,13 +35,10 @@ class NepaliCalendarDelegate implements CalendarDelegate {
   }
 
   @override
-  int getDaysInMonth(int year, int month) {
-    return NepaliDateTime(year, month).totalDays;
-  }
-
-  @override
-  DateTime addDaysToDate(NepaliDateTime date, int days) {
-    return date.add(Duration(days: days));
+  int monthDelta(NepaliDateTime startDate, NepaliDateTime endDate) {
+    final yearDelta = endDate.year - startDate.year;
+    final monthDelta = endDate.month - startDate.month;
+    return yearDelta * 12 + monthDelta;
   }
 
   @override
@@ -59,11 +56,8 @@ class NepaliCalendarDelegate implements CalendarDelegate {
   }
 
   @override
-  DateTimeRange<NepaliDateTime> datesOnly(DateTimeRange<NepaliDateTime> range) {
-    return DateTimeRange(
-      start: dateOnly(range.start),
-      end: dateOnly(range.end),
-    );
+  NepaliDateTime addDaysToDate(NepaliDateTime date, int days) {
+    return date.add(Duration(days: days));
   }
 
   @override
@@ -72,22 +66,8 @@ class NepaliCalendarDelegate implements CalendarDelegate {
   }
 
   @override
-  bool isSameDay(NepaliDateTime? dateA, NepaliDateTime? dateB) {
-    return dateA?.year == dateB?.year &&
-        dateA?.month == dateB?.month &&
-        dateA?.day == dateB?.day;
-  }
-
-  @override
-  bool isSameMonth(NepaliDateTime? dateA, NepaliDateTime? dateB) {
-    return dateA?.year == dateB?.year && dateA?.month == dateB?.month;
-  }
-
-  @override
-  int monthDelta(NepaliDateTime startDate, NepaliDateTime endDate) {
-    return (endDate.year - startDate.year) * 12 +
-        endDate.month -
-        startDate.month;
+  int getDaysInMonth(int year, int month) {
+    return NepaliDateTime(year, month).totalDays;
   }
 
   @override
@@ -107,17 +87,38 @@ class NepaliCalendarDelegate implements CalendarDelegate {
   }
 
   @override
-  String formatYear(int year, MaterialLocalizations localizations) {
-    return localizations.formatYear(DateTime(year));
-  }
-
-  @override
   String formatMediumDate(
     NepaliDateTime date,
     MaterialLocalizations localizations,
   ) {
     final language = _getLanguage(localizations);
     return NepaliDateFormat('EE, MMMM d', language).format(date);
+  }
+
+  @override
+  String formatShortMonthDay(
+    NepaliDateTime date,
+    MaterialLocalizations localizations,
+  ) {
+    return NepaliDateFormat('MMMM d', _getLanguage(localizations)).format(date);
+  }
+
+  @override
+  String formatShortDate(
+    NepaliDateTime date,
+    MaterialLocalizations localizations,
+  ) {
+    final language = _getLanguage(localizations);
+    return NepaliDateFormat('MMMM d, y', language).format(date);
+  }
+
+  @override
+  String formatFullDate(
+    NepaliDateTime date,
+    MaterialLocalizations localizations,
+  ) {
+    final language = _getLanguage(localizations);
+    return NepaliDateFormat('EEEE, MMMM d, y', language).format(date);
   }
 
   @override
@@ -141,32 +142,6 @@ class NepaliCalendarDelegate implements CalendarDelegate {
     } on FormatException {
       return null;
     }
-  }
-
-  @override
-  String formatShortDate(
-    NepaliDateTime date,
-    MaterialLocalizations localizations,
-  ) {
-    final language = _getLanguage(localizations);
-    return NepaliDateFormat('MMMM d, y', language).format(date);
-  }
-
-  @override
-  String formatShortMonthDay(
-    NepaliDateTime date,
-    MaterialLocalizations localizations,
-  ) {
-    return NepaliDateFormat('MMMM d', _getLanguage(localizations)).format(date);
-  }
-
-  @override
-  String formatFullDate(
-    NepaliDateTime date,
-    MaterialLocalizations localizations,
-  ) {
-    final language = _getLanguage(localizations);
-    return NepaliDateFormat('EEEE, MMMM d, y', language).format(date);
   }
 
   @override

@@ -30,7 +30,7 @@ class CalendarDatePickerWidget extends StatelessWidget {
           firstDate: NepaliDateTime(2070),
           lastDate: NepaliDateTime(2090),
           onDateChanged: (date) => _selectedDate.value = date as NepaliDateTime,
-          delegate: const NepaliDatePickerDelegate(),
+          calendarDelegate: const NepaliCalendarDelegate(),
           selectableDayPredicate: (date) {
             return _events.any(
               (event) => _dayEquals(event.date, date as NepaliDateTime),
