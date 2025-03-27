@@ -1,11 +1,11 @@
 name: nepali_date_picker_example
 description: Nepali Date Picker Demo
 
-version: 1.0.0+1
+version: 7.0.0+1
 publish_to: none
 
 environment:
-  sdk: '>=3.6.0 <4.0.0'
+  sdk: '>=3.7.0 <4.0.0'
 
 dependencies:
   flutter:
