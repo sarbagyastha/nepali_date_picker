@@ -145,5 +145,13 @@ Future<DateTimeRange<NepaliDateTime>?> showNepaliDateRangePicker({
     calendarDelegate: const NepaliCalendarDelegate(),
   );
 
-  return dateRange as DateTimeRange<NepaliDateTime>?;
+  if (dateRange == null) return null;
+
+  final DateTime(year: sYear, month: sMonth, day: sDay) = dateRange.start;
+  final DateTime(year: eYear, month: eMonth, day: eDay) = dateRange.end;
+
+  return DateTimeRange(
+    start: NepaliDateTime(sYear, sMonth, sDay),
+    end: NepaliDateTime(eYear, eMonth, eDay),
+  );
 }
