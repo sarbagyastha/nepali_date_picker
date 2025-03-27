@@ -1,3 +1,7 @@
+// Copyright 2020 Sarbagya Dhaubanjar. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nepali_utils/nepali_utils.dart';
@@ -21,14 +25,22 @@ Future<NepaliDateTime?> showAdaptiveDatePicker({
   /// Only for Android and Fuchsia
   DatePickerMode initialDatePickerMode = DatePickerMode.day,
 }) async {
-  assert(firstDate.year >= 1970 && lastDate.year <= 2100,
-      'Invalid Date Range. Valid Range = [1970, 2100]');
-  assert(!initialDate.isBefore(firstDate),
-      'initialDate must be on or after firstDate');
-  assert(!initialDate.isAfter(lastDate),
-      'initialDate must be on or before lastDate');
   assert(
-      !firstDate.isAfter(lastDate), 'lastDate must be on or after firstDate');
+    firstDate.year >= 1970 && lastDate.year <= 2100,
+    'Invalid Date Range. Valid Range = [1970, 2100]',
+  );
+  assert(
+    !initialDate.isBefore(firstDate),
+    'initialDate must be on or after firstDate',
+  );
+  assert(
+    !initialDate.isAfter(lastDate),
+    'initialDate must be on or before lastDate',
+  );
+  assert(
+    !firstDate.isAfter(lastDate),
+    'lastDate must be on or after firstDate',
+  );
 
   final theme = Theme.of(context);
   switch (theme.platform) {
@@ -64,14 +76,22 @@ Future<NepaliDateTime?> _showCupertinoDatePicker({
   Language language = Language.english,
   DateOrder dateOrder = DateOrder.mdy,
 }) async {
-  assert(firstDate.year >= 2000 && lastDate.year <= 2099,
-      'Invalid Date Range. Valid Range = [2000, 2099]');
-  assert(!initialDate.isBefore(firstDate),
-      'initialDate must be on or after firstDate');
-  assert(!initialDate.isAfter(lastDate),
-      'initialDate must be on or before lastDate');
   assert(
-      !firstDate.isAfter(lastDate), 'lastDate must be on or after firstDate');
+    firstDate.year >= 2000 && lastDate.year <= 2099,
+    'Invalid Date Range. Valid Range = [2000, 2099]',
+  );
+  assert(
+    !initialDate.isBefore(firstDate),
+    'initialDate must be on or after firstDate',
+  );
+  assert(
+    !initialDate.isAfter(lastDate),
+    'initialDate must be on or before lastDate',
+  );
+  assert(
+    !firstDate.isAfter(lastDate),
+    'lastDate must be on or after firstDate',
+  );
 
   return await _showCupertinoPopup<NepaliDateTime>(
     context: context,
@@ -82,10 +102,7 @@ Future<NepaliDateTime?> _showCupertinoDatePicker({
         padding: const EdgeInsets.only(top: 6.0),
         color: CupertinoColors.white,
         child: DefaultTextStyle(
-          style: const TextStyle(
-            color: CupertinoColors.black,
-            fontSize: 22.0,
-          ),
+          style: const TextStyle(color: CupertinoColors.black, fontSize: 22.0),
           child: GestureDetector(
             onTap: () {},
             child: SafeArea(
@@ -137,12 +154,10 @@ Future<T?> _showCupertinoPopup<T>({
   required BuildContext context,
   required WidgetBuilder builder,
 }) {
-  return Navigator.of(context, rootNavigator: true).push(
-    _CupertinoPopupRoute<T>(
-      builder: builder,
-      barrierLabel: 'Dismiss',
-    ),
-  );
+  return Navigator.of(
+    context,
+    rootNavigator: true,
+  ).push(_CupertinoPopupRoute<T>(builder: builder, barrierLabel: 'Dismiss'));
 }
 
 class _CupertinoPopupRoute<T> extends PopupRoute<T> {
@@ -191,14 +206,21 @@ class _CupertinoPopupRoute<T> extends PopupRoute<T> {
   }
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     return builder(context);
   }
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: FractionalTranslation(

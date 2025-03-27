@@ -1,3 +1,7 @@
+// Copyright 2020 Sarbagya Dhaubanjar. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -33,28 +37,28 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                   vertical: 16,
                   horizontal: 8,
                 ),
-                child: _selectedDateTime == null
-                    ? Text(
-                        'No Date Picked!',
-                        textAlign: TextAlign.center,
-                      )
-                    : Column(
-                        spacing: 16,
-                        children: [
-                          Text(
-                            NepaliDateFormat("EEE, MMMM d, y hh:mm aa")
-                                .format(_selectedDateTime!),
-                            style: Theme.of(context).textTheme.titleLarge,
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            DateFormat("EEE, MMMM d, y hh:mm aa")
-                                .format(_selectedDateTime!.toDateTime()),
-                            style: Theme.of(context).textTheme.titleSmall,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
+                child:
+                    _selectedDateTime == null
+                        ? Text('No Date Picked!', textAlign: TextAlign.center)
+                        : Column(
+                          spacing: 16,
+                          children: [
+                            Text(
+                              NepaliDateFormat(
+                                "EEE, MMMM d, y hh:mm aa",
+                              ).format(_selectedDateTime!),
+                              style: Theme.of(context).textTheme.titleLarge,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              DateFormat(
+                                "EEE, MMMM d, y hh:mm aa",
+                              ).format(_selectedDateTime!.toDateTime()),
+                              style: Theme.of(context).textTheme.titleSmall,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
               ),
             ),
             SizedBox(height: 20),
@@ -104,7 +108,10 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                       final timeOfDay = TimeOfDay.now();
                       setState(() {
                         _selectedDateTime = newDate.mergeTime(
-                            timeOfDay.hour, timeOfDay.minute, 0);
+                          timeOfDay.hour,
+                          timeOfDay.minute,
+                          0,
+                        );
                       });
                     },
                   );
@@ -117,14 +124,19 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 SizedBox(width: 10.0),
-                Text(
-                  'Design: ',
-                  style: TextStyle(fontSize: 18.0),
+                Text('Design: ', style: TextStyle(fontSize: 18.0)),
+                _radio<String>(
+                  'Material',
+                  'm',
+                  _design,
+                  (value) => setState(() => _design = value),
                 ),
-                _radio<String>('Material', 'm', _design,
-                    (value) => setState(() => _design = value)),
-                _radio<String>('Cupertino', 'c', _design,
-                    (value) => setState(() => _design = value)),
+                _radio<String>(
+                  'Cupertino',
+                  'c',
+                  _design,
+                  (value) => setState(() => _design = value),
+                ),
               ],
             ),
             SizedBox(height: 20),
@@ -138,10 +150,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(height: 15.0),
-                    Text(
-                      'Order: ',
-                      style: TextStyle(fontSize: 18.0),
-                    ),
+                    Text('Order: ', style: TextStyle(fontSize: 18.0)),
                     Text(
                       '(only for Cupertino)',
                       style: TextStyle(fontSize: 8.0),
@@ -152,14 +161,30 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      _radio<DateOrder>('D M Y', DateOrder.dmy, _dateOrder,
-                          (value) => setState(() => _dateOrder = value)),
-                      _radio<DateOrder>('M D Y', DateOrder.mdy, _dateOrder,
-                          (value) => setState(() => _dateOrder = value)),
-                      _radio<DateOrder>('Y D M', DateOrder.ydm, _dateOrder,
-                          (value) => setState(() => _dateOrder = value)),
-                      _radio<DateOrder>('Y M D', DateOrder.ymd, _dateOrder,
-                          (value) => setState(() => _dateOrder = value)),
+                      _radio<DateOrder>(
+                        'D M Y',
+                        DateOrder.dmy,
+                        _dateOrder,
+                        (value) => setState(() => _dateOrder = value),
+                      ),
+                      _radio<DateOrder>(
+                        'M D Y',
+                        DateOrder.mdy,
+                        _dateOrder,
+                        (value) => setState(() => _dateOrder = value),
+                      ),
+                      _radio<DateOrder>(
+                        'Y D M',
+                        DateOrder.ydm,
+                        _dateOrder,
+                        (value) => setState(() => _dateOrder = value),
+                      ),
+                      _radio<DateOrder>(
+                        'Y M D',
+                        DateOrder.ymd,
+                        _dateOrder,
+                        (value) => setState(() => _dateOrder = value),
+                      ),
                     ],
                   ),
                 ),
@@ -184,9 +209,10 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                 ),
                 Switch(
                   value: _showTimerPicker,
-                  onChanged: _design == 'm'
-                      ? (v) => setState(() => _showTimerPicker = v)
-                      : null,
+                  onChanged:
+                      _design == 'm'
+                          ? (v) => setState(() => _showTimerPicker = v)
+                          : null,
                 ),
               ],
             ),
@@ -206,9 +232,10 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       child: RadioListTile<T>(
         value: value,
         groupValue: groupValue,
-        onChanged: _design == 'm' && groupValue == _dateOrder
-            ? null
-            : (v) => onChanged(v!),
+        onChanged:
+            _design == 'm' && groupValue == _dateOrder
+                ? null
+                : (v) => onChanged(v!),
         title: Text(title),
       ),
     );

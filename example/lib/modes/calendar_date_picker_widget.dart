@@ -1,3 +1,7 @@
+// Copyright 2020 Sarbagya Dhaubanjar. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 
@@ -5,20 +9,24 @@ import 'package:nepali_date_picker/nepali_date_picker.dart';
 final List<Event> _events = [
   Event(date: NepaliDateTime.now(), eventTitles: ['Today 1', 'Today 2']),
   Event(
-      date: NepaliDateTime.now().add(Duration(days: 30)),
-      eventTitles: ['Holiday 1', 'Holiday 2']),
+    date: NepaliDateTime.now().add(Duration(days: 30)),
+    eventTitles: ['Holiday 1', 'Holiday 2'],
+  ),
   Event(
-      date: NepaliDateTime.now().subtract(Duration(days: 5)),
-      eventTitles: ['Event 1', 'Event 2']),
+    date: NepaliDateTime.now().subtract(Duration(days: 5)),
+    eventTitles: ['Event 1', 'Event 2'],
+  ),
   Event(
-      date: NepaliDateTime.now().add(Duration(days: 8)),
-      eventTitles: ['Seminar 1', 'Seminar 2']),
+    date: NepaliDateTime.now().add(Duration(days: 8)),
+    eventTitles: ['Seminar 1', 'Seminar 2'],
+  ),
 ];
 
 /// Calendar Picker Example
 class CalendarDatePickerWidget extends StatelessWidget {
-  final ValueNotifier<NepaliDateTime> _selectedDate =
-      ValueNotifier(NepaliDateTime.now());
+  final ValueNotifier<NepaliDateTime> _selectedDate = ValueNotifier(
+    NepaliDateTime.now(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +61,7 @@ class CalendarDatePickerWidget extends StatelessWidget {
               }
 
               if (event == null) {
-                return Center(
-                  child: Text('No Events'),
-                );
+                return Center(child: Text('No Events'));
               }
 
               return ListView.separated(
@@ -72,9 +78,7 @@ class CalendarDatePickerWidget extends StatelessWidget {
                       ScaffoldMessenger.of(context)
                         ..hideCurrentSnackBar()
                         ..showSnackBar(
-                          SnackBar(
-                            content: Text(event!.eventTitles[index]),
-                          ),
+                          SnackBar(content: Text(event!.eventTitles[index])),
                         );
                     },
                   );
@@ -109,9 +113,7 @@ class TodayWidget extends StatelessWidget {
 
     return Material(
       color: theme.colorScheme.primaryContainer,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: AspectRatio(
         aspectRatio: 1,
         child: Column(
@@ -129,8 +131,9 @@ class TodayWidget extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 2),
                 child: Text(
                   NepaliDateFormat.E().format(today).toUpperCase(),
-                  style:
-                      theme.textTheme.bodyMedium?.copyWith(color: Colors.white),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.white,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),

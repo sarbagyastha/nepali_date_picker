@@ -1,3 +1,7 @@
+// Copyright 2020 Sarbagya Dhaubanjar. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 import 'package:flutter/material.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
@@ -81,10 +85,7 @@ class _LocaleScopeState extends State<LocaleScope> {
 }
 
 class _LocaleScope extends InheritedWidget {
-  const _LocaleScope({
-    required this.model,
-    required super.child,
-  });
+  const _LocaleScope({required this.model, required super.child});
 
   final _LocaleModel model;
 

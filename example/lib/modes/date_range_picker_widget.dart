@@ -1,3 +1,7 @@
+// Copyright 2020 Sarbagya Dhaubanjar. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
@@ -30,41 +34,46 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
                   vertical: 16,
                   horizontal: 8,
                 ),
-                child: _selectedDateTimeRange == null
-                    ? Text(
-                        'No Date Range Picked!',
-                        textAlign: TextAlign.center,
-                      )
-                    : Column(
-                        spacing: 16,
-                        children: [
-                          Text(
-                            NepaliDateFormat("EEE, MMMM d, y")
-                                .format(_selectedDateTimeRange!.start),
-                            style: Theme.of(context).textTheme.titleLarge,
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            DateFormat("EEE, MMMM d, y").format(
-                                _selectedDateTimeRange!.start.toDateTime()),
-                            style: Theme.of(context).textTheme.titleSmall,
-                            textAlign: TextAlign.center,
-                          ),
-                          Icon(Icons.arrow_downward_rounded),
-                          Text(
-                            NepaliDateFormat("EEE, MMMM d, y")
-                                .format(_selectedDateTimeRange!.end),
-                            style: Theme.of(context).textTheme.titleLarge,
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            DateFormat("EEE, MMMM d, y").format(
-                                _selectedDateTimeRange!.end.toDateTime()),
-                            style: Theme.of(context).textTheme.titleSmall,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
+                child:
+                    _selectedDateTimeRange == null
+                        ? Text(
+                          'No Date Range Picked!',
+                          textAlign: TextAlign.center,
+                        )
+                        : Column(
+                          spacing: 16,
+                          children: [
+                            Text(
+                              NepaliDateFormat(
+                                "EEE, MMMM d, y",
+                              ).format(_selectedDateTimeRange!.start),
+                              style: Theme.of(context).textTheme.titleLarge,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              DateFormat("EEE, MMMM d, y").format(
+                                _selectedDateTimeRange!.start.toDateTime(),
+                              ),
+                              style: Theme.of(context).textTheme.titleSmall,
+                              textAlign: TextAlign.center,
+                            ),
+                            Icon(Icons.arrow_downward_rounded),
+                            Text(
+                              NepaliDateFormat(
+                                "EEE, MMMM d, y",
+                              ).format(_selectedDateTimeRange!.end),
+                              style: Theme.of(context).textTheme.titleLarge,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              DateFormat("EEE, MMMM d, y").format(
+                                _selectedDateTimeRange!.end.toDateTime(),
+                              ),
+                              style: Theme.of(context).textTheme.titleSmall,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
               ),
             ),
             SizedBox(height: 20),

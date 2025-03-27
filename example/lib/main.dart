@@ -1,4 +1,4 @@
-// Copyright 2019 Sarbagya Dhaubanjar. All rights reserved.
+// Copyright 2020 Sarbagya Dhaubanjar. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -26,15 +26,10 @@ class _MyAppState extends State<MyApp> {
       builder: (_, locale) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.deepPurple,
-          ),
+          theme: ThemeData(primarySwatch: Colors.deepPurple),
           title: 'Nepali Date Picker Demo',
           locale: locale,
-          supportedLocales: [
-            Locale('en', 'US'),
-            Locale('ne', 'NP'),
-          ],
+          supportedLocales: [Locale('en', 'US'), Locale('ne', 'NP')],
           localizationsDelegates: GlobalMaterialLocalizations.delegates,
           home: HomePage(),
         );
@@ -64,9 +59,7 @@ class HomePage extends StatelessWidget {
           ),
           actions: [
             IconButton.filledTonal(
-              icon: Text(
-                LocaleScope.of(context).isNepali ? 'ने' : 'En',
-              ),
+              icon: Text(LocaleScope.of(context).isNepali ? 'ने' : 'En'),
               onPressed: () => LocaleScope.of(context).toggleLocale(),
             ),
             const SizedBox(width: 8),
