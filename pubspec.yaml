@@ -13,7 +13,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: '>=0.19.0 <1.0.0'
-  nepali_utils: ^3.0.7
+  nepali_utils: ^3.0.8
 
 dev_dependencies:
   flutter_test:
