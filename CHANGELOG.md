@@ -1,3 +1,8 @@
+## 6.0.2
+**May 7, 2025**
+- Bumps dependencies to latest version.
+- Fixes date for year 2082 & 2093.
+
 ## 6.0.1
 **Apr 27, 2024**
 - Adds support for Bikram Sambat support up to 2250 BS.
