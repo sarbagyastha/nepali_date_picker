@@ -15,7 +15,7 @@ class CalendarDateRangePickerWidget extends StatefulWidget {
 class _CalendarDateRangePickerWidgetState
     extends State<CalendarDateRangePickerWidget> {
   ///
-  final (NepaliDateTime, NepaliDateTime?) _dateRange = (
+  (NepaliDateTime, NepaliDateTime?) _dateRange = (
     NepaliDateTime.now(),
     NepaliDateTime.now().add(Duration(days: 5)),
   );
@@ -25,29 +25,31 @@ class _CalendarDateRangePickerWidgetState
     return Scaffold(
       body: Column(
         children: [
-          // TODO(sarbagya): Uncomment when https://github.com/flutter/flutter/pull/168290 is merged
-          // Expanded(
-          //   child: CalendarDateRangePicker(
-          //     initialStartDate: NepaliDateTime.now(),
-          //     initialEndDate: NepaliDateTime.now().add(Duration(days: 5)),
-          //     firstDate: NepaliDateTime(1970),
-          //     lastDate: NepaliDateTime(2100),
-          //     onStartDateChanged: (date) {
-          //       _dateRange = (date as NepaliDateTime, _dateRange.$2);
-          //       setState(() {});
-          //     },
-          //     onEndDateChanged: (date) {
-          //       _dateRange = (_dateRange.$1, date as NepaliDateTime?);
-          //       setState(() {});
-          //     },
-          //     selectableDayPredicate: null,
-          //     calendarDelegate: const NepaliCalendarDelegate(),
-          //   ),
-          // ),
+          Expanded(
+            child: CalendarDateRangePicker(
+              initialStartDate: NepaliDateTime.now(),
+              initialEndDate: NepaliDateTime.now().add(Duration(days: 5)),
+              firstDate: NepaliDateTime(1970),
+              lastDate: NepaliDateTime(2100),
+              onStartDateChanged: (date) {
+                _dateRange = (date as NepaliDateTime, _dateRange.$2);
+                setState(() {});
+              },
+              onEndDateChanged: (date) {
+                _dateRange = (_dateRange.$1, date as NepaliDateTime?);
+                setState(() {});
+              },
+              selectableDayPredicate: null,
+              calendarDelegate: const NepaliCalendarDelegate(),
+            ),
+          ),
           ListTile(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+            ),
             title: Text('From: ${_format(_dateRange.$1)}'),
             subtitle: Text('To: ${_format(_dateRange.$2)}'),
-            tileColor: Theme.of(context).primaryColor.withAlpha(50),
+            tileColor: Theme.of(context).colorScheme.primaryContainer,
           ),
         ],
       ),

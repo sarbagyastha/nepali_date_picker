@@ -2,10 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    hide showDateRangePicker, SelectableDayForRangePredicate;
 import 'package:nepali_utils/nepali_utils.dart';
 
 import 'nepali_calendar_delegate.dart';
+import 'overrides/date_range_picker.dart';
 
 /// Shows a dialog containing a Material Design date picker
 /// with Bikram Sambat Calendar.
