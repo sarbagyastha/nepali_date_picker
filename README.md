@@ -54,6 +54,11 @@ print(selectedDateTime); // Outputs the selected date in NepaliDateTime type.
 
 For a complete example, check out the [example](https://github.com/sarbagyastha/nepali_date_picker/tree/main/example).
 
+## 🌐 Demo
+Try the Nepali Date Picker live on the web! Check out the demo page here:
+
+👉 https://date.sarbagyastha.com.np
+
 ## 🔗 Related Package
 If you need additional Nepali date and text utilities, check out the [nepali_utils](https://pub.dev/packages/nepali_utils) package!
 It offers handy helpers for Nepali date formatting, number conversion, and more.
