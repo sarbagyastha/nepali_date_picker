@@ -3,7 +3,6 @@
 [![Pub Package](https://img.shields.io/pub/v/nepali_date_picker)](https://pub.dev/packages/nepali_date_picker)
 [![Licence](https://img.shields.io/badge/Licence-BSD-orange.svg)](https://github.com/sarbagyastha/nepali_date_picker/blob/main/LICENSE)
 [![Demo](https://img.shields.io/badge/Demo-WEB-blueviolet.svg)](https://date.sarbagyastha.com.np)
-[![effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://dart.dev/guides/language/effective-dart)
 
 A beautiful, customizable date picker widget for Flutter, fully localized for the Nepali (Bikram Sambat) calendar. This package allows users to select dates in the Nepali/Indian calendar system, making it perfect for apps targeting Nepali-speaking audiences or integrating regional calendar functionality.
 
