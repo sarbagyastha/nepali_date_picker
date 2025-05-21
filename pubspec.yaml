@@ -20,9 +20,21 @@ dev_dependencies:
     sdk: flutter
 
 screenshots:
-  - description: Nepali Date Picker Demo
-    path: demo.gif
-  - description: Nepali Date Picker Example
-    path: screenshot/picker.png
-  - description: Nepali Date Calendar Example
-    path: screenshot/calendar.png
+  - description: Date Picker in English; Light Theme
+    path: screenshot/material/date-en-light.png
+  - description: Date Picker in Nepali; Dark Theme
+    path: screenshot/material/date-np-dark.png
+  - description: Date Picker in Nepali; Light Theme
+    path: screenshot/material/date-np-light.png
+  - description: Input Date Picker in English; Dark Theme
+    path: screenshot/material/input-en-dark.png
+  - description: Input Date Picker in Nepali; Light Theme
+    path: screenshot/material/input-np-light.png
+  - description: Date Range Picker in English; Dark Theme
+    path: screenshot/material/range-en-dark.png
+  - description: Date Range Picker in Nepali; Light Theme
+    path: screenshot/material/range-np-light.png
+  - description: Input Date Range Picker in Nepali; Dark Theme
+    path: screenshot/material/range-input-np-dark.png
+  - description: Date Picker in Nepali; Light Theme; Landscape
+    path: screenshot/material/date-light-land.png
