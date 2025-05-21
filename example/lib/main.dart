@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
       builder: (_, locale) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(primarySwatch: Colors.deepPurple),
+          theme: ThemeData(colorSchemeSeed: Colors.orange),
           title: 'Nepali Date Picker Demo',
           locale: locale,
           supportedLocales: [Locale('en', 'US'), Locale('ne', 'NP')],
@@ -75,6 +75,7 @@ class HomePage extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(16),
               ),
+              elevation: 0,
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: 500),
                 child: TabBarView(

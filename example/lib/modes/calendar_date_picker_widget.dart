@@ -30,65 +30,73 @@ class CalendarDatePickerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CalendarDatePicker(
-          initialDate: NepaliDateTime.now(),
-          firstDate: NepaliDateTime(2070),
-          lastDate: NepaliDateTime(2090),
-          onDateChanged: (date) => _selectedDate.value = date as NepaliDateTime,
-          calendarDelegate: const NepaliCalendarDelegate(),
-          selectableDayPredicate: (date) {
-            return _events.any(
-              (event) => _dayEquals(event.date, date as NepaliDateTime),
-            );
-          },
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Text('Events', style: Theme.of(context).textTheme.titleMedium),
-        ),
-        Expanded(
-          child: ValueListenableBuilder<NepaliDateTime>(
-            valueListenable: _selectedDate,
-            builder: (context, date, _) {
-              Event? event;
-              try {
-                event = _events.firstWhere((e) => _dayEquals(e.date, date));
-              } on StateError {
-                event = null;
-              }
-
-              if (event == null) {
-                return Center(child: Text('No Events'));
-              }
-
-              return ListView.separated(
-                itemCount: event.eventTitles.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    leading: TodayWidget(today: date),
-                    title: Text(event!.eventTitles[index]),
-                    onTap: () {
-                      ScaffoldMessenger.of(context)
-                        ..hideCurrentSnackBar()
-                        ..showSnackBar(
-                          SnackBar(content: Text(event!.eventTitles[index])),
-                        );
-                    },
-                  );
-                },
-                separatorBuilder: (context, _) => Divider(height: 1),
+    return Material(
+      color: Theme.of(context).colorScheme.surfaceContainerLow,
+      borderRadius: BorderRadius.circular(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CalendarDatePicker(
+            initialDate: NepaliDateTime.now(),
+            firstDate: NepaliDateTime(2070),
+            lastDate: NepaliDateTime(2090),
+            onDateChanged: (date) =>
+                _selectedDate.value = date as NepaliDateTime,
+            calendarDelegate: const NepaliCalendarDelegate(),
+            selectableDayPredicate: (date) {
+              return _events.any(
+                (event) => _dayEquals(event.date, date as NepaliDateTime),
               );
             },
           ),
-        ),
-      ],
+          Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Text(
+              'Events',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+          Expanded(
+            child: ValueListenableBuilder<NepaliDateTime>(
+              valueListenable: _selectedDate,
+              builder: (context, date, _) {
+                Event? event;
+                try {
+                  event = _events.firstWhere((e) => _dayEquals(e.date, date));
+                } on StateError {
+                  event = null;
+                }
+
+                if (event == null) {
+                  return Center(child: Text('No Events'));
+                }
+
+                return ListView.separated(
+                  itemCount: event.eventTitles.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      leading: TodayWidget(today: date),
+                      title: Text(event!.eventTitles[index]),
+                      onTap: () {
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(
+                            SnackBar(content: Text(event!.eventTitles[index])),
+                          );
+                      },
+                    );
+                  },
+                  separatorBuilder: (context, _) => Divider(height: 1),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
