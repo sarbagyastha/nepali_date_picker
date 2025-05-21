@@ -1,100 +1,104 @@
-import 'package:flutter/material.dart' hide CalendarDatePicker;
+// Copyright 2020 Sarbagya Dhaubanjar. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
-import 'package:nepali_utils/nepali_utils.dart';
+
+/// Events
+final List<Event> _events = [
+  Event(date: NepaliDateTime.now(), eventTitles: ['Today 1', 'Today 2']),
+  Event(
+    date: NepaliDateTime.now().add(Duration(days: 30)),
+    eventTitles: ['Holiday 1', 'Holiday 2'],
+  ),
+  Event(
+    date: NepaliDateTime.now().subtract(Duration(days: 5)),
+    eventTitles: ['Event 1', 'Event 2'],
+  ),
+  Event(
+    date: NepaliDateTime.now().add(Duration(days: 8)),
+    eventTitles: ['Seminar 1', 'Seminar 2'],
+  ),
+];
 
 /// Calendar Picker Example
 class CalendarDatePickerWidget extends StatelessWidget {
-  final ValueNotifier<NepaliDateTime> _selectedDate =
-      ValueNotifier(NepaliDateTime.now());
+  final ValueNotifier<NepaliDateTime> _selectedDate = ValueNotifier(
+    NepaliDateTime.now(),
+  );
 
-  /// Events
-  final List<Event> events = [
-    Event(date: NepaliDateTime.now(), eventTitles: ['Today 1', 'Today 2']),
-    Event(
-        date: NepaliDateTime.now().add(Duration(days: 30)),
-        eventTitles: ['Holiday 1', 'Holiday 2']),
-    Event(
-        date: NepaliDateTime.now().subtract(Duration(days: 5)),
-        eventTitles: ['Event 1', 'Event 2']),
-    Event(
-        date: NepaliDateTime.now().add(Duration(days: 8)),
-        eventTitles: ['Seminar 1', 'Seminar 2']),
-  ];
+  CalendarDatePickerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CalendarDatePicker(
-          initialDate: NepaliDateTime.now(),
-          firstDate: NepaliDateTime(2070),
-          lastDate: NepaliDateTime(2090),
-          onDateChanged: (date) => _selectedDate.value = date,
-          dayBuilder: (dayToBuild) {
-            return Stack(
-              children: <Widget>[
-                Center(
-                  child: Text(
-                    NepaliUtils().language == Language.english
-                        ? '${dayToBuild.day}'
-                        : NepaliUnicode.convert('${dayToBuild.day}'),
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ),
-                if (events.any((event) => _dayEquals(event.date, dayToBuild)))
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      width: 6,
-                      height: 6,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Colors.purple),
-                    ),
-                  )
-              ],
-            );
-          },
-          selectedDayDecoration: BoxDecoration(
-            color: Colors.deepOrange,
-            shape: BoxShape.circle,
-          ),
-          todayDecoration: BoxDecoration(
-            gradient: LinearGradient(colors: [Colors.yellow, Colors.orange]),
-            shape: BoxShape.circle,
-          ),
-        ),
-        Expanded(
-          child: ValueListenableBuilder<NepaliDateTime>(
-            valueListenable: _selectedDate,
-            builder: (context, date, _) {
-              Event? event;
-              try {
-                event = events.firstWhere((e) => _dayEquals(e.date, date));
-              } on StateError {
-                event = null;
-              }
-
-              if (event == null) {
-                return Center(
-                  child: Text('No Events'),
-                );
-              }
-
-              return ListView.separated(
-                itemCount: event.eventTitles.length,
-                itemBuilder: (context, index) => ListTile(
-                  leading: TodayWidget(
-                    today: date,
-                  ),
-                  title: Text(event!.eventTitles[index]),
-                  onTap: () {},
-                ),
-                separatorBuilder: (context, _) => Divider(),
+    return Material(
+      color: Theme.of(context).colorScheme.surfaceContainerLow,
+      borderRadius: BorderRadius.circular(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CalendarDatePicker(
+            initialDate: NepaliDateTime.now(),
+            firstDate: NepaliDateTime(2070),
+            lastDate: NepaliDateTime(2090),
+            onDateChanged: (date) =>
+                _selectedDate.value = date as NepaliDateTime,
+            calendarDelegate: const NepaliCalendarDelegate(),
+            selectableDayPredicate: (date) {
+              return _events.any(
+                (event) => _dayEquals(event.date, date as NepaliDateTime),
               );
             },
           ),
-        ),
-      ],
+          Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Text(
+              'Events',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+          Expanded(
+            child: ValueListenableBuilder<NepaliDateTime>(
+              valueListenable: _selectedDate,
+              builder: (context, date, _) {
+                Event? event;
+                try {
+                  event = _events.firstWhere((e) => _dayEquals(e.date, date));
+                } on StateError {
+                  event = null;
+                }
+
+                if (event == null) {
+                  return Center(child: Text('No Events'));
+                }
+
+                return ListView.separated(
+                  itemCount: event.eventTitles.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      leading: TodayWidget(today: date),
+                      title: Text(event!.eventTitles[index]),
+                      onTap: () {
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(
+                            SnackBar(content: Text(event!.eventTitles[index])),
+                          );
+                      },
+                    );
+                  },
+                  separatorBuilder: (context, _) => Divider(height: 1),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -111,54 +115,43 @@ class TodayWidget extends StatelessWidget {
   final NepaliDateTime today;
 
   ///
-  const TodayWidget({
-    Key? key,
-    required this.today,
-  }) : super(key: key);
+  const TodayWidget({required this.today, super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Material(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: SizedBox(
-        width: 60,
-        height: 60,
+      color: theme.colorScheme.primaryContainer,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: AspectRatio(
+        aspectRatio: 1,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             DecoratedBox(
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
+                color: theme.colorScheme.primary,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
                 ),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 2),
                 child: Text(
-                  NepaliDateFormat.EEEE()
-                      .format(today)
-                      .substring(0, 3)
-                      .toUpperCase(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge
-                      ?.copyWith(color: Colors.white),
+                  NepaliDateFormat.E().format(today).toUpperCase(),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.white,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
             ),
-            Spacer(),
             Text(
               NepaliDateFormat.d().format(today),
-              style: Theme.of(context).textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
-            Spacer(),
           ],
         ),
       ),

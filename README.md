@@ -1,156 +1,71 @@
-# Nepali Date Picker + Calendar
+# 🇳🇵 Nepali Date Picker + Calendar 📅
 
 [![Pub Package](https://img.shields.io/pub/v/nepali_date_picker)](https://pub.dev/packages/nepali_date_picker)
-[![Licence](https://img.shields.io/badge/Licence-MIT-orange.svg)](https://github.com/sarbagyastha/nepali_date_picker/blob/master/LICENSE)
-[![Demo](https://img.shields.io/badge/Demo-WEB-blueviolet.svg)](https://sarbagyastha.com.np/nepali_date_picker)
-[![effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://dart.dev/guides/language/effective-dart)
+[![Licence](https://img.shields.io/badge/Licence-BSD-orange.svg)](https://github.com/sarbagyastha/nepali_date_picker/blob/main/LICENSE)
+[![Demo](https://img.shields.io/badge/Demo-WEB-blueviolet.svg)](https://date.sarbagyastha.com.np)
 
-Material and Cupertino Styled Date Picker, Date Range Picker and Calendar with Bikram Sambat(Nepali) Support.
+A beautiful, customizable date picker widget for Flutter, fully localized for the Nepali (Bikram Sambat) calendar. This package allows users to select dates in the Nepali/Indian calendar system, making it perfect for apps targeting Nepali-speaking audiences or integrating regional calendar functionality.
 
-![Loading Demo](demo.gif)
 
-Nepali Date Picker returns data in **NepaliDateTime** type, which is
-included in [*nepali_utils*](https://pub.dev/packages/nepali_utils)
-package.
+## 🚀 Features
+- 🇳🇵 Bikram Sambat (Nepali) Calendar support
+  
+- 🎨 Customizable UI to match your app’s theme
+  
+- ⚡ Easy Integration into any Flutter project
+  
+- ✅ Date Validation for valid Nepali dates only
+  
+- 📆 Supports date from 1970 BS to 2250 BS
+  
+- 🔄 Effortlessly convert between Bikram Sambat and Gregorian dates. 
 
-[**Click here to launch WEB DEMO**](https://sarbagyastha.com.np/nepali_date_picker)
 
-![Loading Demo](screenshot/picker.png) ![Loading Demo](screenshot/calendar.png)
+## 🛠️ Getting Started
+Add this to your pubspec.yaml:
+```yaml
+dependencies:
+  nepali_date_picker: ^<latest_version>
+```
 
-### Salient Features
-* Material DatePicker
-* Cupertino DatePicker
-* Adaptive DatePicker
-* Calendar Picker
-* Material Date Range Picker
-* Calendar Range Picker
-* Supports from 1970 B.S. to 2250 B.S.
+Then run:
+```bash
+flutter pub get
+```
 
-## Note
-Use Version 5.0.0 for `flutter < 2.1.0`
-
-## Usage
-
-#### Material Style Date Picker
-
+## 💡 Usage
+Import the package:
 ```dart
-import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
+import 'package:nepali_date_picker/nepali_date_picker.dart';
+```
 
-NepaliDateTime _selectedDateTime = await picker.showMaterialDatePicker(
-    context: context,
-    initialDate: NepaliDateTime.now(),
-    firstDate: NepaliDateTime(2000),
-    lastDate: NepaliDateTime(2090),
-    initialDatePickerMode: DatePickerMode.day,
+Example usage:
+```dart
+final selectedDateTime = await showNepaliDatePicker(
+  context: context,
+  initialDate: _selectedDateTime ?? NepaliDateTime.now(),
+  firstDate: NepaliDateTime(1970, 2, 5),
+  lastDate: NepaliDateTime(2250, 11, 6),
+  initialDatePickerMode: DatePickerMode.day,
 );
 
-print(_selectedDateTime); // 2076-02-16T00:00:00
+print(selectedDateTime); // Outputs the selected date in NepaliDateTime type.
 ```
 
-#### Cupertino Style Date Picker
-```dart
-picker.showCupertinoDatePicker(
-    context: context,
-    initialDate: NepaliDateTime.now(),
-    firstDate: NepaliDateTime(2000),
-    lastDate: NepaliDateTime(2090),
-    language: _language,
-    dateOrder: _dateOrder,
-    onDateChanged: (newDate) {
-        print(_selectedDateTime);
-    },
-);
-```
+For a complete example, check out the [example](https://github.com/sarbagyastha/nepali_date_picker/tree/main/example).
 
-#### Adaptive Date Picker
-Shows DatePicker based on Platform. 
-*i.e. Cupertino DatePicker will be shown on iOS while Material on Android and Fuchsia.*
-```dart
-NepaliDateTime _selectedDateTime = await picker.showAdaptiveDatePicker(
-    context: context,
-    initialDate: NepaliDateTime.now(),
-    firstDate: NepaliDateTime(2000),
-    lastDate: NepaliDateTime(2090),
-    language: _language,
-    dateOrder: _dateOrder, // for iOS only
-    initialDatePickerMode: DatePickerMode.day, // for platform except iOS
-);
-```
+## 🌐 Demo
+Try the Nepali Date Picker live on the web! Check out the demo page here:
 
-#### Calender Picker
-Shows Calendar, can be used for showing events.
-```dart
-CalendarDatePicker(
-    initialDate: NepaliDateTime.now(),
-    firstDate: NepaliDateTime(2070),
-    lastDate: NepaliDateTime(2090),
-    onDateChanged: (date) => _selectedDate.value = date,
-    dayBuilder: (dayToBuild) { // Optional
-      return Center(
-                child: Text(
-                    '${dayToBuild.day}',
-                    style: Theme.of(context).textTheme.caption,
-               ),
-          ),
-      },
-     selectedDayDecoration: BoxDecoration ( // Optional
-            color: Colors.deepOrange,
-            shape: BoxShape.circle,
-     ),
-     todayDecoration: BoxDecoration ( // Optional
-            gradient: LinearGradient(colors: [Colors.yellow, Colors.orange]),
-            shape: BoxShape.circle,
-     ),
-};
-```
+👉 https://date.sarbagyastha.com.np
 
-## Screenshots
+## 🔗 Related Package
+If you need additional Nepali date and text utilities, check out the [nepali_utils](https://pub.dev/packages/nepali_utils) package!
+It offers handy helpers for Nepali date formatting, number conversion, and more.
+Perfect to use alongside nepali_date_picker!
 
-***Material Design*** (Portrait)
+## 🤝 Contributing
+Contributions are welcome! Feel free to open issues or submit [pull requests](https://github.com/sarbagyastha/nepali_date_picker/pulls).
 
-![Portrait Screenshot](screenshot/portrait.png)
-
-***Material Design*** (Landscape)
-
-![Landscape Screenshot](screenshot/landscape.png)
-
-***Cupertino Design***
-
-![Cupertino English](screenshot/cupertino_en.jpg)
-
-![Cupertino Nepali](screenshot/cupertino_np.jpg)
-
-## Example
-
-[Detailed Example](https://github.com/sarbagyastha/nepali_date_picker/tree/master/example)
-
-
-## License
-
-```
-Copyright 2020 Sarbagya Dhaubanjar. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
-
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
-      copyright notice, this list of conditions and the following
-      disclaimer in the documentation and/or other materials provided
-      with the distribution.
-    * Neither the name of Google Inc. nor the names of its
-      contributors may be used to endorse or promote products derived
-      from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-```
+## 📄 License
+Licensed under the [BSD-3 License](https://github.com/sarbagyastha/nepali_date_picker/blob/main/LICENSE).

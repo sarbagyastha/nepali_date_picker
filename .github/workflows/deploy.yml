@@ -1,29 +1,22 @@
-name: Deploy Web App
+name: Deploy to Web
 
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  web-deploy:
+    name: Web Deploy
+    runs-on: macos-latest
 
     steps:
-      - name: Check out current repository
-        uses: actions/checkout@v2
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v1
+      - uses: actions/checkout@v4
         with:
-          channel: 'stable'
-
-      - name: Build Web App
-        run: flutter build web
-        working-directory: example
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+          ref: ${{ github.ref_name }}
+      - uses: subosito/flutter-action@v2.18.0
+      - uses: sarbagyastha/flutter-gh-pages@main
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./example/build/web
+          workingDir: example
+          baseHref: /
+          customArgs: --wasm

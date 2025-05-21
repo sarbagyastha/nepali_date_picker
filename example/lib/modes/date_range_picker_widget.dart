@@ -1,14 +1,21 @@
+// Copyright 2020 Sarbagya Dhaubanjar. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 ///
 class DateRangePickerWidget extends StatefulWidget {
+  const DateRangePickerWidget({super.key});
+
   @override
-  _DateRangePickerWidgetState createState() => _DateRangePickerWidgetState();
+  State<DateRangePickerWidget> createState() => _DateRangePickerWidgetState();
 }
 
 class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
-  NepaliDateTimeRange? _selectedDateTimeRange = NepaliDateTimeRange(
+  DateTimeRange<NepaliDateTime>? _selectedDateTimeRange = DateTimeRange(
     start: NepaliDateTime.now(),
     end: NepaliDateTime.now(),
   );
@@ -16,53 +23,71 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (_selectedDateTimeRange != null)
-            Text(
-              'From Date: ${NepaliDateFormat("EEE, MMMM d, y").format(_selectedDateTimeRange!.start)}\n\n'
-              'To Date: ${NepaliDateFormat("EEE, MMMM d, y").format(_selectedDateTimeRange!.end)}',
-              style: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: 18.0,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          SizedBox(height: 20),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 50.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Card(
+              margin: EdgeInsets.zero,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 8,
                 ),
+                child: _selectedDateTimeRange == null
+                    ? Text('No Date Range Picked!', textAlign: TextAlign.center)
+                    : Column(
+                        spacing: 16,
+                        children: [
+                          Text(
+                            NepaliDateFormat(
+                              'EEE, MMMM d, y',
+                            ).format(_selectedDateTimeRange!.start),
+                            style: Theme.of(context).textTheme.titleLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            DateFormat('EEE, MMMM d, y').format(
+                              _selectedDateTimeRange!.start.toDateTime(),
+                            ),
+                            style: Theme.of(context).textTheme.titleSmall,
+                            textAlign: TextAlign.center,
+                          ),
+                          Icon(Icons.arrow_downward_rounded),
+                          Text(
+                            NepaliDateFormat(
+                              'EEE, MMMM d, y',
+                            ).format(_selectedDateTimeRange!.end),
+                            style: Theme.of(context).textTheme.titleLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            DateFormat(
+                              'EEE, MMMM d, y',
+                            ).format(_selectedDateTimeRange!.end.toDateTime()),
+                            style: Theme.of(context).textTheme.titleSmall,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
               ),
+            ),
+            SizedBox(height: 20),
+            FilledButton.tonal(
               onPressed: () async {
-                _selectedDateTimeRange = await showMaterialDateRangePicker(
+                _selectedDateTimeRange = await showNepaliDateRangePicker(
                   context: context,
                   firstDate: NepaliDateTime(2020),
                   lastDate: NepaliDateTime(2099),
                 );
                 setState(() {});
               },
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'SELECT DATE RANGE',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-              ),
+              child: Text('PICK DATE RANGE'),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
