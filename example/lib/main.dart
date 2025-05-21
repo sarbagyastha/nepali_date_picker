@@ -2,9 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:nepali_date_picker_example/locale_scope.dart';
+import 'package:nepali_date_picker_example/app_scope.dart';
 
 import 'modes/calendar_date_picker_widget.dart';
 import 'modes/calendar_date_range_picker_widget.dart';
@@ -22,11 +23,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return LocaleScope(
-      builder: (_, locale) {
+    return AppScope(
+      builder: (_, locale, brightness, color) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(colorSchemeSeed: Colors.orange),
+          theme: ThemeData(colorSchemeSeed: color, brightness: brightness),
           title: 'Nepali Date Picker Demo',
           locale: locale,
           supportedLocales: [Locale('en', 'US'), Locale('ne', 'NP')],
@@ -42,12 +43,13 @@ class _MyAppState extends State<MyApp> {
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final appScope = AppScope.of(context);
+
     return DefaultTabController(
       length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: Text("Nepali Date Picker"),
-          centerTitle: true,
           bottom: TabBar(
             isScrollable: true,
             tabs: [
@@ -59,8 +61,25 @@ class HomePage extends StatelessWidget {
           ),
           actions: [
             IconButton.filledTonal(
-              icon: Text(LocaleScope.of(context).isNepali ? 'ने' : 'En'),
-              onPressed: () => LocaleScope.of(context).toggleLocale(),
+              icon: Icon(Icons.color_lens_outlined),
+              onPressed: () => ColorPicker(
+                color: appScope.color,
+                onColorChanged: appScope.updateColor,
+              ).showPickerDialog(context),
+            ),
+            const SizedBox(width: 16),
+            IconButton.filledTonal(
+              icon: Icon(
+                appScope.brightness == Brightness.light
+                    ? Icons.dark_mode_outlined
+                    : Icons.light_mode_outlined,
+              ),
+              onPressed: appScope.toggleBrightness,
+            ),
+            const SizedBox(width: 16),
+            IconButton.filledTonal(
+              icon: Text(appScope.isNepali ? 'En' : 'ने'),
+              onPressed: appScope.toggleLocale,
             ),
             const SizedBox(width: 8),
           ],

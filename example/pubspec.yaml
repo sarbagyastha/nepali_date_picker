@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flex_color_picker: ^3.7.1
   nepali_date_picker:
     path: ../
 
