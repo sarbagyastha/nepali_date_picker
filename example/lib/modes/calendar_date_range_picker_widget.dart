@@ -7,8 +7,10 @@ import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 ///
 class CalendarDateRangePickerWidget extends StatefulWidget {
+  const CalendarDateRangePickerWidget({super.key});
+
   @override
-  _CalendarDateRangePickerWidgetState createState() =>
+  State<CalendarDateRangePickerWidget> createState() =>
       _CalendarDateRangePickerWidgetState();
 }
 

@@ -82,6 +82,7 @@ class AppScope extends StatefulWidget {
   final Color defaultColor;
 
   ///
+  // ignore: library_private_types_in_public_api
   static _AppModel of(BuildContext context) {
     final result = context.dependOnInheritedWidgetOfExactType<_LocaleScope>();
     assert(result != null, 'No AppScope found in context');

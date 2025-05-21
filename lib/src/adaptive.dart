@@ -96,7 +96,8 @@ Future<NepaliDateTime?> _showCupertinoDatePicker({
   return await _showCupertinoPopup<NepaliDateTime>(
     context: context,
     builder: (BuildContext context) {
-      NepaliDateTime? _selectedDate;
+      NepaliDateTime? selectedDate;
+
       return Container(
         height: _kPickerSheetHeight + 40.0,
         padding: const EdgeInsets.only(top: 6.0),
@@ -126,7 +127,7 @@ Future<NepaliDateTime?> _showCupertinoDatePicker({
                         child: Text(
                           language == Language.english ? 'DONE' : 'ठिक छ',
                         ),
-                        onPressed: () => Navigator.pop(context, _selectedDate),
+                        onPressed: () => Navigator.pop(context, selectedDate),
                       ),
                     ],
                   ),
@@ -135,7 +136,7 @@ Future<NepaliDateTime?> _showCupertinoDatePicker({
                       initialDate: NepaliDateTime.now(),
                       minimumYear: firstDate.year,
                       maximumYear: lastDate.year,
-                      onDateChanged: (date) => _selectedDate = date,
+                      onDateChanged: (date) => selectedDate = date,
                       language: language,
                       dateOrder: dateOrder,
                     ),
@@ -164,8 +165,8 @@ class _CupertinoPopupRoute<T> extends PopupRoute<T> {
   _CupertinoPopupRoute({
     required this.builder,
     required this.barrierLabel,
-    RouteSettings? settings,
-  }) : super(settings: settings);
+    super.settings,
+  });
 
   final WidgetBuilder builder;
 

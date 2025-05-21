@@ -216,10 +216,9 @@ Future<DateTimeRange?> showDateRangePicker({
   CalendarDelegate<DateTime> calendarDelegate =
       const GregorianCalendarDelegate(),
 }) async {
-  initialDateRange =
-      initialDateRange == null
-          ? null
-          : calendarDelegate.datesOnly(initialDateRange);
+  initialDateRange = initialDateRange == null
+      ? null
+      : calendarDelegate.datesOnly(initialDateRange);
   firstDate = calendarDelegate.dateOnly(firstDate);
   lastDate = calendarDelegate.dateOnly(lastDate);
   assert(
@@ -353,8 +352,8 @@ String _formatRangeEndDate(
   return endDate == null
       ? localizations.dateRangeEndLabel
       : (startDate != null &&
-          startDate.year == endDate.year &&
-          startDate.year == currentDate.year)
+            startDate.year == endDate.year &&
+            startDate.year == currentDate.year)
       ? calendarDelegate.formatShortMonthDay(endDate, localizations)
       : calendarDelegate.formatShortDate(endDate, localizations);
 }
@@ -578,13 +577,9 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog>
         return;
       }
     }
-    final DateTimeRange? selectedRange =
-        _hasSelectedDateRange
-            ? DateTimeRange(
-              start: _selectedStart.value!,
-              end: _selectedEnd.value!,
-            )
-            : null;
+    final DateTimeRange? selectedRange = _hasSelectedDateRange
+        ? DateTimeRange(start: _selectedStart.value!, end: _selectedEnd.value!)
+        : null;
 
     Navigator.pop(context, selectedRange);
   }
@@ -687,17 +682,16 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog>
           onEndDateChanged: _handleEndDateChanged,
           onConfirm: _hasSelectedDateRange ? _handleOk : null,
           onCancel: _handleCancel,
-          entryModeButton:
-              showEntryModeButton
-                  ? IconButton(
-                    icon:
-                        widget.switchToInputEntryModeIcon ??
-                        Icon(useMaterial3 ? Icons.edit_outlined : Icons.edit),
-                    padding: EdgeInsets.zero,
-                    tooltip: localizations.inputDateModeButtonLabel,
-                    onPressed: _handleEntryModeToggle,
-                  )
-                  : null,
+          entryModeButton: showEntryModeButton
+              ? IconButton(
+                  icon:
+                      widget.switchToInputEntryModeIcon ??
+                      Icon(useMaterial3 ? Icons.edit_outlined : Icons.edit),
+                  padding: EdgeInsets.zero,
+                  tooltip: localizations.inputDateModeButtonLabel,
+                  onPressed: _handleEntryModeToggle,
+                )
+              : null,
           confirmText:
               widget.saveText ??
               (useMaterial3
@@ -730,10 +724,9 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog>
           selectedEndDate: _selectedEnd.value,
           currentDate: widget.currentDate,
           picker: SizedBox(
-            height:
-                orientation == Orientation.portrait
-                    ? _inputFormPortraitHeight
-                    : _inputFormLandscapeHeight,
+            height: orientation == Orientation.portrait
+                ? _inputFormPortraitHeight
+                : _inputFormLandscapeHeight,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
@@ -768,17 +761,16 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog>
           ),
           onConfirm: _handleOk,
           onCancel: _handleCancel,
-          entryModeButton:
-              showEntryModeButton
-                  ? IconButton(
-                    icon:
-                        widget.switchToCalendarEntryModeIcon ??
-                        const Icon(Icons.calendar_today),
-                    padding: EdgeInsets.zero,
-                    tooltip: localizations.calendarModeButtonLabel,
-                    onPressed: _handleEntryModeToggle,
-                  )
-                  : null,
+          entryModeButton: showEntryModeButton
+              ? IconButton(
+                  icon:
+                      widget.switchToCalendarEntryModeIcon ??
+                      const Icon(Icons.calendar_today),
+                  padding: EdgeInsets.zero,
+                  tooltip: localizations.calendarModeButtonLabel,
+                  onPressed: _handleEntryModeToggle,
+                )
+              : null,
           confirmText: widget.confirmText ?? localizations.okButtonLabel,
           cancelText:
               widget.cancelText ??
@@ -792,23 +784,20 @@ class _DateRangePickerDialogState extends State<DateRangePickerDialog>
                   : localizations.dateRangePickerHelpText.toUpperCase()),
         );
         final DialogThemeData dialogTheme = theme.dialogTheme;
-        size =
-            orientation == Orientation.portrait
-                ? (useMaterial3
-                    ? _inputPortraitDialogSizeM3
-                    : _inputPortraitDialogSizeM2)
-                : _inputRangeLandscapeDialogSize;
-        elevation =
-            useMaterial3
-                ? datePickerTheme.elevation ?? defaults.elevation!
-                : datePickerTheme.elevation ?? dialogTheme.elevation ?? 24;
+        size = orientation == Orientation.portrait
+            ? (useMaterial3
+                  ? _inputPortraitDialogSizeM3
+                  : _inputPortraitDialogSizeM2)
+            : _inputRangeLandscapeDialogSize;
+        elevation = useMaterial3
+            ? datePickerTheme.elevation ?? defaults.elevation!
+            : datePickerTheme.elevation ?? dialogTheme.elevation ?? 24;
         shadowColor = datePickerTheme.shadowColor ?? defaults.shadowColor;
         surfaceTintColor =
             datePickerTheme.surfaceTintColor ?? defaults.surfaceTintColor;
-        shape =
-            useMaterial3
-                ? datePickerTheme.shape ?? defaults.shape
-                : datePickerTheme.shape ?? dialogTheme.shape ?? defaults.shape;
+        shape = useMaterial3
+            ? datePickerTheme.shape ?? defaults.shape
+            : datePickerTheme.shape ?? dialogTheme.shape ?? defaults.shape;
 
         insetPadding = const EdgeInsets.symmetric(
           horizontal: 16.0,
@@ -902,10 +891,10 @@ class _CalendarRangePickerDialog extends StatelessWidget {
     final TextStyle? headlineStyle =
         themeData.rangePickerHeaderHeadlineStyle ??
         defaults.rangePickerHeaderHeadlineStyle;
-    final TextStyle? headlineHelpStyle = (themeData
-                .rangePickerHeaderHelpStyle ??
-            defaults.rangePickerHeaderHelpStyle)
-        ?.apply(color: headerForeground);
+    final TextStyle? headlineHelpStyle =
+        (themeData.rangePickerHeaderHelpStyle ??
+                defaults.rangePickerHeaderHelpStyle)
+            ?.apply(color: headerForeground);
     final String startDateText = _formatRangeStartDate(
       localizations,
       calendarDelegate,
@@ -920,14 +909,14 @@ class _CalendarRangePickerDialog extends StatelessWidget {
       calendarDelegate.now(),
     );
     final TextStyle? startDateStyle = headlineStyle?.apply(
-      color:
-          selectedStartDate != null
-              ? headerForeground
-              : headerDisabledForeground,
+      color: selectedStartDate != null
+          ? headerForeground
+          : headerDisabledForeground,
     );
     final TextStyle? endDateStyle = headlineStyle?.apply(
-      color:
-          selectedEndDate != null ? headerForeground : headerDisabledForeground,
+      color: selectedEndDate != null
+          ? headerForeground
+          : headerDisabledForeground,
     );
     final ButtonStyle buttonStyle = TextButton.styleFrom(
       foregroundColor: headerForeground,
@@ -1053,14 +1042,13 @@ class CalendarDateRangePicker extends StatefulWidget {
     required this.onStartDateChanged,
     required this.onEndDateChanged,
     required this.calendarDelegate,
-  }) : initialStartDate =
-           initialStartDate != null
-               ? calendarDelegate.dateOnly(initialStartDate)
-               : null,
-       initialEndDate =
-           initialEndDate != null
-               ? calendarDelegate.dateOnly(initialEndDate)
-               : null,
+    super.key,
+  }) : initialStartDate = initialStartDate != null
+           ? calendarDelegate.dateOnly(initialStartDate)
+           : null,
+       initialEndDate = initialEndDate != null
+           ? calendarDelegate.dateOnly(initialEndDate)
+           : null,
        firstDate = calendarDelegate.dateOnly(firstDate),
        lastDate = calendarDelegate.dateOnly(lastDate),
        currentDate = calendarDelegate.dateOnly(
@@ -1208,10 +1196,9 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
     int index,
     bool beforeInitialMonth,
   ) {
-    final int monthIndex =
-        beforeInitialMonth
-            ? _initialMonthIndex - index - 1
-            : _initialMonthIndex + index;
+    final int monthIndex = beforeInitialMonth
+        ? _initialMonthIndex - index - 1
+        : _initialMonthIndex + index;
     final DateTime month = widget.calendarDelegate.addMonthsToMonthDate(
       widget.firstDate,
       monthIndex,
@@ -1536,11 +1523,9 @@ class _InputDateRangePickerDialog extends StatelessWidget {
     // date range picker. To ensure that the date range displayed in the
     // input date range picker's header fits in landscape mode, we override
     // the M3 default here.
-    TextStyle? headlineStyle =
-        (orientation == Orientation.portrait)
-            ? datePickerTheme.headerHeadlineStyle ??
-                defaults.headerHeadlineStyle
-            : Theme.of(context).textTheme.headlineSmall;
+    TextStyle? headlineStyle = (orientation == Orientation.portrait)
+        ? datePickerTheme.headerHeadlineStyle ?? defaults.headerHeadlineStyle
+        : Theme.of(context).textTheme.headlineSmall;
 
     final Color? headerForegroundColor =
         datePickerTheme.headerForegroundColor ?? defaults.headerForegroundColor;
@@ -1554,8 +1539,8 @@ class _InputDateRangePickerDialog extends StatelessWidget {
     );
     final String semanticDateText =
         selectedStartDate != null && selectedEndDate != null
-            ? '${calendarDelegate.formatMediumDate(selectedStartDate!, localizations)} – ${calendarDelegate.formatMediumDate(selectedEndDate!, localizations)}'
-            : '';
+        ? '${calendarDelegate.formatMediumDate(selectedStartDate!, localizations)} – ${calendarDelegate.formatMediumDate(selectedEndDate!, localizations)}'
+        : '';
 
     final Widget header = _DatePickerHeader(
       helpText:
@@ -1613,10 +1598,9 @@ class _InputDateRangePickerDialog extends StatelessWidget {
       case Orientation.portrait:
         return LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
-            final Size portraitDialogSize =
-                useMaterial3
-                    ? _inputPortraitDialogSizeM3
-                    : _inputPortraitDialogSizeM2;
+            final Size portraitDialogSize = useMaterial3
+                ? _inputPortraitDialogSizeM3
+                : _inputPortraitDialogSizeM2;
             // Make sure the portrait dialog can fit the contents comfortably when
             // resized from the landscape dialog.
             final bool isFullyPortrait =
@@ -1647,7 +1631,10 @@ class _InputDateRangePickerDialog extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[Expanded(child: picker), actions],
+                children: <Widget>[
+                  Expanded(child: picker),
+                  actions,
+                ],
               ),
             ),
           ],
@@ -1682,14 +1669,12 @@ class _InputDateRangePicker extends StatefulWidget {
     this.autofocus = false,
     this.autovalidate = false,
     this.keyboardType = TextInputType.datetime,
-  }) : initialStartDate =
-           initialStartDate == null
-               ? null
-               : calendarDelegate.dateOnly(initialStartDate),
-       initialEndDate =
-           initialEndDate == null
-               ? null
-               : calendarDelegate.dateOnly(initialEndDate),
+  }) : initialStartDate = initialStartDate == null
+           ? null
+           : calendarDelegate.dateOnly(initialStartDate),
+       initialEndDate = initialEndDate == null
+           ? null
+           : calendarDelegate.dateOnly(initialEndDate),
        firstDate = calendarDelegate.dateOnly(firstDate),
        lastDate = calendarDelegate.dateOnly(lastDate);
 
@@ -2071,8 +2056,9 @@ class _MonthItemState extends State<_MonthItem> {
 
   void _dayFocusChanged(bool focused) {
     if (focused) {
-      final TraversalDirection? focusDirection =
-          _FocusedDate.maybeOf(context)?.scrollDirection;
+      final TraversalDirection? focusDirection = _FocusedDate.maybeOf(
+        context,
+      )?.scrollDirection;
       if (focusDirection != null) {
         ScrollPositionAlignmentPolicy policy =
             ScrollPositionAlignmentPolicy.explicit;
@@ -2249,8 +2235,8 @@ class _MonthItemState extends State<_MonthItem> {
 
     final double maxWidth =
         MediaQuery.orientationOf(context) == Orientation.landscape
-            ? _maxCalendarWidthLandscape
-            : _maxCalendarWidthPortrait;
+        ? _maxCalendarWidthLandscape
+        : _maxCalendarWidthPortrait;
     return Column(
       children: <Widget>[
         ConstrainedBox(
@@ -2399,10 +2385,9 @@ class _DayItemState extends State<_DayItem> {
     final WidgetStateProperty<Color?> dayOverlayColor =
         WidgetStateProperty.resolveWith<Color?>(
           (Set<WidgetState> states) => effectiveValue(
-            (DatePickerThemeData? theme) =>
-                widget.isInRange
-                    ? theme?.rangeSelectionOverlayColor?.resolve(states)
-                    : theme?.dayOverlayColor?.resolve(states),
+            (DatePickerThemeData? theme) => widget.isInRange
+                ? theme?.rangeSelectionOverlayColor?.resolve(states)
+                : theme?.dayOverlayColor?.resolve(states),
           ),
         );
 
@@ -2418,10 +2403,9 @@ class _DayItemState extends State<_DayItem> {
       );
 
       if (widget.isRangeSelected && !widget.isOneDayRange) {
-        final _HighlightPainterStyle style =
-            widget.isSelectedDayStart
-                ? _HighlightPainterStyle.highlightTrailing
-                : _HighlightPainterStyle.highlightLeading;
+        final _HighlightPainterStyle style = widget.isSelectedDayStart
+            ? _HighlightPainterStyle.highlightTrailing
+            : _HighlightPainterStyle.highlightLeading;
         highlightPainter = _HighlightPainter(
           color: highlightColor,
           style: style,
@@ -2462,8 +2446,9 @@ class _DayItemState extends State<_DayItem> {
     // day of month before the rest of the date, as they are looking
     // for the day of month. To do that we prepend day of month to the
     // formatted full date.
-    final String semanticLabelSuffix =
-        widget.isToday ? ', ${localizations.currentDateLabel}' : '';
+    final String semanticLabelSuffix = widget.isToday
+        ? ', ${localizations.currentDateLabel}'
+        : '';
     String semanticLabel =
         '$dayText, ${widget.calendarDelegate.formatFullDate(widget.day, localizations)}$semanticLabelSuffix';
     if (widget.isSelectedDayStart) {
@@ -2544,10 +2529,9 @@ class _HighlightPainter extends CustomPainter {
       return;
     }
 
-    final Paint paint =
-        Paint()
-          ..color = color
-          ..style = PaintingStyle.fill;
+    final Paint paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
 
     final bool rtl = switch (textDirection) {
       TextDirection.rtl || null => true,
@@ -2756,9 +2740,10 @@ class _DatePickerHeader extends StatelessWidget {
         datePickerTheme.headerBackgroundColor ?? defaults.headerBackgroundColor;
     final Color? foregroundColor =
         datePickerTheme.headerForegroundColor ?? defaults.headerForegroundColor;
-    final TextStyle? helpStyle = (datePickerTheme.headerHelpStyle ??
-            defaults.headerHelpStyle)
-        ?.copyWith(color: foregroundColor);
+    final TextStyle? helpStyle =
+        (datePickerTheme.headerHelpStyle ?? defaults.headerHelpStyle)?.copyWith(
+          color: foregroundColor,
+        );
     final double currentScale =
         MediaQuery.textScalerOf(context).scale(_fontSizeToScale) /
         _fontSizeToScale;
@@ -2776,8 +2761,9 @@ class _DatePickerHeader extends StatelessWidget {
     final double scaledFontSize = MediaQuery.textScalerOf(
       context,
     ).scale(titleStyle?.fontSize ?? 32);
-    final double headerScaleFactor =
-        textScaleFactor > 1 ? textScaleFactor : 1.0;
+    final double headerScaleFactor = textScaleFactor > 1
+        ? textScaleFactor
+        : 1.0;
 
     final Text help = Text(
       helpText,
@@ -2797,20 +2783,20 @@ class _DatePickerHeader extends StatelessWidget {
       titleText,
       semanticsLabel: titleSemanticsLabel ?? titleText,
       style: titleStyle,
-      maxLines:
-          orientation == Orientation.portrait
-              ? (scaledFontSize > 70 ? 2 : 1)
-              : scaledFontSize > 40
-              ? 3
-              : 2,
+      maxLines: orientation == Orientation.portrait
+          ? (scaledFontSize > 70 ? 2 : 1)
+          : scaledFontSize > 40
+          ? 3
+          : 2,
       overflow: TextOverflow.ellipsis,
       textScaler: MediaQuery.textScalerOf(
         context,
       ).clamp(maxScaleFactor: textScaleFactor),
     );
 
-    final double fontScaleAdjustedHeaderHeight =
-        headerScaleFactor > 1.3 ? headerScaleFactor - 0.2 : 1.0;
+    final double fontScaleAdjustedHeaderHeight = headerScaleFactor > 1.3
+        ? headerScaleFactor - 0.2
+        : 1.0;
 
     switch (orientation) {
       case Orientation.portrait:
@@ -2874,17 +2860,16 @@ class _DatePickerHeader extends StatelessWidget {
                   ),
                   if (entryModeButton != null)
                     Padding(
-                      padding:
-                          theme.useMaterial3
-                              // TODO(TahaTesser): This is an eye-balled M3 entry mode button padding
-                              // from https://m3.material.io/components/date-pickers/specs#c16c142b-4706-47f3-9400-3cde654b9aa8.
-                              // Update this value to use tokens when available.
-                              ? const EdgeInsetsDirectional.only(
-                                start: 8.0,
-                                end: 4.0,
-                                bottom: 6.0,
-                              )
-                              : const EdgeInsets.symmetric(horizontal: 4),
+                      padding: theme.useMaterial3
+                          // TODO(TahaTesser): This is an eye-balled M3 entry mode button padding
+                          // from https://m3.material.io/components/date-pickers/specs#c16c142b-4706-47f3-9400-3cde654b9aa8.
+                          // Update this value to use tokens when available.
+                          ? const EdgeInsetsDirectional.only(
+                              start: 8.0,
+                              end: 4.0,
+                              bottom: 6.0,
+                            )
+                          : const EdgeInsets.symmetric(horizontal: 4),
                       child: Semantics(container: true, child: entryModeButton),
                     ),
                 ],
@@ -2954,10 +2939,9 @@ class _DayHeaders extends StatelessWidget {
 
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxWidth:
-            MediaQuery.orientationOf(context) == Orientation.landscape
-                ? _maxCalendarWidthLandscape
-                : _maxCalendarWidthPortrait,
+        maxWidth: MediaQuery.orientationOf(context) == Orientation.landscape
+            ? _maxCalendarWidthLandscape
+            : _maxCalendarWidthPortrait,
         maxHeight: _monthItemRowHeight,
       ),
       child: GridView.custom(

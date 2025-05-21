@@ -10,8 +10,10 @@ import 'package:nepali_utils/nepali_utils.dart';
 
 /// Date Picker Example
 class DatePickerWidget extends StatefulWidget {
+  const DatePickerWidget({super.key});
+
   @override
-  _DatePickerWidgetState createState() => _DatePickerWidgetState();
+  State<DatePickerWidget> createState() => _DatePickerWidgetState();
 }
 
 class _DatePickerWidgetState extends State<DatePickerWidget> {
@@ -37,28 +39,27 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                   vertical: 16,
                   horizontal: 8,
                 ),
-                child:
-                    _selectedDateTime == null
-                        ? Text('No Date Picked!', textAlign: TextAlign.center)
-                        : Column(
-                          spacing: 16,
-                          children: [
-                            Text(
-                              NepaliDateFormat(
-                                "EEE, MMMM d, y hh:mm aa",
-                              ).format(_selectedDateTime!),
-                              style: Theme.of(context).textTheme.titleLarge,
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              DateFormat(
-                                "EEE, MMMM d, y hh:mm aa",
-                              ).format(_selectedDateTime!.toDateTime()),
-                              style: Theme.of(context).textTheme.titleSmall,
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
+                child: _selectedDateTime == null
+                    ? Text('No Date Picked!', textAlign: TextAlign.center)
+                    : Column(
+                        spacing: 16,
+                        children: [
+                          Text(
+                            NepaliDateFormat(
+                              'EEE, MMMM d, y hh:mm aa',
+                            ).format(_selectedDateTime!),
+                            style: Theme.of(context).textTheme.titleLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            DateFormat(
+                              'EEE, MMMM d, y hh:mm aa',
+                            ).format(_selectedDateTime!.toDateTime()),
+                            style: Theme.of(context).textTheme.titleSmall,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
               ),
             ),
             SizedBox(height: 20),
@@ -73,7 +74,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                     initialDatePickerMode: DatePickerMode.day,
                   );
                   if (_selectedDateTime != null) {
-                    if (_showTimerPicker) {
+                    if (context.mounted && _showTimerPicker) {
                       final timeOfDay = await showTimePicker(
                         context: context,
                         initialTime: TimeOfDay.fromDateTime(
@@ -209,10 +210,9 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                 ),
                 Switch(
                   value: _showTimerPicker,
-                  onChanged:
-                      _design == 'm'
-                          ? (v) => setState(() => _showTimerPicker = v)
-                          : null,
+                  onChanged: _design == 'm'
+                      ? (v) => setState(() => _showTimerPicker = v)
+                      : null,
                 ),
               ],
             ),
@@ -232,10 +232,9 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       child: RadioListTile<T>(
         value: value,
         groupValue: groupValue,
-        onChanged:
-            _design == 'm' && groupValue == _dateOrder
-                ? null
-                : (v) => onChanged(v!),
+        onChanged: _design == 'm' && groupValue == _dateOrder
+            ? null
+            : (v) => onChanged(v as T),
         title: Text(title),
       ),
     );

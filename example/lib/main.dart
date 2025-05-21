@@ -16,8 +16,10 @@ void main() => runApp(MyApp());
 
 /// MyApp
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -41,6 +43,8 @@ class _MyAppState extends State<MyApp> {
 
 ///
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final appScope = AppScope.of(context);
@@ -49,7 +53,7 @@ class HomePage extends StatelessWidget {
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Nepali Date Picker"),
+          title: Text('Nepali Date Picker'),
           bottom: TabBar(
             isScrollable: true,
             tabs: [

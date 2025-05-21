@@ -8,8 +8,10 @@ import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 ///
 class DateRangePickerWidget extends StatefulWidget {
+  const DateRangePickerWidget({super.key});
+
   @override
-  _DateRangePickerWidgetState createState() => _DateRangePickerWidgetState();
+  State<DateRangePickerWidget> createState() => _DateRangePickerWidgetState();
 }
 
 class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
@@ -34,46 +36,42 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
                   vertical: 16,
                   horizontal: 8,
                 ),
-                child:
-                    _selectedDateTimeRange == null
-                        ? Text(
-                          'No Date Range Picked!',
-                          textAlign: TextAlign.center,
-                        )
-                        : Column(
-                          spacing: 16,
-                          children: [
-                            Text(
-                              NepaliDateFormat(
-                                "EEE, MMMM d, y",
-                              ).format(_selectedDateTimeRange!.start),
-                              style: Theme.of(context).textTheme.titleLarge,
-                              textAlign: TextAlign.center,
+                child: _selectedDateTimeRange == null
+                    ? Text('No Date Range Picked!', textAlign: TextAlign.center)
+                    : Column(
+                        spacing: 16,
+                        children: [
+                          Text(
+                            NepaliDateFormat(
+                              'EEE, MMMM d, y',
+                            ).format(_selectedDateTimeRange!.start),
+                            style: Theme.of(context).textTheme.titleLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            DateFormat('EEE, MMMM d, y').format(
+                              _selectedDateTimeRange!.start.toDateTime(),
                             ),
-                            Text(
-                              DateFormat("EEE, MMMM d, y").format(
-                                _selectedDateTimeRange!.start.toDateTime(),
-                              ),
-                              style: Theme.of(context).textTheme.titleSmall,
-                              textAlign: TextAlign.center,
-                            ),
-                            Icon(Icons.arrow_downward_rounded),
-                            Text(
-                              NepaliDateFormat(
-                                "EEE, MMMM d, y",
-                              ).format(_selectedDateTimeRange!.end),
-                              style: Theme.of(context).textTheme.titleLarge,
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              DateFormat("EEE, MMMM d, y").format(
-                                _selectedDateTimeRange!.end.toDateTime(),
-                              ),
-                              style: Theme.of(context).textTheme.titleSmall,
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
+                            style: Theme.of(context).textTheme.titleSmall,
+                            textAlign: TextAlign.center,
+                          ),
+                          Icon(Icons.arrow_downward_rounded),
+                          Text(
+                            NepaliDateFormat(
+                              'EEE, MMMM d, y',
+                            ).format(_selectedDateTimeRange!.end),
+                            style: Theme.of(context).textTheme.titleLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            DateFormat(
+                              'EEE, MMMM d, y',
+                            ).format(_selectedDateTimeRange!.end.toDateTime()),
+                            style: Theme.of(context).textTheme.titleSmall,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
               ),
             ),
             SizedBox(height: 20),

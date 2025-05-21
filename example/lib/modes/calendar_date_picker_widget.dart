@@ -28,6 +28,8 @@ class CalendarDatePickerWidget extends StatelessWidget {
     NepaliDateTime.now(),
   );
 
+  CalendarDatePickerWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Material(
