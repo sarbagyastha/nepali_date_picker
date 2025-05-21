@@ -15,7 +15,7 @@ class CalendarDateRangePickerWidget extends StatefulWidget {
 class _CalendarDateRangePickerWidgetState
     extends State<CalendarDateRangePickerWidget> {
   ///
-  (NepaliDateTime, NepaliDateTime?) _dateRange = (
+  final (NepaliDateTime, NepaliDateTime?) _dateRange = (
     NepaliDateTime.now(),
     NepaliDateTime.now().add(Duration(days: 5)),
   );
@@ -25,6 +25,7 @@ class _CalendarDateRangePickerWidgetState
     return Scaffold(
       body: Column(
         children: [
+          // TODO(sarbagya): Uncomment when https://github.com/flutter/flutter/pull/168290 is merged
           // Expanded(
           //   child: CalendarDateRangePicker(
           //     initialStartDate: NepaliDateTime.now(),

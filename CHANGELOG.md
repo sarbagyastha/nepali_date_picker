@@ -1,3 +1,8 @@
+## 7.0.0
+**May 21, 2025**
+- Upgrades to Material 3 styled date picker using the newly introduced [CalendarDelegate](https://github.com/flutter/flutter/pull/161874).
+- Supports `flutter >= 3.32.0`.
+
 ## 6.0.1
 **Apr 27, 2024**
 - Adds support for Bikram Sambat support up to 2250 BS.
