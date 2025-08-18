@@ -1892,7 +1892,7 @@ class _InputDateRangePickerState extends State<_InputDateRangePicker> {
     final MaterialLocalizations localizations = MaterialLocalizations.of(
       context,
     );
-    final InputDecorationTheme inputTheme = theme.inputDecorationTheme;
+    final InputDecorationThemeData inputTheme = theme.inputDecorationTheme;
     final InputBorder inputBorder =
         inputTheme.border ??
         (useMaterial3
