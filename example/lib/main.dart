@@ -49,7 +49,7 @@ class const HomePage({super.key}) extends StatelessWidget {
       length: 5,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Nepali Date Picker'),
+          title: Text('Nepali Date'),
           bottom: TabBar(
             isScrollable: true,
             tabs: [

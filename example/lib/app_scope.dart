@@ -65,7 +65,7 @@ class const AppScope({
   final Brightness defaultBrightness = .light,
 
   ///
-  final Color defaultColor = Colors.orange,
+  final Color defaultColor = Colors.teal,
   super.key,
 }) extends StatefulWidget {
   ///
