@@ -18,12 +18,11 @@ import 'package:flutter/services.dart';
 ///
 /// See [showDateRangePicker], which has a [SelectableDayForRangePredicate]
 /// parameter used to specify allowable days in the date range picker.
-typedef SelectableDayForRangePredicate =
-    bool Function(
-      DateTime day,
-      DateTime? selectedStartDay,
-      DateTime? selectedEndDay,
-    );
+typedef SelectableDayForRangePredicate = bool Function(
+  DateTime day,
+  DateTime? selectedStartDay,
+  DateTime? selectedEndDay,
+);
 
 const Duration _monthScrollDuration = Duration(milliseconds: 200);
 
@@ -566,9 +565,8 @@ class _MonthItemState extends State<_MonthItem> {
 
   void _dayFocusChanged(bool focused) {
     if (focused) {
-      final TraversalDirection? focusDirection = _FocusedDate.maybeOf(
-        context,
-      )?.scrollDirection;
+      final TraversalDirection? focusDirection = _FocusedDate.maybeOf(context)
+          ?.scrollDirection;
       if (focusDirection != null) {
         ScrollPositionAlignmentPolicy policy =
             ScrollPositionAlignmentPolicy.explicit;
@@ -750,9 +748,8 @@ class _MonthItemState extends State<_MonthItem> {
     return Column(
       children: <Widget>[
         ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: maxWidth,
-          ).tighten(height: _monthItemHeaderHeight),
+          constraints: BoxConstraints(maxWidth: maxWidth)
+              .tighten(height: _monthItemHeaderHeight),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Align(
