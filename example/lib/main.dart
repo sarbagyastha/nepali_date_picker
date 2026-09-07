@@ -8,6 +8,7 @@ import 'package:nepali_date_picker_example/app_scope.dart';
 
 import 'modes/calendar_date_picker_widget.dart';
 import 'modes/calendar_date_range_picker_widget.dart';
+import 'modes/date_converter_widget.dart';
 import 'modes/date_picker_widget.dart';
 import 'modes/date_range_picker_widget.dart';
 
@@ -45,13 +46,14 @@ class const HomePage({super.key}) extends StatelessWidget {
     final appScope = AppScope.of(context);
 
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Nepali Date Picker'),
           bottom: TabBar(
             isScrollable: true,
             tabs: [
+              Tab(text: 'Converter'),
               Tab(text: 'Date Picker'),
               Tab(text: 'Calendar'),
               Tab(text: 'Date Range Picker'),
@@ -98,6 +100,7 @@ class const HomePage({super.key}) extends StatelessWidget {
                 constraints: BoxConstraints(maxWidth: 500),
                 child: TabBarView(
                   children: [
+                    DateConverterWidget(),
                     DatePickerWidget(),
                     CalendarDatePickerWidget(),
                     DateRangePickerWidget(),
