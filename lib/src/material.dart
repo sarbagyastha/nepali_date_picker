@@ -38,9 +38,9 @@ Future<NepaliDateTime?> showNepaliDatePicker({
   String? fieldLabelText,
   TextInputType? keyboardType,
   Offset? anchorPoint,
-  final ValueChanged<DatePickerEntryMode>? onDatePickerModeChange,
-  final Icon? switchToInputEntryModeIcon,
-  final Icon? switchToCalendarEntryModeIcon,
+  ValueChanged<DatePickerEntryMode>? onDatePickerModeChange,
+  Icon? switchToInputEntryModeIcon,
+  Icon? switchToCalendarEntryModeIcon,
 }) async {
   final date = await showDatePicker(
     context: context,
@@ -111,8 +111,8 @@ Future<DateTimeRange<NepaliDateTime>?> showNepaliDateRangePicker({
   TransitionBuilder? builder,
   Offset? anchorPoint,
   TextInputType keyboardType = TextInputType.datetime,
-  final Icon? switchToInputEntryModeIcon,
-  final Icon? switchToCalendarEntryModeIcon,
+  Icon? switchToInputEntryModeIcon,
+  Icon? switchToCalendarEntryModeIcon,
   SelectableDayForRangePredicate? selectableDayPredicate,
 }) async {
   final dateRange = await showDateRangePicker(

@@ -153,8 +153,6 @@ class NepaliCalendarDelegate extends CalendarDelegate<NepaliDateTime> {
   }
 
   Language _getLanguage(MaterialLocalizations localizations) {
-    return localizations is MaterialLocalizationNe
-        ? Language.nepali
-        : Language.english;
+    return localizations is MaterialLocalizationNe ? .nepali : .english;
   }
 }
