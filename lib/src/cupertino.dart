@@ -83,6 +83,7 @@ enum DateOrder {
 }
 
 /// Cupertino styled nepali date picker.
+// ignore: prefer_const_constructors_in_immutables
 class NepaliCupertinoDatePicker({
   /// Callback called when the selected date changes. Must not be
   /// null.

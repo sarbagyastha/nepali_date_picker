@@ -23,10 +23,22 @@ final List<Event> _events = [
 ];
 
 /// Calendar Picker Example
-class CalendarDatePickerWidget({super.key}) extends StatelessWidget {
+class const CalendarDatePickerWidget({super.key}) extends StatefulWidget {
+  @override
+  State<CalendarDatePickerWidget> createState() =>
+      _CalendarDatePickerWidgetState();
+}
+
+class _CalendarDatePickerWidgetState extends State<CalendarDatePickerWidget> {
   final ValueNotifier<NepaliDateTime> _selectedDate = ValueNotifier(
     NepaliDateTime.now(),
   );
+
+  @override
+  void dispose() {
+    _selectedDate.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

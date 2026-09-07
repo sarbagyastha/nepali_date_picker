@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flex_color_picker: ^3.7.1
+  flex_color_picker: ^4.0.0
   intl: '>=0.19.0 <1.0.0'
   material_ui: ^1.1.1
   nepali_date_picker:
