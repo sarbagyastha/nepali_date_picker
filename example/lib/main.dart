@@ -14,9 +14,7 @@ import 'modes/date_range_picker_widget.dart';
 void main() => runApp(MyApp());
 
 /// MyApp
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
+class const MyApp({super.key}) extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -41,9 +39,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 ///
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
+class const HomePage({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appScope = AppScope.of(context);
@@ -73,7 +69,7 @@ class HomePage extends StatelessWidget {
             const SizedBox(width: 16),
             IconButton.filledTonal(
               icon: Icon(
-                appScope.brightness == Brightness.light
+                appScope.brightness == .light
                     ? Icons.dark_mode_outlined
                     : Icons.light_mode_outlined,
               ),

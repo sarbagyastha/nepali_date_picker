@@ -6,18 +6,14 @@ import 'package:material_ui/material_ui.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
 ///
-class _AppModel extends ChangeNotifier {
-  ///
-  _AppModel(Locale locale, Brightness brightness, Color color)
-    : _color = color,
-      _locale = locale,
-      _brightness = brightness {
+class _AppModel(
+  var Locale _locale,
+  var Brightness _brightness,
+  var Color _color,
+) extends ChangeNotifier {
+  this {
     _updateLanguage();
   }
-
-  Locale _locale;
-  Brightness _brightness;
-  Color _color;
 
   ///
   void toggleLocale() {
@@ -59,28 +55,21 @@ class _AppModel extends ChangeNotifier {
 }
 
 ///
-class AppScope extends StatefulWidget {
+class const AppScope({
   ///
-  const AppScope({
-    required this.builder,
-    this.defaultLocale = const Locale('en', 'US'),
-    this.defaultBrightness = Brightness.light,
-    this.defaultColor = Colors.orange,
-    super.key,
-  });
+  required final Widget Function(BuildContext, Locale, Brightness, Color)
+  builder,
 
   ///
-  final Widget Function(BuildContext, Locale, Brightness, Color) builder;
+  final Locale defaultLocale = const Locale('en', 'US'),
 
   ///
-  final Locale defaultLocale;
+  final Brightness defaultBrightness = .light,
 
   ///
-  final Brightness defaultBrightness;
-
-  ///
-  final Color defaultColor;
-
+  final Color defaultColor = Colors.orange,
+  super.key,
+}) extends StatefulWidget {
   ///
   // ignore: library_private_types_in_public_api
   static _AppModel of(BuildContext context) {
@@ -131,11 +120,8 @@ class _AppScopeState extends State<AppScope> {
   }
 }
 
-class _LocaleScope extends InheritedWidget {
-  const _LocaleScope({required this.model, required super.child});
-
-  final _AppModel model;
-
+class const _LocaleScope({required final _AppModel model, required super.child})
+    extends InheritedWidget {
   @override
   bool updateShouldNotify(_LocaleScope old) {
     return model._locale != old.model._locale ||

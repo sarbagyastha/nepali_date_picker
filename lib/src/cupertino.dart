@@ -103,13 +103,11 @@ class NepaliCupertinoDatePicker({
   final DateOrder dateOrder = .mdy,
   super.key,
 }) extends StatefulWidget {
-  this : initialDate = initialDate ?? NepaliDateTime.now();
-
   /// The initial date of the picker.
   ///
   /// Changing this value after the initial build will not affect the currently
   /// selected date.
-  final NepaliDateTime initialDate;
+  final NepaliDateTime initialDate = initialDate ?? NepaliDateTime.now();
 
   @override
   State<StatefulWidget> createState() {

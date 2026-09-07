@@ -23,12 +23,10 @@ final List<Event> _events = [
 ];
 
 /// Calendar Picker Example
-class CalendarDatePickerWidget extends StatelessWidget {
+class CalendarDatePickerWidget({super.key}) extends StatelessWidget {
   final ValueNotifier<NepaliDateTime> _selectedDate = ValueNotifier(
     NepaliDateTime.now(),
   );
-
-  CalendarDatePickerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +34,7 @@ class CalendarDatePickerWidget extends StatelessWidget {
       color: Theme.of(context).colorScheme.surfaceContainerLow,
       borderRadius: BorderRadius.circular(16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           CalendarDatePicker(
             initialDate: NepaliDateTime.now(),
@@ -110,13 +108,11 @@ class CalendarDatePickerWidget extends StatelessWidget {
 }
 
 ///
-class TodayWidget extends StatelessWidget {
+class const TodayWidget({
   ///
-  final NepaliDateTime today;
-
-  ///
-  const TodayWidget({required this.today, super.key});
-
+  required final NepaliDateTime today,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -127,7 +123,7 @@ class TodayWidget extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: 1,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: .stretch,
           children: [
             DecoratedBox(
               decoration: BoxDecoration(
@@ -144,14 +140,11 @@ class TodayWidget extends StatelessWidget {
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: Colors.white,
                   ),
-                  textAlign: TextAlign.center,
+                  textAlign: .center,
                 ),
               ),
             ),
-            Text(
-              NepaliDateFormat.d().format(today),
-              textAlign: TextAlign.center,
-            ),
+            Text(NepaliDateFormat.d().format(today), textAlign: .center),
           ],
         ),
       ),
@@ -160,13 +153,10 @@ class TodayWidget extends StatelessWidget {
 }
 
 ///
-class Event {
+class Event({
   ///
-  final NepaliDateTime date;
+  required final NepaliDateTime date,
 
   ///
-  final List<String> eventTitles;
-
-  ///
-  Event({required this.date, required this.eventTitles});
-}
+  required final List<String> eventTitles,
+});

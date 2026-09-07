@@ -9,9 +9,7 @@ import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
 /// Date Picker Example
-class DatePickerWidget extends StatefulWidget {
-  const DatePickerWidget({super.key});
-
+class const DatePickerWidget({super.key}) extends StatefulWidget {
   @override
   State<DatePickerWidget> createState() => _DatePickerWidgetState();
 }
@@ -19,7 +17,7 @@ class DatePickerWidget extends StatefulWidget {
 class _DatePickerWidgetState extends State<DatePickerWidget> {
   NepaliDateTime? _selectedDateTime = NepaliDateTime.now();
   String _design = 'm';
-  DateOrder _dateOrder = DateOrder.mdy;
+  DateOrder _dateOrder = .mdy;
   bool _showTimerPicker = false;
 
   @override
@@ -28,9 +26,9 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: .stretch,
+          mainAxisAlignment: .center,
+          mainAxisSize: .min,
           children: [
             Card(
               margin: EdgeInsets.zero,
@@ -40,23 +38,21 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                   horizontal: 8,
                 ),
                 child: _selectedDateTime == null
-                    ? Text('No Date Picked!', textAlign: TextAlign.center)
+                    ? Text('No Date Picked!', textAlign: .center)
                     : Column(
                         spacing: 16,
                         children: [
                           Text(
-                            NepaliDateFormat(
-                              'EEE, MMMM d, y hh:mm aa',
-                            ).format(_selectedDateTime!),
+                            NepaliDateFormat('EEE, MMMM d, y hh:mm aa')
+                                .format(_selectedDateTime!),
                             style: Theme.of(context).textTheme.titleLarge,
-                            textAlign: TextAlign.center,
+                            textAlign: .center,
                           ),
                           Text(
-                            DateFormat(
-                              'EEE, MMMM d, y hh:mm aa',
-                            ).format(_selectedDateTime!.toDateTime()),
+                            DateFormat('EEE, MMMM d, y hh:mm aa')
+                                .format(_selectedDateTime!.toDateTime()),
                             style: Theme.of(context).textTheme.titleSmall,
-                            textAlign: TextAlign.center,
+                            textAlign: .center,
                           ),
                         ],
                       ),
@@ -71,7 +67,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                     initialDate: _selectedDateTime ?? NepaliDateTime.now(),
                     firstDate: NepaliDateTime(1970, 2, 5),
                     lastDate: NepaliDateTime(2250, 11, 6),
-                    initialDatePickerMode: DatePickerMode.day,
+                    initialDatePickerMode: .day,
                   );
                   if (_selectedDateTime != null) {
                     if (context.mounted && _showTimerPicker) {
@@ -122,7 +118,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             ),
             SizedBox(height: 20),
             Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: .min,
               children: <Widget>[
                 SizedBox(width: 10.0),
                 Text('Design: ', style: TextStyle(fontSize: 18.0)),
@@ -142,13 +138,13 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             ),
             SizedBox(height: 20),
             Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: .min,
+              mainAxisAlignment: .start,
+              crossAxisAlignment: .start,
               children: <Widget>[
                 SizedBox(width: 10.0),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: .start,
                   children: <Widget>[
                     SizedBox(height: 15.0),
                     Text('Order: ', style: TextStyle(fontSize: 18.0)),
@@ -160,29 +156,29 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                 ),
                 Expanded(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisSize: .min,
                     children: <Widget>[
                       _radio<DateOrder>(
                         'D M Y',
-                        DateOrder.dmy,
+                        .dmy,
                         _dateOrder,
                         (value) => setState(() => _dateOrder = value),
                       ),
                       _radio<DateOrder>(
                         'M D Y',
-                        DateOrder.mdy,
+                        .mdy,
                         _dateOrder,
                         (value) => setState(() => _dateOrder = value),
                       ),
                       _radio<DateOrder>(
                         'Y D M',
-                        DateOrder.ydm,
+                        .ydm,
                         _dateOrder,
                         (value) => setState(() => _dateOrder = value),
                       ),
                       _radio<DateOrder>(
                         'Y M D',
-                        DateOrder.ymd,
+                        .ymd,
                         _dateOrder,
                         (value) => setState(() => _dateOrder = value),
                       ),
@@ -195,7 +191,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
               children: [
                 SizedBox(width: 10.0),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: .start,
                   children: <Widget>[
                     SizedBox(height: 15.0),
                     Text(
