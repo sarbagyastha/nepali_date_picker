@@ -98,6 +98,9 @@ class _DateConverterWidgetState extends State<DateConverterWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: .stretch,
@@ -124,25 +127,18 @@ class _DateConverterWidgetState extends State<DateConverterWidget> {
               }),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: TextField(
-              key: ValueKey('input-${_direction.name}'),
-              controller: _dateController,
-              keyboardType: TextInputType.datetime,
-              decoration: InputDecoration(
-                labelText: _direction == .adToBs
-                    ? 'Gregorian date (AD)'
-                    : 'Bikram Sambat date (BS)',
-                hintText: 'yyyy-mm-dd',
-                errorText: _inputError,
-                border: const OutlineInputBorder(),
+            child: Text(
+              'Pick a date',
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: colorScheme.onSurfaceVariant,
               ),
-              onChanged: _onTypedDateChanged,
+              textAlign: .center,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           if (_direction == .adToBs)
             CalendarDatePicker(
               key: ValueKey(
@@ -164,6 +160,48 @@ class _DateConverterWidgetState extends State<DateConverterWidget> {
               calendarDelegate: const NepaliCalendarDelegate(),
               onDateChanged: _onCalendarDateChanged,
             ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                const Expanded(child: Divider()),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    'or type it directly',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+                const Expanded(child: Divider()),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TextField(
+              key: ValueKey('input-${_direction.name}'),
+              controller: _dateController,
+              keyboardType: .datetime,
+              decoration: InputDecoration(
+                labelText: _direction == .adToBs
+                    ? 'Gregorian date (AD)'
+                    : 'Bikram Sambat date (BS)',
+                hintText: 'yyyy-mm-dd',
+                errorText: _inputError,
+                isDense: true,
+
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onChanged: _onTypedDateChanged,
+            ),
+          ),
+          const SizedBox(height: 16),
         ],
       ),
     );
@@ -180,7 +218,7 @@ class const _ResultCard({
     final colorScheme = Theme.of(context).colorScheme;
 
     return Card(
-      margin: EdgeInsets.zero,
+      margin: .zero,
       color: colorScheme.primaryContainer,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
