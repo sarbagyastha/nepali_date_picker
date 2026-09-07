@@ -183,6 +183,8 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
   late int daysInCurrentMonth;
 
   late final FixedExtentScrollController dayController;
+  late final FixedExtentScrollController monthController;
+  late final FixedExtentScrollController yearController;
 
   // Estimated width of columns.
   Map<int, double> estimatedColumnWidths = <int, double>{};
@@ -195,6 +197,18 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
     selectedYear = widget.initialDate.year;
 
     dayController = FixedExtentScrollController(initialItem: selectedDay - 1);
+    monthController = FixedExtentScrollController(
+      initialItem: selectedMonth - 1,
+    );
+    yearController = FixedExtentScrollController(initialItem: selectedYear);
+  }
+
+  @override
+  void dispose() {
+    dayController.dispose();
+    monthController.dispose();
+    yearController.dispose();
+    super.dispose();
   }
 
   @override
@@ -278,16 +292,20 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
     TransitionBuilder itemPositioningBuilder,
   ) {
     return CupertinoPicker(
-      scrollController: FixedExtentScrollController(
-        initialItem: selectedMonth - 1,
-      ),
+      scrollController: monthController,
       offAxisFraction: offAxisFraction,
       itemExtent: _kItemExtent,
       useMagnifier: _kUseMagnifier,
       magnification: _kMagnification,
       backgroundColor: _kBackgroundColor,
       onSelectedItemChanged: (int index) {
-        selectedMonth = index + 1;
+        setState(() {
+          selectedMonth = index + 1;
+          daysInCurrentMonth = NepaliDateTime(
+            selectedYear,
+            selectedMonth,
+          ).totalDays;
+        });
         if (selectedDay <= daysInCurrentMonth) {
           widget.onDateChanged(
             NepaliDateTime(selectedYear, selectedMonth, selectedDay),
@@ -309,14 +327,20 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
     TransitionBuilder itemPositioningBuilder,
   ) {
     return CupertinoPicker.builder(
-      scrollController: FixedExtentScrollController(initialItem: selectedYear),
+      scrollController: yearController,
       itemExtent: _kItemExtent,
       offAxisFraction: offAxisFraction,
       useMagnifier: _kUseMagnifier,
       magnification: _kMagnification,
       backgroundColor: _kBackgroundColor,
       onSelectedItemChanged: (int index) {
-        selectedYear = index;
+        setState(() {
+          selectedYear = index;
+          daysInCurrentMonth = NepaliDateTime(
+            selectedYear,
+            selectedMonth,
+          ).totalDays;
+        });
         if (selectedDay <= daysInCurrentMonth) {
           widget.onDateChanged(
             NepaliDateTime(selectedYear, selectedMonth, selectedDay),

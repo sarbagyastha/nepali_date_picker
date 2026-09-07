@@ -115,8 +115,9 @@ class _CalendarDatePickerWidgetState extends State<CalendarDatePickerWidget> {
   bool _dayEquals(NepaliDateTime? a, NepaliDateTime? b) =>
       a != null &&
       b != null &&
-      a.toIso8601String().substring(0, 10) ==
-          b.toIso8601String().substring(0, 10);
+      a.year == b.year &&
+      a.month == b.month &&
+      a.day == b.day;
 }
 
 ///

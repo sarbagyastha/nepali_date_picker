@@ -129,7 +129,7 @@ Future<NepaliDateTime?> _showCupertinoDatePicker({
                   ),
                   Expanded(
                     child: NepaliCupertinoDatePicker(
-                      initialDate: NepaliDateTime.now(),
+                      initialDate: initialDate,
                       minimumYear: firstDate.year,
                       maximumYear: lastDate.year,
                       onDateChanged: (date) => selectedDate = date,

@@ -85,7 +85,12 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
     NepaliDateTime date,
     MaterialLocalizations localizations,
   ) {
-    return NepaliDateFormat.yMMMM(_getLanguage(localizations)).format(date);
+    final language = _getLanguage(localizations);
+    return _cachedFormat(
+      'yMMMM',
+      language,
+      () => NepaliDateFormat.yMMMM(language),
+    ).format(date);
   }
 
   @override
@@ -94,7 +99,11 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
     MaterialLocalizations localizations,
   ) {
     final language = _getLanguage(localizations);
-    return NepaliDateFormat('EE, MMMM d', language).format(date);
+    return _cachedFormat(
+      'EE, MMMM d',
+      language,
+      () => NepaliDateFormat('EE, MMMM d', language),
+    ).format(date);
   }
 
   @override
@@ -102,7 +111,12 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
     NepaliDateTime date,
     MaterialLocalizations localizations,
   ) {
-    return NepaliDateFormat('MMMM d', _getLanguage(localizations)).format(date);
+    final language = _getLanguage(localizations);
+    return _cachedFormat(
+      'MMMM d',
+      language,
+      () => NepaliDateFormat('MMMM d', language),
+    ).format(date);
   }
 
   @override
@@ -111,7 +125,11 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
     MaterialLocalizations localizations,
   ) {
     final language = _getLanguage(localizations);
-    return NepaliDateFormat('MMMM d, y', language).format(date);
+    return _cachedFormat(
+      'MMMM d, y',
+      language,
+      () => NepaliDateFormat('MMMM d, y', language),
+    ).format(date);
   }
 
   @override
@@ -120,7 +138,11 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
     MaterialLocalizations localizations,
   ) {
     final language = _getLanguage(localizations);
-    return NepaliDateFormat('EEEE, MMMM d, y', language).format(date);
+    return _cachedFormat(
+      'EEEE, MMMM d, y',
+      language,
+      () => NepaliDateFormat('EEEE, MMMM d, y', language),
+    ).format(date);
   }
 
   @override
@@ -129,7 +151,11 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
     MaterialLocalizations localizations,
   ) {
     final language = _getLanguage(localizations);
-    return NepaliDateFormat(_compactDatePattern, language).format(date);
+    return _cachedFormat(
+      _compactDatePattern,
+      language,
+      () => NepaliDateFormat(_compactDatePattern, language),
+    ).format(date);
   }
 
   @override
@@ -154,4 +180,14 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
   Language _getLanguage(MaterialLocalizations localizations) {
     return localizations is MaterialLocalizationNe ? .nepali : .english;
   }
+}
+
+final _formatterCache = <String, NepaliDateFormat>{};
+
+NepaliDateFormat _cachedFormat(
+  String key,
+  Language language,
+  NepaliDateFormat Function() create,
+) {
+  return _formatterCache['$key|$language'] ??= create();
 }

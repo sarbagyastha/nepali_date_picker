@@ -6,7 +6,6 @@ import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 
 import 'package:nepali_date_picker/nepali_date_picker.dart';
-import 'package:nepali_utils/nepali_utils.dart';
 
 /// Date Picker Example
 class const DatePickerWidget({super.key}) extends StatefulWidget {
@@ -15,10 +14,18 @@ class const DatePickerWidget({super.key}) extends StatefulWidget {
 }
 
 class _DatePickerWidgetState extends State<DatePickerWidget> {
-  NepaliDateTime? _selectedDateTime = NepaliDateTime.now();
+  final ValueNotifier<NepaliDateTime?> _selectedDateTime = ValueNotifier(
+    NepaliDateTime.now(),
+  );
   String _design = 'm';
   DateOrder _dateOrder = .mdy;
   bool _showTimerPicker = false;
+
+  @override
+  void dispose() {
+    _selectedDateTime.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,79 +44,84 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                   vertical: 16,
                   horizontal: 8,
                 ),
-                child: _selectedDateTime == null
-                    ? Text('No Date Picked!', textAlign: .center)
-                    : Column(
-                        spacing: 16,
-                        children: [
-                          Text(
-                            NepaliDateFormat('EEE, MMMM d, y hh:mm aa')
-                                .format(_selectedDateTime!),
-                            style: Theme.of(context).textTheme.titleLarge,
-                            textAlign: .center,
-                          ),
-                          Text(
-                            DateFormat('EEE, MMMM d, y hh:mm aa')
-                                .format(_selectedDateTime!.toDateTime()),
-                            style: Theme.of(context).textTheme.titleSmall,
-                            textAlign: .center,
-                          ),
-                        ],
-                      ),
+                child: ValueListenableBuilder<NepaliDateTime?>(
+                  valueListenable: _selectedDateTime,
+                  builder: (context, selectedDateTime, _) {
+                    if (selectedDateTime == null) {
+                      return Text('No Date Picked!', textAlign: .center);
+                    }
+                    return Column(
+                      spacing: 16,
+                      children: [
+                        Text(
+                          NepaliDateFormat('EEE, MMMM d, y hh:mm aa')
+                              .format(selectedDateTime),
+                          style: Theme.of(context).textTheme.titleLarge,
+                          textAlign: .center,
+                        ),
+                        Text(
+                          DateFormat('EEE, MMMM d, y hh:mm aa')
+                              .format(selectedDateTime.toDateTime()),
+                          style: Theme.of(context).textTheme.titleSmall,
+                          textAlign: .center,
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
             SizedBox(height: 20),
             FilledButton.tonal(
               onPressed: () async {
                 if (_design == 'm') {
-                  _selectedDateTime = await showNepaliDatePicker(
+                  var newDateTime = await showNepaliDatePicker(
                     context: context,
-                    initialDate: _selectedDateTime ?? NepaliDateTime.now(),
+                    initialDate:
+                        _selectedDateTime.value ?? NepaliDateTime.now(),
                     firstDate: NepaliDateTime(1970, 2, 5),
                     lastDate: NepaliDateTime(2250, 11, 6),
                     initialDatePickerMode: .day,
                   );
-                  if (_selectedDateTime != null) {
+                  if (newDateTime != null) {
                     if (context.mounted && _showTimerPicker) {
                       final timeOfDay = await showTimePicker(
                         context: context,
                         initialTime: TimeOfDay.fromDateTime(
-                          _selectedDateTime!.toDateTime(),
+                          newDateTime.toDateTime(),
                         ),
                       );
-                      _selectedDateTime = _selectedDateTime!.mergeTime(
+                      newDateTime = newDateTime.mergeTime(
                         timeOfDay?.hour ?? 0,
                         timeOfDay?.minute ?? 0,
                         0,
                       );
                     } else {
                       final timeOfDay = TimeOfDay.now();
-                      _selectedDateTime = _selectedDateTime!.mergeTime(
+                      newDateTime = newDateTime.mergeTime(
                         timeOfDay.hour,
                         timeOfDay.minute,
                         0,
                       );
                     }
+                    _selectedDateTime.value = newDateTime;
                   }
-
-                  setState(() {});
                 } else {
                   showCupertinoDatePicker(
                     context: context,
-                    initialDate: _selectedDateTime ?? NepaliDateTime.now(),
+                    initialDate:
+                        _selectedDateTime.value ?? NepaliDateTime.now(),
                     firstDate: NepaliDateTime(1970),
                     lastDate: NepaliDateTime(2100, 12),
                     language: NepaliUtils().language,
                     dateOrder: _dateOrder,
                     onDateChanged: (newDate) {
                       final timeOfDay = TimeOfDay.now();
-                      setState(() {
-                        _selectedDateTime = newDate.mergeTime(
-                          timeOfDay.hour,
-                          timeOfDay.minute,
-                          0,
-                        );
-                      });
+                      _selectedDateTime.value = newDate.mergeTime(
+                        timeOfDay.hour,
+                        timeOfDay.minute,
+                        0,
+                      );
                     },
                   );
                 }
