@@ -1,71 +1,82 @@
-# 🇳🇵 Nepali Date Picker + Calendar 📅
+# 🇳🇵 Nepali Date Picker + Calendar
 
 [![Pub Package](https://img.shields.io/pub/v/nepali_date_picker)](https://pub.dev/packages/nepali_date_picker)
 [![Licence](https://img.shields.io/badge/Licence-BSD-orange.svg)](https://github.com/sarbagyastha/nepali_date_picker/blob/main/LICENSE)
 [![Demo](https://img.shields.io/badge/Demo-WEB-blueviolet.svg)](https://date.sarbagyastha.com.np)
 
-A beautiful, customizable date picker widget for Flutter, fully localized for the Nepali (Bikram Sambat) calendar. This package allows users to select dates in the Nepali/Indian calendar system, making it perfect for apps targeting Nepali-speaking audiences or integrating regional calendar functionality.
+A customizable, fully localized date picker for Flutter, built for the Nepali (Bikram Sambat) calendar.
 
+## Features
 
-## 🚀 Features
-- 🇳🇵 Bikram Sambat (Nepali) Calendar support
-  
-- 🎨 Customizable UI to match your app’s theme
-  
-- ⚡ Easy Integration into any Flutter project
-  
-- ✅ Date Validation for valid Nepali dates only
-  
-- 📆 Supports date from 1970 BS to 2250 BS
-  
-- 🔄 Effortlessly convert between Bikram Sambat and Gregorian dates. 
+- 🇳🇵 Full Bikram Sambat calendar support, from 1970 BS to 2250 BS
+- 📅 Material, Cupertino, and adaptive picker styles
+- 🎯 Single date and date range selection
+- 🔄 Effortless conversion between Bikram Sambat and Gregorian dates
+- 🎨 Themeable to match your app
 
+## Getting Started
 
-## 🛠️ Getting Started
-Add this to your pubspec.yaml:
 ```yaml
 dependencies:
   nepali_date_picker: ^<latest_version>
 ```
 
-Then run:
 ```bash
 flutter pub get
 ```
 
-## 💡 Usage
-Import the package:
+## Usage
+
 ```dart
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 ```
 
-Example usage:
+### Single date
+
 ```dart
-final selectedDateTime = await showNepaliDatePicker(
+final date = await showNepaliDatePicker(
   context: context,
-  initialDate: _selectedDateTime ?? NepaliDateTime.now(),
+  initialDate: NepaliDateTime.now(),
   firstDate: NepaliDateTime(1970, 2, 5),
   lastDate: NepaliDateTime(2250, 11, 6),
-  initialDatePickerMode: DatePickerMode.day,
 );
-
-print(selectedDateTime); // Outputs the selected date in NepaliDateTime type.
 ```
 
-For a complete example, check out the [example](https://github.com/sarbagyastha/nepali_date_picker/tree/main/example).
+### Date range
 
-## 🌐 Demo
-Try the Nepali Date Picker live on the web! Check out the demo page here:
+```dart
+final range = await showNepaliDateRangePicker(
+  context: context,
+  firstDate: NepaliDateTime(1970, 2, 5),
+  lastDate: NepaliDateTime(2250, 11, 6),
+);
+```
 
-👉 https://date.sarbagyastha.com.np
+### Adaptive (Material on Android, Cupertino on iOS)
 
-## 🔗 Related Package
-If you need additional Nepali date and text utilities, check out the [nepali_utils](https://pub.dev/packages/nepali_utils) package!
-It offers handy helpers for Nepali date formatting, number conversion, and more.
-Perfect to use alongside nepali_date_picker!
+```dart
+final date = await showAdaptiveDatePicker(
+  context: context,
+  initialDate: NepaliDateTime.now(),
+  firstDate: NepaliDateTime(1970, 2, 5),
+  lastDate: NepaliDateTime(2250, 11, 6),
+);
+```
 
-## 🤝 Contributing
-Contributions are welcome! Feel free to open issues or submit [pull requests](https://github.com/sarbagyastha/nepali_date_picker/pulls).
+See the [example app](https://github.com/sarbagyastha/nepali_date_picker/tree/main/example) for a complete integration.
 
-## 📄 License
+## Demo
+
+Try it live at [date.sarbagyastha.com.np](https://date.sarbagyastha.com.np).
+
+## Related Package
+
+Need more Nepali date/text utilities? Check out [nepali_utils](https://pub.dev/packages/nepali_utils) for date formatting, number conversion, and more — pairs well with this package.
+
+## Contributing
+
+Contributions are welcome! Open an issue or submit a [pull request](https://github.com/sarbagyastha/nepali_date_picker/pulls).
+
+## License
+
 Licensed under the [BSD-3 License](https://github.com/sarbagyastha/nepali_date_picker/blob/main/LICENSE).
