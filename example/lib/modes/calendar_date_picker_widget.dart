@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 /// Events
@@ -23,12 +23,22 @@ final List<Event> _events = [
 ];
 
 /// Calendar Picker Example
-class CalendarDatePickerWidget extends StatelessWidget {
+class const CalendarDatePickerWidget({super.key}) extends StatefulWidget {
+  @override
+  State<CalendarDatePickerWidget> createState() =>
+      _CalendarDatePickerWidgetState();
+}
+
+class _CalendarDatePickerWidgetState extends State<CalendarDatePickerWidget> {
   final ValueNotifier<NepaliDateTime> _selectedDate = ValueNotifier(
     NepaliDateTime.now(),
   );
 
-  CalendarDatePickerWidget({super.key});
+  @override
+  void dispose() {
+    _selectedDate.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +46,7 @@ class CalendarDatePickerWidget extends StatelessWidget {
       color: Theme.of(context).colorScheme.surfaceContainerLow,
       borderRadius: BorderRadius.circular(16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           CalendarDatePicker(
             initialDate: NepaliDateTime.now(),
@@ -105,18 +115,17 @@ class CalendarDatePickerWidget extends StatelessWidget {
   bool _dayEquals(NepaliDateTime? a, NepaliDateTime? b) =>
       a != null &&
       b != null &&
-      a.toIso8601String().substring(0, 10) ==
-          b.toIso8601String().substring(0, 10);
+      a.year == b.year &&
+      a.month == b.month &&
+      a.day == b.day;
 }
 
 ///
-class TodayWidget extends StatelessWidget {
+class const TodayWidget({
   ///
-  final NepaliDateTime today;
-
-  ///
-  const TodayWidget({required this.today, super.key});
-
+  required final NepaliDateTime today,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -127,7 +136,7 @@ class TodayWidget extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: 1,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: .stretch,
           children: [
             DecoratedBox(
               decoration: BoxDecoration(
@@ -144,14 +153,11 @@ class TodayWidget extends StatelessWidget {
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: Colors.white,
                   ),
-                  textAlign: TextAlign.center,
+                  textAlign: .center,
                 ),
               ),
             ),
-            Text(
-              NepaliDateFormat.d().format(today),
-              textAlign: TextAlign.center,
-            ),
+            Text(NepaliDateFormat.d().format(today), textAlign: .center),
           ],
         ),
       ),
@@ -160,13 +166,10 @@ class TodayWidget extends StatelessWidget {
 }
 
 ///
-class Event {
+class Event({
   ///
-  final NepaliDateTime date;
+  required final NepaliDateTime date,
 
   ///
-  final List<String> eventTitles;
-
-  ///
-  Event({required this.date, required this.eventTitles});
-}
+  required final List<String> eventTitles,
+});

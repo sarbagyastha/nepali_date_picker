@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
 import 'nepali_calendar_delegate.dart';
@@ -18,7 +18,7 @@ Future<NepaliDateTime?> showNepaliDatePicker({
   required NepaliDateTime lastDate,
   NepaliDateTime? initialDate,
   NepaliDateTime? currentDate,
-  DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
+  DatePickerEntryMode initialEntryMode = .calendar,
   SelectableDayPredicate? selectableDayPredicate,
   String? helpText,
   String? cancelText,
@@ -31,16 +31,16 @@ Future<NepaliDateTime?> showNepaliDatePicker({
   RouteSettings? routeSettings,
   TextDirection? textDirection,
   TransitionBuilder? builder,
-  DatePickerMode initialDatePickerMode = DatePickerMode.day,
+  DatePickerMode initialDatePickerMode = .day,
   String? errorFormatText,
   String? errorInvalidText,
   String? fieldHintText,
   String? fieldLabelText,
   TextInputType? keyboardType,
   Offset? anchorPoint,
-  final ValueChanged<DatePickerEntryMode>? onDatePickerModeChange,
-  final Icon? switchToInputEntryModeIcon,
-  final Icon? switchToCalendarEntryModeIcon,
+  ValueChanged<DatePickerEntryMode>? onDatePickerModeChange,
+  Icon? switchToInputEntryModeIcon,
+  Icon? switchToCalendarEntryModeIcon,
 }) async {
   final date = await showDatePicker(
     context: context,
@@ -89,7 +89,7 @@ Future<DateTimeRange<NepaliDateTime>?> showNepaliDateRangePicker({
   required NepaliDateTime lastDate,
   DateTimeRange<NepaliDateTime>? initialDateRange,
   NepaliDateTime? currentDate,
-  DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
+  DatePickerEntryMode initialEntryMode = .calendar,
   String? helpText,
   String? cancelText,
   String? confirmText,
@@ -110,9 +110,9 @@ Future<DateTimeRange<NepaliDateTime>?> showNepaliDateRangePicker({
   TextDirection? textDirection,
   TransitionBuilder? builder,
   Offset? anchorPoint,
-  TextInputType keyboardType = TextInputType.datetime,
-  final Icon? switchToInputEntryModeIcon,
-  final Icon? switchToCalendarEntryModeIcon,
+  TextInputType keyboardType = .datetime,
+  Icon? switchToInputEntryModeIcon,
+  Icon? switchToCalendarEntryModeIcon,
   SelectableDayForRangePredicate? selectableDayPredicate,
 }) async {
   final dateRange = await showDateRangePicker(

@@ -2,8 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:nepali_utils/nepali_utils.dart';
@@ -25,11 +24,10 @@ const _compactDatePattern = 'y-MM-dd';
 ///
 /// This delegate allows [CalendarDatePicker] to interpret and navigate dates
 /// based on the Nepali calendar system.
-class NepaliCalendarDelegate extends CalendarDelegate<NepaliDateTime> {
-  /// Creates a [NepaliCalendarDelegate] for interpreting dates
-  /// according to the Nepali (Bikram Sambat) calendar system.
-  const NepaliCalendarDelegate();
-
+///
+/// Creates a [NepaliCalendarDelegate] for interpreting dates
+/// according to the Nepali (Bikram Sambat) calendar system.
+class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
   @override
   NepaliDateTime now() => NepaliDateTime.now();
 
@@ -87,7 +85,8 @@ class NepaliCalendarDelegate extends CalendarDelegate<NepaliDateTime> {
     NepaliDateTime date,
     MaterialLocalizations localizations,
   ) {
-    return NepaliDateFormat.yMMMM(_getLanguage(localizations)).format(date);
+    final language = _getLanguage(localizations);
+    return NepaliDateFormat.yMMMM(language).format(date);
   }
 
   @override
@@ -104,7 +103,8 @@ class NepaliCalendarDelegate extends CalendarDelegate<NepaliDateTime> {
     NepaliDateTime date,
     MaterialLocalizations localizations,
   ) {
-    return NepaliDateFormat('MMMM d', _getLanguage(localizations)).format(date);
+    final language = _getLanguage(localizations);
+    return NepaliDateFormat('MMMM d', language).format(date);
   }
 
   @override
@@ -154,8 +154,6 @@ class NepaliCalendarDelegate extends CalendarDelegate<NepaliDateTime> {
   }
 
   Language _getLanguage(MaterialLocalizations localizations) {
-    return localizations is MaterialLocalizationNe
-        ? Language.nepali
-        : Language.english;
+    return localizations is MaterialLocalizationNe ? .nepali : .english;
   }
 }

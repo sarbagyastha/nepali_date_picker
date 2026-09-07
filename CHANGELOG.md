@@ -1,3 +1,9 @@
+## 8.0.0
+**Sep 8, 2026**
+**Breaking Change**
+- Replaces `package:flutter/material.dart` and `package:flutter/cupertino.dart` with `material_ui`/`cupertino_ui` across the entire picker implementation.
+- Requires `flutter >= 3.47.0` and `dart >= 3.13.0`.
+
 ## 7.0.1
 **Aug 18, 2025**
 - Fixes issue with `flutter >= 3.35.0`.

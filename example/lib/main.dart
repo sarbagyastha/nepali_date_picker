@@ -3,21 +3,19 @@
 // found in the LICENSE file.
 
 import 'package:flex_color_picker/flex_color_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:nepali_date_picker_example/app_scope.dart';
 
 import 'modes/calendar_date_picker_widget.dart';
 import 'modes/calendar_date_range_picker_widget.dart';
+import 'modes/date_converter_widget.dart';
 import 'modes/date_picker_widget.dart';
 import 'modes/date_range_picker_widget.dart';
 
 void main() => runApp(MyApp());
 
 /// MyApp
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
+class const MyApp({super.key}) extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -42,21 +40,20 @@ class _MyAppState extends State<MyApp> {
 }
 
 ///
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
+class const HomePage({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appScope = AppScope.of(context);
 
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Nepali Date Picker'),
+          title: Text('Nepali Date'),
           bottom: TabBar(
             isScrollable: true,
             tabs: [
+              Tab(text: 'Converter'),
               Tab(text: 'Date Picker'),
               Tab(text: 'Calendar'),
               Tab(text: 'Date Range Picker'),
@@ -74,7 +71,7 @@ class HomePage extends StatelessWidget {
             const SizedBox(width: 16),
             IconButton.filledTonal(
               icon: Icon(
-                appScope.brightness == Brightness.light
+                appScope.brightness == .light
                     ? Icons.dark_mode_outlined
                     : Icons.light_mode_outlined,
               ),
@@ -103,6 +100,7 @@ class HomePage extends StatelessWidget {
                 constraints: BoxConstraints(maxWidth: 500),
                 child: TabBarView(
                   children: [
+                    DateConverterWidget(),
                     DatePickerWidget(),
                     CalendarDatePickerWidget(),
                     DateRangePickerWidget(),
