@@ -17,13 +17,13 @@ Future<NepaliDateTime?> showAdaptiveDatePicker({
   required NepaliDateTime initialDate,
   required NepaliDateTime firstDate,
   required NepaliDateTime lastDate,
-  Language language = Language.english,
+  Language language = .english,
 
   /// Only for iOS
-  DateOrder dateOrder = DateOrder.mdy,
+  DateOrder dateOrder = .mdy,
 
   /// Only for Android and Fuchsia
-  DatePickerMode initialDatePickerMode = DatePickerMode.day,
+  DatePickerMode initialDatePickerMode = .day,
 }) async {
   assert(
     firstDate.year >= 1970 && lastDate.year <= 2100,
@@ -73,8 +73,8 @@ Future<NepaliDateTime?> _showCupertinoDatePicker({
   required NepaliDateTime initialDate,
   required NepaliDateTime firstDate,
   required NepaliDateTime lastDate,
-  Language language = Language.english,
-  DateOrder dateOrder = DateOrder.mdy,
+  Language language = .english,
+  DateOrder dateOrder = .mdy,
 }) async {
   assert(
     firstDate.year >= 2000 && lastDate.year <= 2099,
@@ -116,17 +116,13 @@ Future<NepaliDateTime?> _showCupertinoDatePicker({
                     children: <Widget>[
                       TextButton(
                         child: Text(
-                          language == Language.english
-                              ? 'CANCEL'
-                              : 'रद्द गर्नुहोस',
+                          language == .english ? 'CANCEL' : 'रद्द गर्नुहोस',
                         ),
                         onPressed: () => Navigator.pop(context),
                       ),
                       Spacer(),
                       TextButton(
-                        child: Text(
-                          language == Language.english ? 'DONE' : 'ठिक छ',
-                        ),
+                        child: Text(language == .english ? 'DONE' : 'ठिक छ'),
                         onPressed: () => Navigator.pop(context, selectedDate),
                       ),
                     ],
@@ -161,18 +157,11 @@ Future<T?> _showCupertinoPopup<T>({
   ).push(_CupertinoPopupRoute<T>(builder: builder, barrierLabel: 'Dismiss'));
 }
 
-class _CupertinoPopupRoute<T> extends PopupRoute<T> {
-  _CupertinoPopupRoute({
-    required this.builder,
-    required this.barrierLabel,
-    super.settings,
-  });
-
-  final WidgetBuilder builder;
-
-  @override
-  final String barrierLabel;
-
+class _CupertinoPopupRoute<T>({
+  required final WidgetBuilder builder,
+  @override required final String barrierLabel,
+  super.settings,
+}) extends PopupRoute<T> {
   @override
   Color get barrierColor => Color(0x6604040F);
 

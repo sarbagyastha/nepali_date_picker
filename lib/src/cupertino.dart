@@ -26,18 +26,13 @@ const TextStyle _kDefaultPickerTextStyle = TextStyle(letterSpacing: -0.83);
 //
 // The picker will be placed in the center, and the leftmost and rightmost
 // column will be extended equally to the remaining width.
-class _DatePickerLayoutDelegate extends MultiChildLayoutDelegate {
-  _DatePickerLayoutDelegate({
-    required this.columnWidths,
-    required this.textDirectionFactor,
-  });
-
+class _DatePickerLayoutDelegate({
   // The list containing widths of all columns.
-  final List<double> columnWidths;
+  required final List<double> columnWidths,
 
   // textDirectionFactor is 1 if text is written left to right, and -1 if right to left.
-  final int textDirectionFactor;
-
+  required final int textDirectionFactor,
+}) extends MultiChildLayoutDelegate {
   @override
   void performLayout(Size size) {
     var remainingWidth = size.width;
@@ -88,40 +83,33 @@ enum DateOrder {
 }
 
 /// Cupertino styled nepali date picker.
-class NepaliCupertinoDatePicker extends StatefulWidget {
-  /// Constructs an instance of [NepaliCupertinoDatePicker].
-  NepaliCupertinoDatePicker({
-    required this.onDateChanged,
-    NepaliDateTime? initialDate,
-    this.minimumYear = 1,
-    this.maximumYear,
-    this.language = Language.english,
-    this.dateOrder = DateOrder.mdy,
-    super.key,
-  }) : initialDate = initialDate ?? NepaliDateTime.now();
+class NepaliCupertinoDatePicker({
+  /// Callback called when the selected date changes. Must not be
+  /// null.
+  required final ValueChanged<NepaliDateTime> onDateChanged,
+  NepaliDateTime? initialDate,
+
+  /// Minimum year that the picker can be scrolled to.
+  /// Defaults to 1 and must not be null.
+  final int minimumYear = 1,
+
+  /// Maximum year that the picker can be scrolled to. Null if there's no limit.
+  final int? maximumYear,
+
+  /// The language of the picker.
+  final Language language = .english,
+
+  /// The arrangement of columns in the picker.
+  final DateOrder dateOrder = .mdy,
+  super.key,
+}) extends StatefulWidget {
+  this : initialDate = initialDate ?? NepaliDateTime.now();
 
   /// The initial date of the picker.
   ///
   /// Changing this value after the initial build will not affect the currently
   /// selected date.
   final NepaliDateTime initialDate;
-
-  /// Minimum year that the picker can be scrolled to.
-  /// Defaults to 1 and must not be null.
-  final int minimumYear;
-
-  /// Maximum year that the picker can be scrolled to. Null if there's no limit.
-  final int? maximumYear;
-
-  /// Callback called when the selected date changes. Must not be
-  /// null.
-  final ValueChanged<NepaliDateTime> onDateChanged;
-
-  /// The language of the picker.
-  final Language language;
-
-  /// The arrangement of columns in the picker.
-  final DateOrder dateOrder;
 
   @override
   State<StatefulWidget> createState() {
@@ -137,23 +125,22 @@ class NepaliCupertinoDatePicker extends StatefulWidget {
     var longestText = '';
 
     switch (columnType) {
-      case _PickerColumnType.dayOfMonth:
+      case .dayOfMonth:
         for (var i = 1; i <= 32; i++) {
-          final dayOfMonth = language == Language.english
+          final dayOfMonth = language == .english
               ? '$i'
               : NepaliUnicode.convert('$i');
           if (longestText.length < dayOfMonth.length) longestText = dayOfMonth;
         }
         break;
-      case _PickerColumnType.month:
+      case .month:
         for (var i = 1; i <= 12; i++) {
-          final month = NepaliDateFormat.MMMM(
-            language,
-          ).format(NepaliDateTime(1970, i));
+          final month = NepaliDateFormat.MMMM(language)
+              .format(NepaliDateTime(1970, i));
           if (longestText.length < month.length) longestText = month;
         }
         break;
-      case _PickerColumnType.year:
+      case .year:
         longestText = NepaliDateFormat.y(language).format(NepaliDateTime(2076));
         break;
     }
@@ -177,11 +164,10 @@ class NepaliCupertinoDatePicker extends StatefulWidget {
   }
 }
 
-typedef _ColumnBuilder =
-    Widget Function(
-      double offAxisFraction,
-      TransitionBuilder itemPositioningBuilder,
-    );
+typedef _ColumnBuilder = Widget Function(
+  double offAxisFraction,
+  TransitionBuilder itemPositioningBuilder,
+);
 
 class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
   late int textDirectionFactor;
@@ -278,7 +264,7 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
         return itemPositioningBuilder(
           context,
           Text(
-            widget.language == Language.english
+            widget.language == .english
                 ? '${index + 1}'
                 : NepaliUnicode.convert('${index + 1}'),
             style: disableTextStyle,
@@ -348,7 +334,7 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
         return itemPositioningBuilder(
           context,
           Text(
-            widget.language == Language.english
+            widget.language == .english
                 ? '$index'
                 : NepaliUnicode.convert('$index'),
           ),
@@ -384,7 +370,7 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
     var columnWidths = <double>[];
 
     switch (widget.dateOrder) {
-      case DateOrder.mdy:
+      case .mdy:
         pickerBuilders = <_ColumnBuilder>[
           _buildMonthPicker,
           _buildDayPicker,
@@ -396,7 +382,7 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
           _getEstimatedColumnWidth(_PickerColumnType.year),
         ];
         break;
-      case DateOrder.dmy:
+      case .dmy:
         pickerBuilders = <_ColumnBuilder>[
           _buildDayPicker,
           _buildMonthPicker,
@@ -408,7 +394,7 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
           _getEstimatedColumnWidth(_PickerColumnType.year),
         ];
         break;
-      case DateOrder.ymd:
+      case .ymd:
         pickerBuilders = <_ColumnBuilder>[
           _buildYearPicker,
           _buildMonthPicker,
@@ -420,7 +406,7 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
           _getEstimatedColumnWidth(_PickerColumnType.dayOfMonth),
         ];
         break;
-      case DateOrder.ydm:
+      case .ydm:
         pickerBuilders = <_ColumnBuilder>[
           _buildYearPicker,
           _buildDayPicker,
@@ -507,8 +493,8 @@ void showCupertinoDatePicker({
   required NepaliDateTime firstDate,
   required NepaliDateTime lastDate,
   required ValueChanged<NepaliDateTime> onDateChanged,
-  Language language = Language.english,
-  DateOrder dateOrder = DateOrder.mdy,
+  Language language = .english,
+  DateOrder dateOrder = .mdy,
 }) {
   assert(
     firstDate.year >= 1970 && lastDate.year <= 2100,

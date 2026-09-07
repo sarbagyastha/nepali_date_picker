@@ -6,7 +6,7 @@ import 'package:nepali_utils/nepali_utils.dart';
 
 /// Formats month to literal form
 String formattedMonth(int month, [Language? language]) {
-  final isEnglish = (language ?? NepaliUtils().language) == Language.english;
+  final isEnglish = (language ?? NepaliUtils().language) == .english;
 
   switch (month) {
     case 1:

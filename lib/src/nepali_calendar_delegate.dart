@@ -24,11 +24,10 @@ const _compactDatePattern = 'y-MM-dd';
 ///
 /// This delegate allows [CalendarDatePicker] to interpret and navigate dates
 /// based on the Nepali calendar system.
-class NepaliCalendarDelegate extends CalendarDelegate<NepaliDateTime> {
-  /// Creates a [NepaliCalendarDelegate] for interpreting dates
-  /// according to the Nepali (Bikram Sambat) calendar system.
-  const NepaliCalendarDelegate();
-
+///
+/// Creates a [NepaliCalendarDelegate] for interpreting dates
+/// according to the Nepali (Bikram Sambat) calendar system.
+class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
   @override
   NepaliDateTime now() => NepaliDateTime.now();
 
