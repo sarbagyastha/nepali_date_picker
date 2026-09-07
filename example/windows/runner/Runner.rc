@@ -93,7 +93,7 @@ BEGIN
             VALUE "FileDescription", "nepali_date_picker_example" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "nepali_date_picker_example" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 np.com.sarbagyastha. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 np.com.sarbagyastha. All rights reserved." "\0"
             VALUE "OriginalFilename", "nepali_date_picker_example.exe" "\0"
             VALUE "ProductName", "nepali_date_picker_example" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"

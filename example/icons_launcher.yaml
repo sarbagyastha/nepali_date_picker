@@ -1,0 +1,16 @@
+icons_launcher:
+  image_path: assets/picker-icon.png
+  platforms:
+    android:
+      enable: true
+    ios:
+      enable: true
+    web:
+      enable: true
+      favicon_output_extension: .ico
+    macos:
+      enable: true
+    windows:
+      enable: true
+    linux:
+      enable: true
