@@ -247,20 +247,16 @@ class _CalendarDateRangePickerState extends State<CalendarDateRangePicker> {
               controller: _controller,
               center: sliverAfterKey,
               slivers: <Widget>[
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) =>
-                        _buildMonthItem(context, index, true),
-                    childCount: _initialMonthIndex,
-                  ),
+                SliverList.builder(
+                  itemCount: _initialMonthIndex,
+                  itemBuilder: (BuildContext context, int index) =>
+                      _buildMonthItem(context, index, true),
                 ),
-                SliverList(
+                SliverList.builder(
                   key: sliverAfterKey,
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) =>
-                        _buildMonthItem(context, index, false),
-                    childCount: _numberOfMonths - _initialMonthIndex,
-                  ),
+                  itemCount: _numberOfMonths - _initialMonthIndex,
+                  itemBuilder: (BuildContext context, int index) =>
+                      _buildMonthItem(context, index, false),
                 ),
               ],
             ),
@@ -864,7 +860,7 @@ class _DayItemState extends State<_DayItem> {
     final TextDirection textDirection = Directionality.of(context);
     final Color highlightColor = widget.highlightColor;
 
-    BoxDecoration? decoration;
+    ShapeDecoration? decoration;
     TextStyle? itemStyle = textTheme.bodyMedium;
 
     T? effectiveValue<T>(T? Function(DatePickerThemeData? theme) getProperty) {
@@ -885,6 +881,13 @@ class _DayItemState extends State<_DayItem> {
       if (widget.isSelectedDayStart || widget.isSelectedDayEnd)
         WidgetState.selected,
     };
+
+    final OutlinedBorder dayShape =
+        resolve<OutlinedBorder?>(
+          (DatePickerThemeData? theme) => theme?.dayShape,
+          states,
+        ) ??
+        const CircleBorder();
 
     _statesController.value = states;
 
@@ -908,13 +911,10 @@ class _DayItemState extends State<_DayItem> {
     _HighlightPainter? highlightPainter;
 
     if (widget.isSelectedDayStart || widget.isSelectedDayEnd) {
-      // The selected start and end dates gets a circle background
+      // The selected start and end dates get a custom shaped background
       // highlight, and a contrasting text color.
       itemStyle = itemStyle?.apply(color: dayForegroundColor);
-      decoration = BoxDecoration(
-        color: dayBackgroundColor,
-        shape: BoxShape.circle,
-      );
+      decoration = ShapeDecoration(color: dayBackgroundColor, shape: dayShape);
 
       if (widget.isRangeSelected && !widget.isOneDayRange) {
         final _HighlightPainterStyle style = widget.isSelectedDayStart
@@ -943,13 +943,14 @@ class _DayItemState extends State<_DayItem> {
         color: colorScheme.onSurface.withValues(alpha: 0.38),
       );
     } else if (widget.isToday) {
-      // The current day gets a different text color and a circle stroke
+      // The current day gets a different text color and a custom shape
       // border.
       itemStyle = itemStyle?.apply(color: colorScheme.primary);
-      decoration = BoxDecoration(
-        border: Border.all(color: colorScheme.primary),
-        shape: BoxShape.circle,
-      );
+      final BorderSide todaySide =
+          (datePickerTheme.todayBorder ?? defaults.todayBorder!).copyWith(
+            color: colorScheme.primary,
+          );
+      decoration = ShapeDecoration(shape: dayShape.copyWith(side: todaySide));
     }
 
     final String dayText = localizations.formatDecimal(widget.day.day);
@@ -993,7 +994,8 @@ class _DayItemState extends State<_DayItem> {
       dayWidget = InkResponse(
         focusNode: widget.focusNode,
         onTap: () => widget.onChanged(widget.day),
-        radius: _monthItemRowHeight / 2 + 4,
+        customBorder: dayShape,
+        containedInkWell: true,
         statesController: _statesController,
         overlayColor: dayOverlayColor,
         onFocusChange: widget.onFocusChange,
