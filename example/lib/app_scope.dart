@@ -48,9 +48,7 @@ class _AppModel(
   Color get color => _color;
 
   void _updateLanguage() {
-    NepaliUtils().language = _locale.languageCode == 'ne'
-        ? Language.nepali
-        : Language.english;
+    NepaliUtils().language = _locale.languageCode == 'ne' ? .nepali : .english;
   }
 }
 
