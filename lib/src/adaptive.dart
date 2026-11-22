@@ -7,7 +7,9 @@ import 'package:material_ui/material_ui.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
 import 'cupertino.dart';
+import 'language_source.dart';
 import 'material.dart';
+import 'utils.dart';
 
 const double _kPickerSheetHeight = 216.0;
 
@@ -17,7 +19,17 @@ Future<NepaliDateTime?> showAdaptiveDatePicker({
   required NepaliDateTime initialDate,
   required NepaliDateTime firstDate,
   required NepaliDateTime lastDate,
-  Language language = .english,
+
+  /// The language of the Cupertino picker. When null, it is read from
+  /// [languageSource]. The Material picker follows [languageSource] only.
+  Language? language,
+
+  /// Where the language is read from when [language] is null.
+  LanguageSource languageSource = .app,
+
+  /// Only for Android and Fuchsia: whether "today" is the current date in
+  /// Nepal instead of on the device.
+  bool useNepalTime = false,
 
   /// Only for iOS
   DateOrder dateOrder = .mdy,
@@ -54,6 +66,8 @@ Future<NepaliDateTime?> showAdaptiveDatePicker({
         lastDate: lastDate,
         initialDate: initialDate,
         initialDatePickerMode: initialDatePickerMode,
+        useNepalTime: useNepalTime,
+        languageSource: languageSource,
       );
     case TargetPlatform.iOS:
     case TargetPlatform.macOS:
@@ -63,6 +77,7 @@ Future<NepaliDateTime?> showAdaptiveDatePicker({
         firstDate: firstDate,
         lastDate: lastDate,
         language: language,
+        languageSource: languageSource,
         dateOrder: dateOrder,
       );
   }
@@ -73,7 +88,8 @@ Future<NepaliDateTime?> _showCupertinoDatePicker({
   required NepaliDateTime initialDate,
   required NepaliDateTime firstDate,
   required NepaliDateTime lastDate,
-  Language language = .english,
+  Language? language,
+  LanguageSource languageSource = .app,
   DateOrder dateOrder = .mdy,
 }) async {
   assert(
@@ -97,6 +113,7 @@ Future<NepaliDateTime?> _showCupertinoDatePicker({
     context: context,
     builder: (BuildContext context) {
       NepaliDateTime? selectedDate;
+      final resolvedLanguage = language ?? languageOf(context, languageSource);
 
       return Container(
         height: _kPickerSheetHeight + 40.0,
@@ -116,13 +133,17 @@ Future<NepaliDateTime?> _showCupertinoDatePicker({
                     children: <Widget>[
                       TextButton(
                         child: Text(
-                          language == .english ? 'CANCEL' : 'रद्द गर्नुहोस',
+                          resolvedLanguage == .english
+                              ? 'CANCEL'
+                              : 'रद्द गर्नुहोस',
                         ),
                         onPressed: () => Navigator.pop(context),
                       ),
                       Spacer(),
                       TextButton(
-                        child: Text(language == .english ? 'DONE' : 'ठिक छ'),
+                        child: Text(
+                          resolvedLanguage == .english ? 'DONE' : 'ठिक छ',
+                        ),
                         onPressed: () => Navigator.pop(context, selectedDate),
                       ),
                     ],
@@ -133,7 +154,7 @@ Future<NepaliDateTime?> _showCupertinoDatePicker({
                       minimumYear: firstDate.year,
                       maximumYear: lastDate.year,
                       onDateChanged: (date) => selectedDate = date,
-                      language: language,
+                      language: resolvedLanguage,
                       dateOrder: dateOrder,
                     ),
                   ),

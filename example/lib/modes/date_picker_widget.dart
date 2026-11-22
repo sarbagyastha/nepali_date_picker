@@ -113,7 +113,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                         _selectedDateTime.value ?? NepaliDateTime.now(),
                     firstDate: NepaliDateTime(1970),
                     lastDate: NepaliDateTime(2100, 12),
-                    language: NepaliUtils().language,
+                    language: NepaliUtils.currentLanguage,
                     dateOrder: _dateOrder,
                     onDateChanged: (newDate) {
                       final timeOfDay = TimeOfDay.now();

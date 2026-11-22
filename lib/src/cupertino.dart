@@ -6,6 +6,7 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
+import 'language_source.dart';
 import 'utils.dart';
 
 // Default aesthetic values obtained by comparing with iOS pickers.
@@ -98,7 +99,16 @@ class NepaliCupertinoDatePicker({
   final int? maximumYear,
 
   /// The language of the picker.
-  final Language language = .english,
+  ///
+  /// When null, it is read from [languageSource].
+  final Language? language,
+
+  /// Where the language is read from when [language] is null.
+  final LanguageSource languageSource = .app,
+
+  /// Whether the default [initialDate] is today in Nepal instead of on the
+  /// device.
+  final bool useNepalTime = false,
 
   /// The arrangement of columns in the picker.
   final DateOrder dateOrder = .mdy,
@@ -108,7 +118,9 @@ class NepaliCupertinoDatePicker({
   ///
   /// Changing this value after the initial build will not affect the currently
   /// selected date.
-  final NepaliDateTime initialDate = initialDate ?? NepaliDateTime.now();
+  final NepaliDateTime initialDate =
+      initialDate ??
+      (useNepalTime ? NepaliDateTime.nepalNow() : NepaliDateTime.now());
 
   @override
   State<StatefulWidget> createState() {
@@ -128,19 +140,20 @@ class NepaliCupertinoDatePicker({
         for (var i = 1; i <= 32; i++) {
           final dayOfMonth = language == .english
               ? '$i'
-              : NepaliUnicode.convert('$i');
+              : const NepaliUnicode().convert('$i');
           if (longestText.length < dayOfMonth.length) longestText = dayOfMonth;
         }
         break;
       case .month:
         for (var i = 1; i <= 12; i++) {
           final month = NepaliDateFormat.MMMM(language)
-              .format(NepaliDateTime(1970, i));
+              .format(NepaliDateTime.utc(1970, i));
           if (longestText.length < month.length) longestText = month;
         }
         break;
       case .year:
-        longestText = NepaliDateFormat.y(language).format(NepaliDateTime(2076));
+        longestText = NepaliDateFormat.y(language)
+            .format(NepaliDateTime.utc(2076));
         break;
     }
 
@@ -169,6 +182,9 @@ typedef _ColumnBuilder = Widget Function(
 );
 
 class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
+  Language get _language =>
+      widget.language ?? languageOf(context, widget.languageSource);
+
   late int textDirectionFactor;
 
   // Alignment based on text direction. The variable name is self descriptive,
@@ -229,22 +245,25 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
     estimatedColumnWidths[_PickerColumnType.dayOfMonth.index] =
         NepaliCupertinoDatePicker._getColumnWidth(
           _PickerColumnType.dayOfMonth,
-          widget.language,
+          _language,
           context,
         );
     estimatedColumnWidths[_PickerColumnType.month.index] =
         NepaliCupertinoDatePicker._getColumnWidth(
           _PickerColumnType.month,
-          widget.language,
+          _language,
           context,
         );
     estimatedColumnWidths[_PickerColumnType.year.index] =
         NepaliCupertinoDatePicker._getColumnWidth(
           _PickerColumnType.year,
-          widget.language,
+          _language,
           context,
         );
-    daysInCurrentMonth = NepaliDateTime(selectedYear, selectedMonth).totalDays;
+    daysInCurrentMonth = NepaliDateTime.utc(
+      selectedYear,
+      selectedMonth,
+    ).totalDays;
   }
 
   Widget _buildDayPicker(
@@ -277,9 +296,9 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
         return itemPositioningBuilder(
           context,
           Text(
-            widget.language == .english
+            _language == .english
                 ? '${index + 1}'
-                : NepaliUnicode.convert('${index + 1}'),
+                : const NepaliUnicode().convert('${index + 1}'),
             style: disableTextStyle,
           ),
         );
@@ -301,7 +320,7 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
       onSelectedItemChanged: (int index) {
         setState(() {
           selectedMonth = index + 1;
-          daysInCurrentMonth = NepaliDateTime(
+          daysInCurrentMonth = NepaliDateTime.utc(
             selectedYear,
             selectedMonth,
           ).totalDays;
@@ -316,7 +335,7 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
       children: List<Widget>.generate(12, (int index) {
         return itemPositioningBuilder(
           context,
-          Text(formattedMonth(index + 1, widget.language)),
+          Text(formattedMonth(index + 1, _language)),
         );
       }),
     );
@@ -334,9 +353,13 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
       magnification: _kMagnification,
       backgroundColor: _kBackgroundColor,
       onSelectedItemChanged: (int index) {
+        // Blank entries outside the supported years can't form a date.
+        if (index < NepaliDateTime.minYear || index > NepaliDateTime.maxYear) {
+          return;
+        }
         setState(() {
           selectedYear = index;
-          daysInCurrentMonth = NepaliDateTime(
+          daysInCurrentMonth = NepaliDateTime.utc(
             selectedYear,
             selectedMonth,
           ).totalDays;
@@ -348,18 +371,22 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
         }
       },
       itemBuilder: (BuildContext context, int index) {
-        if (index < widget.minimumYear) return null;
+        // nepali_utils 4.0 throws a RangeError outside its supported years.
+        if (index < widget.minimumYear || index < NepaliDateTime.minYear) {
+          return null;
+        }
 
-        if (widget.maximumYear != null && index > widget.maximumYear!) {
+        final maximumYear = widget.maximumYear ?? NepaliDateTime.maxYear;
+        if (index > maximumYear || index > NepaliDateTime.maxYear) {
           return null;
         }
 
         return itemPositioningBuilder(
           context,
           Text(
-            widget.language == .english
+            _language == .english
                 ? '$index'
-                : NepaliUnicode.convert('$index'),
+                : const NepaliUnicode().convert('$index'),
           ),
         );
       },
@@ -500,7 +527,7 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
       estimatedColumnWidths[columnType.index] =
           NepaliCupertinoDatePicker._getColumnWidth(
             columnType,
-            widget.language,
+            _language,
             context,
           );
     }
@@ -516,7 +543,8 @@ void showCupertinoDatePicker({
   required NepaliDateTime firstDate,
   required NepaliDateTime lastDate,
   required ValueChanged<NepaliDateTime> onDateChanged,
-  Language language = .english,
+  Language? language,
+  LanguageSource languageSource = .app,
   DateOrder dateOrder = .mdy,
 }) {
   assert(
@@ -555,6 +583,7 @@ void showCupertinoDatePicker({
                 maximumYear: lastDate.year,
                 onDateChanged: onDateChanged,
                 language: language,
+                languageSource: languageSource,
                 dateOrder: dateOrder,
               ),
             ),

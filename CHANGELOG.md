@@ -1,3 +1,16 @@
+## 9.0.0
+**Unreleased**
+**Breaking Change**
+- Migrates to `nepali_utils` 4.0.
+- "Today" in the pickers is now the device's local date (`NepaliDateTime.now()` is local in `nepali_utils` 4.0). Pass `useNepalTime: true` to use the current date in Nepal instead.
+- `language` on `NepaliCupertinoDatePicker`, `showCupertinoDatePicker` and `showAdaptiveDatePicker` is now optional and defaults to the locale instead of English.
+- Adds `LanguageSource` (`app` / `device`) to choose whether the default language comes from the app's locale or the device locale.
+- Adds `useNepalTime` and `languageSource` to `NepaliCalendarDelegate`, `showNepaliDatePicker`, `showNepaliDateRangePicker` and `showAdaptiveDatePicker`.
+- Improves `NepaliCalendarDelegate` performance: cached formatters, time-zone-free calendar lookups and a fast path in `dateOnly`.
+- Fixes `addDaysToDate` across daylight saving transitions.
+- Fixes `parseCompactDate` rejecting valid Bikram Sambat dates (e.g. day 32).
+- The Cupertino year picker is limited to the years supported by `nepali_utils` (`NepaliDateTime.minYear`-`NepaliDateTime.maxYear`).
+
 ## 8.0.0
 **Sep 8, 2026**
 **Breaking Change**

@@ -48,7 +48,9 @@ class _AppModel(
   Color get color => _color;
 
   void _updateLanguage() {
-    NepaliUtils().language = _locale.languageCode == 'ne' ? .nepali : .english;
+    NepaliUtils.defaultLanguage = _locale.languageCode == 'ne'
+        ? .nepali
+        : .english;
   }
 }
 
@@ -58,8 +60,8 @@ class const AppScope({
   required final Widget Function(BuildContext, Locale, Brightness, Color)
   builder,
 
-  ///
-  final Locale defaultLocale = const Locale('en', 'US'),
+  /// Defaults to the device locale.
+  final Locale? defaultLocale,
 
   ///
   final Brightness defaultBrightness = .light,
@@ -81,13 +83,20 @@ class const AppScope({
 }
 
 class _AppScopeState extends State<AppScope> {
+  static Locale _deviceLocale() {
+    final locale = WidgetsBinding.instance.platformDispatcher.locale;
+    return locale.languageCode == 'ne'
+        ? const Locale('ne', 'NP')
+        : const Locale('en', 'US');
+  }
+
   late final _AppModel _model;
 
   @override
   void initState() {
     super.initState();
     _model = _AppModel(
-      widget.defaultLocale,
+      widget.defaultLocale ?? _deviceLocale(),
       widget.defaultBrightness,
       widget.defaultColor,
     );
