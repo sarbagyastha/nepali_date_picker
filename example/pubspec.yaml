@@ -1,7 +1,7 @@
 name: nepali_date_picker_example
 description: Nepali Date Picker Demo
 
-version: 8.0.0+1
+version: 9.0.0+1
 publish_to: none
 
 environment:

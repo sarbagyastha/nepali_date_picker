@@ -1,5 +1,5 @@
 ## 9.0.0
-**Unreleased**
+**Nov 22, 2026**
 **Breaking Change**
 - Migrates to `nepali_utils` 4.0.
 - "Today" in the pickers is now the device's local date (`NepaliDateTime.now()` is local in `nepali_utils` 4.0). Pass `useNepalTime: true` to use the current date in Nepal instead.
