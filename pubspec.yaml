@@ -10,12 +10,13 @@ environment:
   flutter: '>=3.47.0'
 
 dependencies:
-  cupertino_ui: ^1.0.2
+  cupertino_ui: ^1.1.7
   flutter:
     sdk: flutter
   intl: '>=0.20.0 <1.0.0'
-  material_ui: ^1.1.1
-  nepali_utils: ^3.0.8
+  material_ui: ^1.11.1
+  nepali_utils:
+    path: ../nepali_utils
 
 dev_dependencies:
   flutter_test:
