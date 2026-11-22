@@ -1,3 +1,21 @@
+## 9.0.0
+**Nov 22, 2026**
+**Breaking Change**
+- Migrates to `nepali_utils` 4.0.
+- "Today" in the pickers is now the device's local date (`NepaliDateTime.now()` is local in `nepali_utils` 4.0). Pass `useNepalTime: true` to use the current date in Nepal instead.
+- `language` on `NepaliCupertinoDatePicker`, `showCupertinoDatePicker` and `showAdaptiveDatePicker` is now optional and defaults to the locale instead of English.
+- Adds `LanguageSource` (`app` / `device`) to choose whether the default language comes from the app's locale or the device locale.
+- Adds `useNepalTime` and `languageSource` to `NepaliCalendarDelegate`, `showNepaliDatePicker`, `showNepaliDateRangePicker` and `showAdaptiveDatePicker`.
+- Improves `NepaliCalendarDelegate` performance: cached formatters, time-zone-free calendar lookups and a fast path in `dateOnly`.
+- Fixes `addDaysToDate` across daylight saving transitions.
+- Fixes `parseCompactDate` rejecting valid Bikram Sambat dates (e.g. day 32).
+- The Cupertino year picker is limited to the years supported by `nepali_utils` (`NepaliDateTime.minYear`-`NepaliDateTime.maxYear`).
+- Fixes the Material calendar grid being misaligned for locales whose week doesn't start on Sunday (e.g. `en_GB`).
+- Fixes `showAdaptiveDatePicker` on iOS/macOS returning `null` when DONE is tapped without scrolling, or after the sheet rebuilds.
+- Fixes `NepaliCupertinoDatePicker` discarding inherited `MediaQuery` data (padding, brightness) when disabling text scaling.
+- Date-range asserts now use the supported range (`NepaliDateTime.minYear`-`NepaliDateTime.maxYear`) consistently.
+- Improves `NepaliCupertinoDatePicker` performance: the language is resolved once instead of per item, column widths are measured lazily and recomputed on language change, and relayouts and rebuilds on scroll end are avoided.
+
 ## 8.0.0
 **Sep 8, 2026**
 **Breaking Change**

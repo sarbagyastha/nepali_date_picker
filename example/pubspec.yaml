@@ -1,7 +1,7 @@
 name: nepali_date_picker_example
 description: Nepali Date Picker Demo
 
-version: 8.0.0+1
+version: 9.0.0+1
 publish_to: none
 
 environment:
@@ -16,7 +16,7 @@ dependencies:
   material_ui: ^1.1.1
   nepali_date_picker:
     path: ../
-  nepali_utils: ^3.0.8
+  nepali_utils: ^4.0.0
 
 dev_dependencies:
   flutter_lints: ^6.0.0

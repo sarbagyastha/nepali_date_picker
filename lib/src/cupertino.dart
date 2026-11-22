@@ -3,9 +3,11 @@
 // found in the LICENSE file.
 
 import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
+import 'language_source.dart';
 import 'utils.dart';
 
 // Default aesthetic values obtained by comparing with iOS pickers.
@@ -60,12 +62,18 @@ class _DatePickerLayoutDelegate({
 
   @override
   bool shouldRelayout(_DatePickerLayoutDelegate oldDelegate) {
-    return columnWidths != oldDelegate.columnWidths ||
+    return !listEquals(columnWidths, oldDelegate.columnWidths) ||
         textDirectionFactor != oldDelegate.textDirectionFactor;
   }
 }
 
 enum _PickerColumnType { dayOfMonth, month, year }
+
+String _localizedNumber(int value, Language language) {
+  return language == .english
+      ? '$value'
+      : const NepaliUnicode().convert('$value');
+}
 
 /// Specifies date order arrangements in cupertino date picker.
 enum DateOrder {
@@ -98,7 +106,16 @@ class NepaliCupertinoDatePicker({
   final int? maximumYear,
 
   /// The language of the picker.
-  final Language language = .english,
+  ///
+  /// When null, it is read from [languageSource].
+  final Language? language,
+
+  /// Where the language is read from when [language] is null.
+  final LanguageSource languageSource = .app,
+
+  /// Whether the default [initialDate] is today in Nepal instead of on the
+  /// device.
+  final bool useNepalTime = false,
 
   /// The arrangement of columns in the picker.
   final DateOrder dateOrder = .mdy,
@@ -108,7 +125,9 @@ class NepaliCupertinoDatePicker({
   ///
   /// Changing this value after the initial build will not affect the currently
   /// selected date.
-  final NepaliDateTime initialDate = initialDate ?? NepaliDateTime.now();
+  final NepaliDateTime initialDate =
+      initialDate ??
+      (useNepalTime ? NepaliDateTime.nepalNow() : NepaliDateTime.now());
 
   @override
   State<StatefulWidget> createState() {
@@ -121,28 +140,15 @@ class NepaliCupertinoDatePicker({
     Language language,
     BuildContext context,
   ) {
-    var longestText = '';
-
-    switch (columnType) {
-      case .dayOfMonth:
-        for (var i = 1; i <= 32; i++) {
-          final dayOfMonth = language == .english
-              ? '$i'
-              : NepaliUnicode.convert('$i');
-          if (longestText.length < dayOfMonth.length) longestText = dayOfMonth;
-        }
-        break;
-      case .month:
-        for (var i = 1; i <= 12; i++) {
-          final month = NepaliDateFormat.MMMM(language)
-              .format(NepaliDateTime(1970, i));
-          if (longestText.length < month.length) longestText = month;
-        }
-        break;
-      case .year:
-        longestText = NepaliDateFormat.y(language).format(NepaliDateTime(2076));
-        break;
-    }
+    final longestText = switch (columnType) {
+      // Every day number has at most two digits; 32 is the widest.
+      .dayOfMonth => _localizedNumber(32, language),
+      .month => List.generate(
+        12,
+        (i) => formattedMonth(i + 1, language),
+      ).reduce((a, b) => a.length >= b.length ? a : b),
+      .year => _localizedNumber(2076, language),
+    };
 
     assert(longestText != '', 'column type is not appropriate');
 
@@ -158,8 +164,9 @@ class NepaliCupertinoDatePicker({
     // because there's no other way to get the information we want without
     // laying out the text.
     painter.layout();
-
-    return painter.maxIntrinsicWidth;
+    final width = painter.maxIntrinsicWidth;
+    painter.dispose();
+    return width;
   }
 }
 
@@ -169,6 +176,8 @@ typedef _ColumnBuilder = Widget Function(
 );
 
 class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
+  late Language _language;
+
   late int textDirectionFactor;
 
   // Alignment based on text direction. The variable name is self descriptive,
@@ -186,8 +195,8 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
   late final FixedExtentScrollController monthController;
   late final FixedExtentScrollController yearController;
 
-  // Estimated width of columns.
-  Map<int, double> estimatedColumnWidths = <int, double>{};
+  // Estimated width of columns, computed lazily per column type.
+  final Map<_PickerColumnType, double> estimatedColumnWidths = {};
 
   @override
   void initState() {
@@ -226,25 +235,26 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
         ? Alignment.centerRight
         : Alignment.centerLeft;
 
-    estimatedColumnWidths[_PickerColumnType.dayOfMonth.index] =
-        NepaliCupertinoDatePicker._getColumnWidth(
-          _PickerColumnType.dayOfMonth,
-          widget.language,
-          context,
-        );
-    estimatedColumnWidths[_PickerColumnType.month.index] =
-        NepaliCupertinoDatePicker._getColumnWidth(
-          _PickerColumnType.month,
-          widget.language,
-          context,
-        );
-    estimatedColumnWidths[_PickerColumnType.year.index] =
-        NepaliCupertinoDatePicker._getColumnWidth(
-          _PickerColumnType.year,
-          widget.language,
-          context,
-        );
-    daysInCurrentMonth = NepaliDateTime(selectedYear, selectedMonth).totalDays;
+    _resolveLanguage();
+    daysInCurrentMonth = NepaliDateTime.utc(
+      selectedYear,
+      selectedMonth,
+    ).totalDays;
+  }
+
+  @override
+  void didUpdateWidget(NepaliCupertinoDatePicker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.language != oldWidget.language ||
+        widget.languageSource != oldWidget.languageSource) {
+      _resolveLanguage();
+    }
+  }
+
+  void _resolveLanguage() {
+    _language = widget.language ?? languageOf(context, widget.languageSource);
+    // Widths depend on the language and the inherited text style.
+    estimatedColumnWidths.clear();
   }
 
   Widget _buildDayPicker(
@@ -276,12 +286,7 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
         }
         return itemPositioningBuilder(
           context,
-          Text(
-            widget.language == .english
-                ? '${index + 1}'
-                : NepaliUnicode.convert('${index + 1}'),
-            style: disableTextStyle,
-          ),
+          Text(_localizedNumber(index + 1, _language), style: disableTextStyle),
         );
       }),
     );
@@ -301,7 +306,7 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
       onSelectedItemChanged: (int index) {
         setState(() {
           selectedMonth = index + 1;
-          daysInCurrentMonth = NepaliDateTime(
+          daysInCurrentMonth = NepaliDateTime.utc(
             selectedYear,
             selectedMonth,
           ).totalDays;
@@ -316,7 +321,7 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
       children: List<Widget>.generate(12, (int index) {
         return itemPositioningBuilder(
           context,
-          Text(formattedMonth(index + 1, widget.language)),
+          Text(formattedMonth(index + 1, _language)),
         );
       }),
     );
@@ -334,9 +339,13 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
       magnification: _kMagnification,
       backgroundColor: _kBackgroundColor,
       onSelectedItemChanged: (int index) {
+        // Blank entries outside the supported years can't form a date.
+        if (index < NepaliDateTime.minYear || index > NepaliDateTime.maxYear) {
+          return;
+        }
         setState(() {
           selectedYear = index;
-          daysInCurrentMonth = NepaliDateTime(
+          daysInCurrentMonth = NepaliDateTime.utc(
             selectedYear,
             selectedMonth,
           ).totalDays;
@@ -348,115 +357,70 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
         }
       },
       itemBuilder: (BuildContext context, int index) {
-        if (index < widget.minimumYear) return null;
+        // nepali_utils 4.0 throws a RangeError outside its supported years.
+        if (index < widget.minimumYear || index < NepaliDateTime.minYear) {
+          return null;
+        }
 
-        if (widget.maximumYear != null && index > widget.maximumYear!) {
+        final maximumYear = widget.maximumYear ?? NepaliDateTime.maxYear;
+        if (index > maximumYear || index > NepaliDateTime.maxYear) {
           return null;
         }
 
         return itemPositioningBuilder(
           context,
-          Text(
-            widget.language == .english
-                ? '$index'
-                : NepaliUnicode.convert('$index'),
-          ),
+          Text(_localizedNumber(index, _language)),
         );
       },
     );
   }
 
   bool _keepInValidRange(ScrollEndNotification notification) {
-    // Whenever scrolling lands on an invalid entry, the picker
-    // automatically scrolls to a valid one.
-    final desiredDay = selectedDay % daysInCurrentMonth;
-    if (desiredDay != selectedDay) {
+    // Whenever scrolling lands on a day the month doesn't have, the picker
+    // automatically scrolls back to the last valid day.
+    final overflow = selectedDay - daysInCurrentMonth;
+    if (overflow > 0) {
       SchedulerBinding.instance.addPostFrameCallback((Duration timestamp) {
+        if (!mounted) return;
         dayController.animateToItem(
-          // The next valid date is also the amount of days overflown.
-          dayController.selectedItem - desiredDay,
+          dayController.selectedItem - overflow,
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOut,
         );
       });
     }
-    setState(() {
-      // Rebuild because the number of valid days per month are different
-      // depending on the month and year.
-    });
     return false;
   }
 
   @override
   Widget build(BuildContext context) {
-    var pickerBuilders = <_ColumnBuilder>[];
-    var columnWidths = <double>[];
-
-    switch (widget.dateOrder) {
-      case .mdy:
-        pickerBuilders = <_ColumnBuilder>[
-          _buildMonthPicker,
-          _buildDayPicker,
-          _buildYearPicker,
-        ];
-        columnWidths = <double>[
-          _getEstimatedColumnWidth(_PickerColumnType.month),
-          _getEstimatedColumnWidth(_PickerColumnType.dayOfMonth),
-          _getEstimatedColumnWidth(_PickerColumnType.year),
-        ];
-        break;
-      case .dmy:
-        pickerBuilders = <_ColumnBuilder>[
-          _buildDayPicker,
-          _buildMonthPicker,
-          _buildYearPicker,
-        ];
-        columnWidths = <double>[
-          _getEstimatedColumnWidth(_PickerColumnType.dayOfMonth),
-          _getEstimatedColumnWidth(_PickerColumnType.month),
-          _getEstimatedColumnWidth(_PickerColumnType.year),
-        ];
-        break;
-      case .ymd:
-        pickerBuilders = <_ColumnBuilder>[
-          _buildYearPicker,
-          _buildMonthPicker,
-          _buildDayPicker,
-        ];
-        columnWidths = <double>[
-          _getEstimatedColumnWidth(_PickerColumnType.year),
-          _getEstimatedColumnWidth(_PickerColumnType.month),
-          _getEstimatedColumnWidth(_PickerColumnType.dayOfMonth),
-        ];
-        break;
-      case .ydm:
-        pickerBuilders = <_ColumnBuilder>[
-          _buildYearPicker,
-          _buildDayPicker,
-          _buildMonthPicker,
-        ];
-        columnWidths = <double>[
-          _getEstimatedColumnWidth(_PickerColumnType.year),
-          _getEstimatedColumnWidth(_PickerColumnType.dayOfMonth),
-          _getEstimatedColumnWidth(_PickerColumnType.month),
-        ];
-        break;
-    }
+    final List<_PickerColumnType> columnTypes = switch (widget.dateOrder) {
+      .mdy => const [_PickerColumnType.month, .dayOfMonth, .year],
+      .dmy => const [_PickerColumnType.dayOfMonth, .month, .year],
+      .ymd => const [_PickerColumnType.year, .month, .dayOfMonth],
+      .ydm => const [_PickerColumnType.year, .dayOfMonth, .month],
+    };
+    final columnWidths = [
+      for (final type in columnTypes) _getEstimatedColumnWidth(type),
+    ];
+    final padding = textDirectionFactor == 1
+        ? const EdgeInsets.only(right: _kDatePickerPadSize)
+        : const EdgeInsets.only(left: _kDatePickerPadSize);
 
     final pickers = <Widget>[];
 
     for (var i = 0; i < columnWidths.length; i++) {
       final offAxisFraction = (i - 1) * 0.3 * textDirectionFactor;
-
-      var padding = const EdgeInsets.only(right: _kDatePickerPadSize);
-      if (textDirectionFactor == -1) {
-        padding = const EdgeInsets.only(left: _kDatePickerPadSize);
-      }
+      final _ColumnBuilder buildColumn = switch (columnTypes[i]) {
+        .dayOfMonth => _buildDayPicker,
+        .month => _buildMonthPicker,
+        .year => _buildYearPicker,
+      };
 
       pickers.add(
         LayoutId(
           id: i,
-          child: pickerBuilders[i](offAxisFraction, (
+          child: buildColumn(offAxisFraction, (
             BuildContext context,
             Widget? child,
           ) {
@@ -476,8 +440,7 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
       );
     }
 
-    return MediaQuery(
-      data: MediaQueryData(textScaler: TextScaler.noScaling),
+    return MediaQuery.withNoTextScaling(
       child: NotificationListener<ScrollEndNotification>(
         onNotification: _keepInValidRange,
         child: DefaultTextStyle.merge(
@@ -496,16 +459,12 @@ class _CupertinoDatePickerDateState extends State<NepaliCupertinoDatePicker> {
 
   // Lazily calculate the column width of the column being displayed only.
   double _getEstimatedColumnWidth(_PickerColumnType columnType) {
-    if (estimatedColumnWidths[columnType.index] == null) {
-      estimatedColumnWidths[columnType.index] =
-          NepaliCupertinoDatePicker._getColumnWidth(
-            columnType,
-            widget.language,
-            context,
-          );
-    }
-
-    return estimatedColumnWidths[columnType.index]!;
+    return estimatedColumnWidths[columnType] ??=
+        NepaliCupertinoDatePicker._getColumnWidth(
+          columnType,
+          _language,
+          context,
+        );
   }
 }
 
@@ -516,12 +475,15 @@ void showCupertinoDatePicker({
   required NepaliDateTime firstDate,
   required NepaliDateTime lastDate,
   required ValueChanged<NepaliDateTime> onDateChanged,
-  Language language = .english,
+  Language? language,
+  LanguageSource languageSource = .app,
   DateOrder dateOrder = .mdy,
 }) {
   assert(
-    firstDate.year >= 1970 && lastDate.year <= 2100,
-    'Invalid Date Range. Valid Range = [1970, 2100]',
+    firstDate.year >= NepaliDateTime.minYear &&
+        lastDate.year <= NepaliDateTime.maxYear,
+    'Invalid Date Range. '
+    'Valid Range = [${NepaliDateTime.minYear}, ${NepaliDateTime.maxYear}]',
   );
   assert(
     !initialDate.isBefore(firstDate),
@@ -555,6 +517,7 @@ void showCupertinoDatePicker({
                 maximumYear: lastDate.year,
                 onDateChanged: onDateChanged,
                 language: language,
+                languageSource: languageSource,
                 dateOrder: dateOrder,
               ),
             ),

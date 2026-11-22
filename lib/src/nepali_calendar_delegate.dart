@@ -3,11 +3,25 @@
 // found in the LICENSE file.
 
 import 'package:material_ui/material_ui.dart';
-import 'package:intl/intl.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
-import 'package:nepali_utils/nepali_utils.dart';
+
+import 'utils.dart';
 
 const _compactDatePattern = 'y-MM-dd';
+final _compactDateRegex = RegExp(r'^\d{4}-\d{2}-\d{2}$');
+
+// NepaliDateFormat is immutable in nepali_utils 4.0, so formatters are cached
+// per (pattern, language) instead of being rebuilt for every call. The date
+// picker formats every visible day (e.g. semantics labels), so this matters.
+final Map<(String, Language), NepaliDateFormat> _formatters = {};
+
+NepaliDateFormat _formatter(
+  String key,
+  Language language,
+  NepaliDateFormat Function() create,
+) {
+  return _formatters[(key, language)] ??= create();
+}
 
 /// A [CalendarDelegate] implementation for the Nepali (Bikram Sambat) calendar system.
 ///
@@ -27,12 +41,37 @@ const _compactDatePattern = 'y-MM-dd';
 ///
 /// Creates a [NepaliCalendarDelegate] for interpreting dates
 /// according to the Nepali (Bikram Sambat) calendar system.
-class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
+///
+/// [useNepalTime] decides what "today" is: `false` (the default) uses the
+/// device's local time ([NepaliDateTime.now]), `true` uses Nepal time
+/// ([NepaliDateTime.nepalNow]).
+///
+/// [languageSource] decides where the language used for formatting comes
+/// from: the app's [MaterialLocalizations] ([LanguageSource.app], the
+/// default) or the device locale ([LanguageSource.device]).
+class const NepaliCalendarDelegate({
+  /// Whether "today" is the current date in Nepal instead of on the device.
+  final bool useNepalTime = false,
+
+  /// Where the formatting language is read from.
+  final LanguageSource languageSource = .app,
+}) extends CalendarDelegate<NepaliDateTime> {
   @override
-  NepaliDateTime now() => NepaliDateTime.now();
+  NepaliDateTime now() =>
+      useNepalTime ? NepaliDateTime.nepalNow() : NepaliDateTime.now();
 
   @override
   NepaliDateTime dateOnly(NepaliDateTime date) {
+    // Fast path: already a local date at midnight, nothing to rebuild.
+    if (!date.isUtc &&
+        !date.isNepalTime &&
+        date.hour == 0 &&
+        date.minute == 0 &&
+        date.second == 0 &&
+        date.millisecond == 0 &&
+        date.microsecond == 0) {
+      return date;
+    }
     return NepaliDateTime(date.year, date.month, date.day);
   }
 
@@ -48,28 +87,29 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
     NepaliDateTime monthDate,
     int monthsToAdd,
   ) {
-    var year = monthDate.year;
-    var month = monthDate.month + monthsToAdd;
-
-    year += (month - 1) ~/ 12;
-    month = month % 12;
-    if (month == 0) month = 12;
-    return NepaliDateTime(year, month);
+    // Out-of-range months roll over into the adjacent years.
+    return NepaliDateTime(monthDate.year, monthDate.month + monthsToAdd);
   }
 
   @override
   NepaliDateTime addDaysToDate(NepaliDateTime date, int days) {
-    return date.add(Duration(days: days));
+    // Out-of-range days roll over into the adjacent months. Unlike adding a
+    // Duration, this is not shifted by daylight saving transitions.
+    return NepaliDateTime(date.year, date.month, date.day + days);
   }
 
   @override
   int firstDayOffset(int year, int month, MaterialLocalizations localizations) {
-    return NepaliDateTime(year, month).weekday - 1;
+    // Calendar-only lookup: UTC avoids resolving the local time zone.
+    // NepaliDateTime.weekday is 1 for Sunday, matching the index base of
+    // MaterialLocalizations.firstDayOfWeekIndex (0 = Sunday).
+    final weekdayFromSunday = NepaliDateTime.utc(year, month).weekday - 1;
+    return (weekdayFromSunday - localizations.firstDayOfWeekIndex) % 7;
   }
 
   @override
   int getDaysInMonth(int year, int month) {
-    return NepaliDateTime(year, month).totalDays;
+    return NepaliDateTime.utc(year, month).totalDays;
   }
 
   @override
@@ -81,12 +121,26 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
   }
 
   @override
+  String formatYear(int year, MaterialLocalizations localizations) {
+    final language = _getLanguage(localizations);
+    return _formatter(
+      'y',
+      language,
+      () => NepaliDateFormat.y(language),
+    ).format(NepaliDateTime.utc(year));
+  }
+
+  @override
   String formatMonthYear(
     NepaliDateTime date,
     MaterialLocalizations localizations,
   ) {
     final language = _getLanguage(localizations);
-    return NepaliDateFormat.yMMMM(language).format(date);
+    return _formatter(
+      'yMMMM',
+      language,
+      () => NepaliDateFormat.yMMMM(language),
+    ).format(date);
   }
 
   @override
@@ -94,8 +148,7 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
     NepaliDateTime date,
     MaterialLocalizations localizations,
   ) {
-    final language = _getLanguage(localizations);
-    return NepaliDateFormat('EE, MMMM d', language).format(date);
+    return _pattern('EE, MMMM d', localizations).format(date);
   }
 
   @override
@@ -103,8 +156,7 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
     NepaliDateTime date,
     MaterialLocalizations localizations,
   ) {
-    final language = _getLanguage(localizations);
-    return NepaliDateFormat('MMMM d', language).format(date);
+    return _pattern('MMMM d', localizations).format(date);
   }
 
   @override
@@ -112,8 +164,7 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
     NepaliDateTime date,
     MaterialLocalizations localizations,
   ) {
-    final language = _getLanguage(localizations);
-    return NepaliDateFormat('MMMM d, y', language).format(date);
+    return _pattern('MMMM d, y', localizations).format(date);
   }
 
   @override
@@ -121,8 +172,7 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
     NepaliDateTime date,
     MaterialLocalizations localizations,
   ) {
-    final language = _getLanguage(localizations);
-    return NepaliDateFormat('EEEE, MMMM d, y', language).format(date);
+    return _pattern('EEEE, MMMM d, y', localizations).format(date);
   }
 
   @override
@@ -130,8 +180,7 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
     NepaliDateTime date,
     MaterialLocalizations localizations,
   ) {
-    final language = _getLanguage(localizations);
-    return NepaliDateFormat(_compactDatePattern, language).format(date);
+    return _pattern(_compactDatePattern, localizations).format(date);
   }
 
   @override
@@ -140,12 +189,19 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
     MaterialLocalizations localizations,
   ) {
     if (inputString == null) return null;
-    try {
-      final dateTime = DateFormat(_compactDatePattern).parseStrict(inputString);
-      return NepaliDateTime(dateTime.year, dateTime.month, dateTime.day);
-    } on FormatException {
+    final input = inputString.trim();
+    if (!_compactDateRegex.hasMatch(input)) return null;
+
+    final date = NepaliDateTime.tryParse(input);
+    if (date == null) return null;
+
+    // NepaliDateTime.parse rolls over out-of-range days (e.g. 2080-01-33),
+    // so check the fields round-trip to keep parsing strict.
+    final [year, month, day] = input.split('-').map(int.parse).toList();
+    if (date.year != year || date.month != month || date.day != day) {
       return null;
     }
+    return date;
   }
 
   @override
@@ -153,7 +209,22 @@ class const NepaliCalendarDelegate() extends CalendarDelegate<NepaliDateTime> {
     return 'yyyy-mm-dd';
   }
 
+  NepaliDateFormat _pattern(
+    String pattern,
+    MaterialLocalizations localizations,
+  ) {
+    final language = _getLanguage(localizations);
+    return _formatter(
+      pattern,
+      language,
+      () => NepaliDateFormat(pattern, language),
+    );
+  }
+
   Language _getLanguage(MaterialLocalizations localizations) {
-    return localizations is MaterialLocalizationNe ? .nepali : .english;
+    return switch (languageSource) {
+      .app => localizations is MaterialLocalizationNe ? .nepali : .english,
+      .device => deviceLanguage(),
+    };
   }
 }

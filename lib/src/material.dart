@@ -5,6 +5,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
+import 'language_source.dart';
 import 'nepali_calendar_delegate.dart';
 
 /// Shows a dialog containing a Material Design date picker
@@ -41,6 +42,12 @@ Future<NepaliDateTime?> showNepaliDatePicker({
   ValueChanged<DatePickerEntryMode>? onDatePickerModeChange,
   Icon? switchToInputEntryModeIcon,
   Icon? switchToCalendarEntryModeIcon,
+
+  /// Whether "today" is the current date in Nepal instead of on the device.
+  bool useNepalTime = false,
+
+  /// Where the picker's language is read from.
+  LanguageSource languageSource = .app,
 }) async {
   final date = await showDatePicker(
     context: context,
@@ -71,7 +78,10 @@ Future<NepaliDateTime?> showNepaliDatePicker({
     onDatePickerModeChange: onDatePickerModeChange,
     switchToInputEntryModeIcon: switchToInputEntryModeIcon,
     switchToCalendarEntryModeIcon: switchToCalendarEntryModeIcon,
-    calendarDelegate: const NepaliCalendarDelegate(),
+    calendarDelegate: NepaliCalendarDelegate(
+      useNepalTime: useNepalTime,
+      languageSource: languageSource,
+    ),
   );
 
   return date as NepaliDateTime?;
@@ -114,6 +124,12 @@ Future<DateTimeRange<NepaliDateTime>?> showNepaliDateRangePicker({
   Icon? switchToInputEntryModeIcon,
   Icon? switchToCalendarEntryModeIcon,
   SelectableDayForRangePredicate? selectableDayPredicate,
+
+  /// Whether "today" is the current date in Nepal instead of on the device.
+  bool useNepalTime = false,
+
+  /// Where the picker's language is read from.
+  LanguageSource languageSource = .app,
 }) async {
   final dateRange = await showDateRangePicker(
     context: context,
@@ -146,16 +162,17 @@ Future<DateTimeRange<NepaliDateTime>?> showNepaliDateRangePicker({
     switchToInputEntryModeIcon: switchToInputEntryModeIcon,
     switchToCalendarEntryModeIcon: switchToCalendarEntryModeIcon,
     selectableDayPredicate: selectableDayPredicate,
-    calendarDelegate: const NepaliCalendarDelegate(),
+    calendarDelegate: NepaliCalendarDelegate(
+      useNepalTime: useNepalTime,
+      languageSource: languageSource,
+    ),
   );
 
   if (dateRange == null) return null;
 
-  final DateTime(year: sYear, month: sMonth, day: sDay) = dateRange.start;
-  final DateTime(year: eYear, month: eMonth, day: eDay) = dateRange.end;
-
+  // NepaliCalendarDelegate only produces NepaliDateTime values.
   return DateTimeRange(
-    start: NepaliDateTime(sYear, sMonth, sDay),
-    end: NepaliDateTime(eYear, eMonth, eDay),
+    start: dateRange.start as NepaliDateTime,
+    end: dateRange.end as NepaliDateTime,
   );
 }
