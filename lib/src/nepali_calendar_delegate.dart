@@ -101,7 +101,10 @@ class const NepaliCalendarDelegate({
   @override
   int firstDayOffset(int year, int month, MaterialLocalizations localizations) {
     // Calendar-only lookup: UTC avoids resolving the local time zone.
-    return NepaliDateTime.utc(year, month).weekday - 1;
+    // NepaliDateTime.weekday is 1 for Sunday, matching the index base of
+    // MaterialLocalizations.firstDayOfWeekIndex (0 = Sunday).
+    final weekdayFromSunday = NepaliDateTime.utc(year, month).weekday - 1;
+    return (weekdayFromSunday - localizations.firstDayOfWeekIndex) % 7;
   }
 
   @override

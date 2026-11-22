@@ -21,10 +21,20 @@ String formattedMonth(int month, [Language? language]) {
       .format(NepaliDateTime.utc(1970, month));
 }
 
+Locale? _lastDeviceLocale;
+Language _lastDeviceLanguage = .english;
+
 /// The [Language] of the device (phone) locale.
+///
+/// The result is cached per locale, since this is called for every date the
+/// calendar delegate formats.
 Language deviceLanguage() {
   final locale = WidgetsBinding.instance.platformDispatcher.locale;
-  return Language.fromLocale(locale.toLanguageTag());
+  if (locale != _lastDeviceLocale) {
+    _lastDeviceLocale = locale;
+    _lastDeviceLanguage = Language.fromLocale(locale.toLanguageTag());
+  }
+  return _lastDeviceLanguage;
 }
 
 /// The [Language] to use for [context] according to [source].

@@ -38,8 +38,10 @@ Future<NepaliDateTime?> showAdaptiveDatePicker({
   DatePickerMode initialDatePickerMode = .day,
 }) async {
   assert(
-    firstDate.year >= 1970 && lastDate.year <= 2100,
-    'Invalid Date Range. Valid Range = [1970, 2100]',
+    firstDate.year >= NepaliDateTime.minYear &&
+        lastDate.year <= NepaliDateTime.maxYear,
+    'Invalid Date Range. '
+    'Valid Range = [${NepaliDateTime.minYear}, ${NepaliDateTime.maxYear}]',
   );
   assert(
     !initialDate.isBefore(firstDate),
@@ -93,8 +95,10 @@ Future<NepaliDateTime?> _showCupertinoDatePicker({
   DateOrder dateOrder = .mdy,
 }) async {
   assert(
-    firstDate.year >= 2000 && lastDate.year <= 2099,
-    'Invalid Date Range. Valid Range = [2000, 2099]',
+    firstDate.year >= NepaliDateTime.minYear &&
+        lastDate.year <= NepaliDateTime.maxYear,
+    'Invalid Date Range. '
+    'Valid Range = [${NepaliDateTime.minYear}, ${NepaliDateTime.maxYear}]',
   );
   assert(
     !initialDate.isBefore(firstDate),
@@ -109,10 +113,14 @@ Future<NepaliDateTime?> _showCupertinoDatePicker({
     'lastDate must be on or after firstDate',
   );
 
-  return await _showCupertinoPopup<NepaliDateTime>(
+  // Lives outside the builder so a rebuild of the sheet keeps the selection,
+  // and DONE without scrolling returns the initial date.
+  var selectedDate = initialDate;
+
+  return await showCupertinoModalPopup<NepaliDateTime>(
     context: context,
+    barrierDismissible: false,
     builder: (BuildContext context) {
-      NepaliDateTime? selectedDate;
       final resolvedLanguage = language ?? languageOf(context, languageSource);
 
       return Container(
@@ -166,78 +174,4 @@ Future<NepaliDateTime?> _showCupertinoDatePicker({
       );
     },
   );
-}
-
-Future<T?> _showCupertinoPopup<T>({
-  required BuildContext context,
-  required WidgetBuilder builder,
-}) {
-  return Navigator.of(
-    context,
-    rootNavigator: true,
-  ).push(_CupertinoPopupRoute<T>(builder: builder, barrierLabel: 'Dismiss'));
-}
-
-class _CupertinoPopupRoute<T>({
-  required final WidgetBuilder builder,
-  @override required final String barrierLabel,
-  super.settings,
-}) extends PopupRoute<T> {
-  @override
-  Color get barrierColor => Color(0x6604040F);
-
-  @override
-  bool get barrierDismissible => false;
-
-  @override
-  bool get semanticsDismissible => false;
-
-  @override
-  Duration get transitionDuration => Duration(milliseconds: 335);
-
-  late Animation<double> _animation;
-
-  late Tween<Offset> _offsetTween;
-
-  @override
-  Animation<double> createAnimation() {
-    _animation = CurvedAnimation(
-      parent: super.createAnimation(),
-
-      // These curves were initially measured from native iOS horizontal page
-      // route animations and seemed to be a good match here as well.
-      curve: Curves.linearToEaseOut,
-      reverseCurve: Curves.linearToEaseOut.flipped,
-    );
-    _offsetTween = Tween<Offset>(
-      begin: const Offset(0.0, 1.0),
-      end: const Offset(0.0, 0.0),
-    );
-    return _animation;
-  }
-
-  @override
-  Widget buildPage(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-  ) {
-    return builder(context);
-  }
-
-  @override
-  Widget buildTransitions(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-    Widget child,
-  ) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: FractionalTranslation(
-        translation: _offsetTween.evaluate(_animation),
-        child: child,
-      ),
-    );
-  }
 }

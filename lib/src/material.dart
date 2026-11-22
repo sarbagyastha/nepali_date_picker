@@ -170,11 +170,9 @@ Future<DateTimeRange<NepaliDateTime>?> showNepaliDateRangePicker({
 
   if (dateRange == null) return null;
 
-  final DateTime(year: sYear, month: sMonth, day: sDay) = dateRange.start;
-  final DateTime(year: eYear, month: eMonth, day: eDay) = dateRange.end;
-
+  // NepaliCalendarDelegate only produces NepaliDateTime values.
   return DateTimeRange(
-    start: NepaliDateTime(sYear, sMonth, sDay),
-    end: NepaliDateTime(eYear, eMonth, eDay),
+    start: dateRange.start as NepaliDateTime,
+    end: dateRange.end as NepaliDateTime,
   );
 }

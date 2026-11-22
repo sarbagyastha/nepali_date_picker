@@ -10,6 +10,11 @@
 - Fixes `addDaysToDate` across daylight saving transitions.
 - Fixes `parseCompactDate` rejecting valid Bikram Sambat dates (e.g. day 32).
 - The Cupertino year picker is limited to the years supported by `nepali_utils` (`NepaliDateTime.minYear`-`NepaliDateTime.maxYear`).
+- Fixes the Material calendar grid being misaligned for locales whose week doesn't start on Sunday (e.g. `en_GB`).
+- Fixes `showAdaptiveDatePicker` on iOS/macOS returning `null` when DONE is tapped without scrolling, or after the sheet rebuilds.
+- Fixes `NepaliCupertinoDatePicker` discarding inherited `MediaQuery` data (padding, brightness) when disabling text scaling.
+- Date-range asserts now use the supported range (`NepaliDateTime.minYear`-`NepaliDateTime.maxYear`) consistently.
+- Improves `NepaliCupertinoDatePicker` performance: the language is resolved once instead of per item, column widths are measured lazily and recomputed on language change, and relayouts and rebuilds on scroll end are avoided.
 
 ## 8.0.0
 **Sep 8, 2026**
